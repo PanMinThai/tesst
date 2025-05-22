@@ -12,6 +12,7 @@ namespace TodoList_PhanMinhThai.Data
     // Data/ApplicationDbContext.cs
     public class ApplicationDbContext : DbContext
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -46,11 +47,6 @@ namespace TodoList_PhanMinhThai.Data
             modelBuilder.Entity<TaskEntity>()
                 .Property(t => t.Priority)
                 .HasConversion<string>();
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=TodoList;Trusted_Connection=True;TrustServerCertificate=True;"
-);
         }
     }
 }

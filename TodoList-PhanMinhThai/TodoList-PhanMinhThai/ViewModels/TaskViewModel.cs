@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TodoList_PhanMinhThai.Models;
 using TodoList_PhanMinhThai.Repositories;
@@ -89,12 +90,28 @@ namespace TodoList_PhanMinhThai.ViewModels
 
         private async Task AddTaskAsync()
         {
-            CurrentTask.CreatedAt = DateTime.Now;
-            CurrentTask.UpdatedAt = DateTime.Now;
 
-            await _taskRepository.AddTaskAsync(CurrentTask);
-            await LoadTasksAsync();
-            ClearTaskFields();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(CurrentTask.Title))
+                {
+                    MessageBox.Show("Please enter a task title");
+                    return;
+                }
+
+                await _taskRepository.AddTaskAsync(CurrentTask);
+                await LoadTasksAsync();
+                ClearTaskFields();
+            }
+            catch (RepositoryException ex)
+            {
+                MessageBox.Show($"Database error: {ex.Message}");
+                // Log error (ex.InnerException) nếu cần
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unexpected error: {ex.Message}");
+            }
         }
 
         private async Task UpdateTaskAsync()
@@ -114,7 +131,7 @@ namespace TodoList_PhanMinhThai.ViewModels
 
         private async Task MarkTaskCompleteAsync()
         {
-            SelectedTask.Status = "Hoàn thành";
+            SelectedTask.Status = Data.Entities.TaskStatus.Completed;
             SelectedTask.UpdatedAt = DateTime.Now;
             await _taskRepository.UpdateTaskAsync(SelectedTask);
             await LoadTasksAsync();
@@ -126,8 +143,8 @@ namespace TodoList_PhanMinhThai.ViewModels
             CurrentTask = new TaskModel
             {
                 DueDate = DateTime.Today,
-                Status = "Đang làm",
-                Priority = "Trung bình"
+                Status = Data.Entities.TaskStatus.Completed,
+                Priority = Data.Entities.TaskPriority.Medium
             };
             SelectedTask = null;
         }

@@ -8,6 +8,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TodoList_PhanMinhThai.Data;
+using TodoList_PhanMinhThai.Repositories;
+using TodoList_PhanMinhThai.ViewModels;
 
 namespace TodoList_PhanMinhThai
 {

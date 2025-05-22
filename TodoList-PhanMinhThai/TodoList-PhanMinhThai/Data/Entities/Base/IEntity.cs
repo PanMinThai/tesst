@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TodoList_PhanMinhThai.Data.Entities.Base
 {
-    public interface IEntity<TKey>
+    public interface IEntity<T>
     {
-        TKey Id { get; set; }
+        T Id { get; set; }
         DateTime CreatedAt { get; set; }
     }
 }

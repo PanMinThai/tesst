@@ -1,6 +1,13 @@
-﻿using System.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 using System.Data;
 using System.Windows;
+using System.Windows.Forms;
+using TodoList_PhanMinhThai.Data;
+using TodoList_PhanMinhThai.Repositories;
+using TodoList_PhanMinhThai.ViewModels;
+using TodoList_PhanMinhThai.Views;
 
 namespace TodoList_PhanMinhThai
 {
@@ -9,6 +16,30 @@ namespace TodoList_PhanMinhThai
     /// </summary>
     public partial class App : Application
     {
+        private readonly ServiceProvider _serviceProvider;
+
+        public App()
+        {
+            var services = new ServiceCollection();
+            ConfigureServices(services);
+            _serviceProvider = services.BuildServiceProvider();
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=.\\SQLEXPRESS;Database=TodoList;Trusted_Connection=True;TrustServerCertificate=True;"));
+            services.AddSingleton<ITaskRepository, TaskRepository>();
+            services.AddSingleton<TaskViewModel>();
+            services.AddSingleton<MainWindow>();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            mainWindow.DataContext = _serviceProvider.GetRequiredService<TaskViewModel>();
+            mainWindow.Show();
+        }
     }
 
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TodoList_PhanMinhThai.Data.Entities.Base
 {
-    public abstract class BaseEntity<TKey> : IEntity<TKey>
+    public abstract class BaseEntity<T> : IEntity<T>
     {
-        public TKey Id { get; set; }
+        public T Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

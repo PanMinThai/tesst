@@ -1,61 +1,108 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TodoList_PhanMinhThai.Data;
 using TodoList_PhanMinhThai.Data.Entities;
+using TodoList_PhanMinhThai.Models;
 
 namespace TodoList_PhanMinhThai.Repositories
 {
     public class TaskRepository : ITaskRepository
     {
-        private readonly string _connectionString;
+        private readonly ApplicationDbContext _context;
 
-        public TaskRepository(string connectionString)
+        public TaskRepository(ApplicationDbContext context) 
         {
-            _connectionString = connectionString;
+            _context = context;
         }
 
-        public Task AddTaskAsync(Task task)
+        public async Task AddTaskAsync(TaskModel task)
         {
-            throw new NotImplementedException();
-        }
+            if (task == null)
+                throw new ArgumentNullException(nameof(task));
 
-        public Task DeleteTaskAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Task>> GetAllTasksAsync()
-        {
-            var tasks = new List<Task>();
-
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                await connection.OpenAsync();
-                var command = new SqlCommand("SELECT * FROM Tasks", connection);
+                // Validate dữ liệu trước khi thêm
+                if (string.IsNullOrWhiteSpace(task.Title))
+                    throw new ArgumentException("Task title cannot be empty");
 
-                using (var reader = await command.ExecuteReaderAsync())
+                var taskEntity = new TaskEntity
                 {
-                    while (await reader.ReadAsync())
-                    {
-                        tasks.Add(new TaskEntity
-                        {
-                            Id = (int)reader["TaskId"],
-                            Title = reader["Title"].ToString(),
-                            Description = reader["Description"].ToString(),
-                            DueDate = (DateTime)reader["DueDate"],
-                            Status = reader["Status"].ToString(),
-                            Priority = reader["Priority"].ToString(),
-                            CreatedAt = (DateTime)reader["CreatedAt"],
-                            UpdatedAt = (DateTime)reader["UpdatedAt"]
-                        });
-                    }
-                }
-            }
+                    Title = task.Title.Trim(),
+                    Description = task.Description?.Trim(),
+                    DueDate = task.DueDate,
+                    Status = task.Status,
+                    Priority = task.Priority,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
 
-            return tasks;
+                await _context.Tasks.AddAsync(taskEntity);
+                await _context.SaveChangesAsync();
+
+                // Cập nhật ID trả về
+                task.Id = taskEntity.Id;
+                task.CreatedAt = taskEntity.CreatedAt;
+                task.UpdatedAt = taskEntity.UpdatedAt;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new RepositoryException("Database error while adding task", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException("Failed to add task", ex);
+            }
+        }
+
+        public async Task DeleteTaskAsync(int id)
+        {
+            try
+            {
+                // Tìm task cần xóa
+                var taskEntity = await _context.Tasks.FindAsync(id);
+
+                if (taskEntity == null)
+                {
+                    throw new KeyNotFoundException($"Task with ID {id} not found");
+                }
+
+                // Xóa task
+                _context.Tasks.Remove(taskEntity);
+
+                // Lưu thay đổi vào database
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new RepositoryException("Database error while deleting task", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException("Failed to delete task", ex);
+            }
+        }
+
+        public async Task<IEnumerable<TaskModel>> GetAllTasksAsync()
+        {
+            return await _context.Tasks
+                .Select(t => new TaskModel
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Description = t.Description,
+                    DueDate = t.DueDate,
+                    Status = t.Status,
+                    Priority = t.Priority,
+                    CreatedAt = t.CreatedAt,
+                    UpdatedAt = t.UpdatedAt
+                })
+                .ToListAsync();
         }
 
         public Task<Task> GetTaskByIdAsync(int id)
@@ -63,15 +110,42 @@ namespace TodoList_PhanMinhThai.Repositories
             throw new NotImplementedException();
         }
 
-        public Task MarkTaskAsCompleteAsync(int id)
+        public async Task UpdateTaskAsync(TaskModel task)
         {
-            throw new NotImplementedException();
+            if (task == null)
+                throw new ArgumentNullException(nameof(task));
+
+            try
+            {
+                var existingTask = await _context.Tasks.FindAsync(task.Id);
+
+                if (existingTask == null)
+                    throw new KeyNotFoundException($"Task with ID {task.Id} not found");
+
+                // Cập nhật thông tin
+                existingTask.Title = task.Title?.Trim();
+                existingTask.Description = task.Description?.Trim();
+                existingTask.DueDate = task.DueDate;
+                existingTask.Status = task.Status;
+                existingTask.Priority = task.Priority;
+                existingTask.UpdatedAt = DateTime.Now;
+
+                _context.Tasks.Update(existingTask);
+                await _context.SaveChangesAsync();
+
+                // Cập nhật lại thông tin cho model nếu cần
+                task.UpdatedAt = existingTask.UpdatedAt;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new RepositoryException("Database error while updating task", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException("Failed to update task", ex);
+            }
         }
 
-        public Task UpdateTaskAsync(Task task)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }
