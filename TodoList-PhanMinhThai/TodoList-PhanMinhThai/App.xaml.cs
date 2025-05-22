@@ -8,6 +8,7 @@ using TodoList_PhanMinhThai.Data;
 using TodoList_PhanMinhThai.Repositories;
 using TodoList_PhanMinhThai.ViewModels;
 using TodoList_PhanMinhThai.Views;
+using Application = System.Windows.Application;
 
 namespace TodoList_PhanMinhThai
 {

@@ -6,7 +6,176 @@
              xmlns:local="clr-namespace:TodoList_PhanMinhThai.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <Grid  Background="#F0F5F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title bar -->
+        <Grid Grid.Row="0" Background="#3A0CA3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="TASK MANAGEMENT" FontSize="10" 
+                   Foreground="White" 
+                   Grid.Column="0" 
+                   Margin="35,0,0,0" 
+                   VerticalAlignment="Center"/>
+            <Button x:Name="btnMinisize" 
+                Grid.Column="1" 
+                BorderThickness="0"
+                Content="-"
+                Foreground="White"
+                FontSize="16"
+                FontFamily="Montserrat"
+                Cursor="Hand"
+                Background="Transparent" Click="btnMinisize_Click"/>
+            <Button x:Name="btnClose" 
+                Grid.Column="2" 
+                BorderThickness="0"
+                Content="X"
+                Foreground="White"
+                FontSize="16"
+                FontFamily="Montserrat"
+                Cursor="Hand"
+                Background="Transparent" Click="btnClose_Click"/>
+        </Grid>
+
+        <!-- Form nhập liệu công việc -->
+        <GroupBox Grid.Row="1" Header="Task Information" Margin="20" Foreground="#333333" BorderBrush="#CCCCCC">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Title:" Foreground="#333333" Grid.Row="0" Grid.Column="0" Margin="5"/>
+                <TextBox Text="{Binding CurrentTask.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Row="0" Grid.Column="1" Margin="5" Background="White" Foreground="#333333"
+                     BorderBrush="#CCCCCC" BorderThickness="1"/>
+
+                <Label Content="Description:" Foreground="#333333" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                <TextBox Text="{Binding CurrentTask.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Row="1" Grid.Column="1" Margin="5" Background="White" Foreground="#333333"
+                     BorderBrush="#CCCCCC" BorderThickness="1"/>
+
+                <Label Content="Due Date:" Foreground="#333333" Grid.Row="2" Grid.Column="0" Margin="5"/>
+                <DatePicker SelectedDate="{Binding CurrentTask.DueDate, Mode=TwoWay}" 
+                        Grid.Row="2" Grid.Column="1" Margin="5" Background="White" Foreground="#333333"
+                        BorderBrush="#CCCCCC" BorderThickness="1"/>
+
+                <Label Content="Status:" Foreground="#333333" Grid.Row="3" Grid.Column="0" Margin="5"/>
+                <ComboBox ItemsSource="{Binding StatusOptions}" 
+                      SelectedItem="{Binding CurrentTask.Status, Mode=TwoWay}"
+                      Grid.Row="3" Grid.Column="1" Margin="5" 
+                      Background="White" Foreground="#333333"
+                      BorderBrush="#CCCCCC" BorderThickness="1">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="#333333"/>
+                            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+
+                <Label Content="Priority:" Foreground="#333333" Grid.Row="4" Grid.Column="0" Margin="5"/>
+                <ComboBox ItemsSource="{Binding PriorityOptions}" 
+                      SelectedItem="{Binding CurrentTask.Priority, Mode=TwoWay}"
+                      Grid.Row="4" Grid.Column="1" Margin="5" 
+                      Background="White" Foreground="#333333"
+                      BorderBrush="#CCCCCC" BorderThickness="1">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="#333333"/>
+                            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="5" Grid.ColumnSpan="2">
+                    <Button Content="Add" Command="{Binding AddTaskCommand}" Margin="5" Width="70" 
+                        Background="#4CC9F0" Foreground="#111111" FontWeight="Bold"
+                        BorderBrush="#4CC9F0" BorderThickness="1"/>
+                    <Button Content="Update" Command="{Binding UpdateTaskCommand}" Margin="5" Width="70" 
+                        Background="#4895EF" Foreground="White" FontWeight="Bold"
+                        BorderBrush="#4895EF" BorderThickness="1"/>
+                    <Button Content="Delete" Command="{Binding DeleteTaskCommand}" Margin="5" Width="70" 
+                        Background="#F72585" Foreground="White" FontWeight="Bold"
+                        BorderBrush="#F72585" BorderThickness="1"/>
+                    <Button Content="Clear" Command="{Binding ClearTaskCommand}" Margin="5" Width="70" 
+                        Background="#7209B7" Foreground="White" FontWeight="Bold"
+                        BorderBrush="#7209B7" BorderThickness="1"/>
+                    <Button Content="Mark Complete" Command="{Binding MarkCompleteCommand}" Margin="5" Width="100" 
+                        Background="#3A0CA3" Foreground="White" FontWeight="Bold"
+                        BorderBrush="#3A0CA3" BorderThickness="1"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- DataGrid hiển thị danh sách công việc -->
+        <GroupBox Grid.Row="2" Header="Task List" Margin="20,0,20,20" Foreground="#333333" BorderBrush="#CCCCCC">
+            <DataGrid ItemsSource="{Binding Tasks}" 
+                  SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  Background="White"
+                  Foreground="#333333"
+                  BorderBrush="#CCCCCC"
+                  RowBackground="White"
+                  AlternatingRowBackground="#F5F9FC"
+                  GridLinesVisibility="None"
+                  HeadersVisibility="Column"
+                  ColumnHeaderHeight="30">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#F0F5F9"/>
+                        <Setter Property="Foreground" Value="#333333"/>
+                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="Padding" Value="5,0,0,0"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="5"/>
+                        <Setter Property="Foreground" Value="#333333"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#E1F0FA"/>
+                                <Setter Property="Foreground" Value="#333333"/>
+                                <Setter Property="BorderBrush" Value="#4CC9F0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                    <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat={}{0:dd/MM/yyyy}}" Width="*"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                    <DataGridTextColumn Header="Priority" Binding="{Binding Priority}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
     </Grid>
 </UserControl>
