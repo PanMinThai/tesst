@@ -2,13 +2,34 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TodoList_PhanMinhThai"
-             >
+             xmlns:views="clr-namespace:TodoList_PhanMinhThai.Views"
+             xmlns:view="clr-namespace:TodoList_PhanMinhThai"
+             xmlns:viewModels="clr-namespace:TodoList_PhanMinhThai.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/ButtonStyles.xaml"/>
+
                 <ResourceDictionary Source="Styles/UIColor.xaml"/>
+                <ResourceDictionary Source="Styles/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="Styles/TaskItemStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type viewModels:AddNewTaskViewModel}">
+                <views:AddNewTaskControl />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+                <views:HomeView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:StartViewModel}">
+                <views:StartControl />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:TaskViewModel}">
+                <views:TaskManagementControl />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:TaskItemViewModel}">
+                <views:TaskItemControl />
+            </DataTemplate>
+
         </ResourceDictionary>
+        
     </Application.Resources>
 </Application>

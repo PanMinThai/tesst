@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoList_PhanMinhThai.Data;
 using TodoList_PhanMinhThai.Data.Entities;
+using TodoList_PhanMinhThai.Dtos;
 using TodoList_PhanMinhThai.Models;
+using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
 
 namespace TodoList_PhanMinhThai.Repositories
 {
@@ -19,7 +21,22 @@ namespace TodoList_PhanMinhThai.Repositories
         {
             _context = context;
         }
+        public int GetInProgressCount()
+        {
+            return _context.Tasks.Count(t => t.Status == TaskStatus.InProgress);
+        }
 
+        // 2. Hàm đếm task đã hoàn thành (Completed)
+        public int GetCompletedCount()
+        {
+            return _context.Tasks.Count(t => t.Status == TaskStatus.Completed);
+        }
+
+        // 3. Hàm đếm task đã hủy (Cancelled)
+        public int GetCancelledCount()
+        {
+            return _context.Tasks.Count(t => t.Status == TaskStatus.Cancelled);
+        }
         public async Task AddTaskAsync(TaskModel task)
         {
             if (task == null)
@@ -34,7 +51,6 @@ namespace TodoList_PhanMinhThai.Repositories
                 var taskEntity = new TaskEntity
                 {
                     Title = task.Title.Trim(),
-                    Description = task.Description?.Trim(),
                     DueDate = task.DueDate,
                     Status = task.Status,
                     Priority = task.Priority,
@@ -95,7 +111,6 @@ namespace TodoList_PhanMinhThai.Repositories
                 {
                     Id = t.Id,
                     Title = t.Title,
-                    Description = t.Description,
                     DueDate = t.DueDate,
                     Status = t.Status,
                     Priority = t.Priority,
@@ -124,7 +139,6 @@ namespace TodoList_PhanMinhThai.Repositories
 
                 // Cập nhật thông tin
                 existingTask.Title = task.Title?.Trim();
-                existingTask.Description = task.Description?.Trim();
                 existingTask.DueDate = task.DueDate;
                 existingTask.Status = task.Status;
                 existingTask.Priority = task.Priority;

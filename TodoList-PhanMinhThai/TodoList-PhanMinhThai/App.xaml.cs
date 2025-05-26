@@ -29,17 +29,29 @@ namespace TodoList_PhanMinhThai
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=.\\SQLEXPRESS;Database=TodoList;Trusted_Connection=True;TrustServerCertificate=True;"));
-            services.AddSingleton<ITaskRepository, TaskRepository>();
-            services.AddSingleton<TaskViewModel>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+
+            // ViewModels
+            services.AddTransient<TaskViewModel>();
+            services.AddTransient<HomeViewModel>();
+            services.AddTransient<StartViewModel>();
+            services.AddTransient<TaskItemViewModel>();
+            services.AddTransient<TaskItemViewModel>();
+
+            // Views
             services.AddSingleton<MainWindow>();
+            services.AddSingleton<HomeView>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            mainWindow.DataContext = _serviceProvider.GetRequiredService<TaskViewModel>();
-            mainWindow.Show();
+            //var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            //mainWindow.DataContext = _serviceProvider.GetRequiredService<TaskViewModel>();
+            //mainWindow.Show();
+            var homeWindow = _serviceProvider.GetRequiredService<HomeView>();
+            homeWindow.DataContext = _serviceProvider.GetRequiredService<HomeViewModel>();
+            homeWindow.Show();
         }
     }
 

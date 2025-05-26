@@ -69,10 +69,6 @@ namespace TodoList_PhanMinhThai.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("date");
 

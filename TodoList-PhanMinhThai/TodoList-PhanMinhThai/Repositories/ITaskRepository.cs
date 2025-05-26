@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TodoList_PhanMinhThai.Data.Entities;
+using TodoList_PhanMinhThai.Dtos;
 using TodoList_PhanMinhThai.Models;
 
 namespace TodoList_PhanMinhThai.Repositories
@@ -15,5 +17,8 @@ namespace TodoList_PhanMinhThai.Repositories
         Task AddTaskAsync(TaskModel task);
         Task UpdateTaskAsync(TaskModel task);
         Task DeleteTaskAsync(int id);
+        int GetInProgressCount();
+        int GetCompletedCount();
+        int GetCancelledCount();
     }
 }

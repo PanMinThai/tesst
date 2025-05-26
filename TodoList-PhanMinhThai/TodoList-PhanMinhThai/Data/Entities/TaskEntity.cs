@@ -15,8 +15,6 @@ namespace TodoList_PhanMinhThai.Data.Entities
         [StringLength(100)]
         public string Title { get; set; }
 
-        public string Description { get; set; }
-
         [Column(TypeName = "date")]
         public DateTime? DueDate { get; set; }
 
@@ -38,7 +36,9 @@ namespace TodoList_PhanMinhThai.Data.Entities
         InProgress,
 
         [Display(Name = "Hoàn thành")]
-        Completed
+        Completed,
+        [Display(Name = "Hủy")]
+        Cancelled
     }
 
     public enum TaskPriority

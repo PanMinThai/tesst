@@ -6,21 +6,25 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TodoList_PhanMinhThai.Data.Entities;
 using TodoList_PhanMinhThai.Models;
 using TodoList_PhanMinhThai.Repositories;
 using TodoList_PhanMinhThai.Utilities;
+using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
 
 namespace TodoList_PhanMinhThai.ViewModels
 {
-    public class TaskViewModel : INotifyPropertyChanged
+    public class TaskViewModel :  ViewModelBase
     {
         private readonly ITaskRepository _taskRepository;
         private TaskModel _selectedTask;
         private TaskModel _currentTask = new TaskModel();
 
         public ObservableCollection<TaskModel> Tasks { get; } = new ObservableCollection<TaskModel>();
-        public ObservableCollection<string> StatusOptions { get; } = new ObservableCollection<string> { "Đang làm", "Hoàn thành" };
-        public ObservableCollection<string> PriorityOptions { get; } = new ObservableCollection<string> { "Cao", "Trung bình", "Thấp" };
+        public ObservableCollection<TaskStatus> StatusOptions { get; } = new ObservableCollection<TaskStatus>(Enum.GetValues(typeof(TaskStatus)).Cast<TaskStatus>());
+
+        public ObservableCollection<TaskPriority> PriorityOptions { get; } = new ObservableCollection<TaskPriority>(Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>());
+
 
         public TaskModel SelectedTask
         {
@@ -34,13 +38,12 @@ namespace TodoList_PhanMinhThai.ViewModels
                     {
                         Id = _selectedTask.Id,
                         Title = _selectedTask.Title,
-                        Description = _selectedTask.Description,
                         DueDate = _selectedTask.DueDate,
                         Status = _selectedTask.Status,
                         Priority = _selectedTask.Priority
                     };
                 }
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedTask));
                 CommandManager.InvalidateRequerySuggested();
             }
         }
@@ -51,7 +54,7 @@ namespace TodoList_PhanMinhThai.ViewModels
             set
             {
                 _currentTask = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(_currentTask));
             }
         }
 
@@ -154,10 +157,5 @@ namespace TodoList_PhanMinhThai.ViewModels
             return SelectedTask != null;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

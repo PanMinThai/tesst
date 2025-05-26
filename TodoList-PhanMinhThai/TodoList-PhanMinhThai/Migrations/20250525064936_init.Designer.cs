@@ -12,7 +12,7 @@ using TodoList_PhanMinhThai.Data;
 namespace TodoList_PhanMinhThai.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250521094533_init")]
+    [Migration("20250525064936_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -71,10 +71,6 @@ namespace TodoList_PhanMinhThai.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("date");

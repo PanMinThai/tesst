@@ -10,18 +10,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace TodoList_PhanMinhThai.Views
 {
     /// <summary>
-    /// Interaction logic for HomeView.xaml
+    /// Interaction logic for AddNewTaskControl.xaml
     /// </summary>
-    public partial class HomeView : Window
+    public partial class AddNewTaskControl : UserControl
     {
-        public HomeView()
+        public AddNewTaskControl()
         {
             InitializeComponent();
+        }
+
+        private void CreateTaskButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void CategoryButton_Click(Object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
