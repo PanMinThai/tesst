@@ -54,21 +54,34 @@ namespace TodoList_PhanMinhThai.ViewModels
                 {
                     Title = task.Title,
                     DueDate = task.DueDate?.ToString("MMMM dd, yyyy") ?? "No due date", // Nếu null sẽ hiển thị "No due date" 
-                    DaysAgo = CalculateDaysAgo(task.CreatedAt), // Tính toán số ngày trước
+                    DaysAgo = CalculateTimeDifference(task.DueDate), // Tính toán số ngày trước
                     Priority = task.Priority,
-                    Status = task.Status
+                    Status = task.Status,
+                    Background = task.Status switch
+                    {
+                        Data.Entities.TaskStatus.Completed => "#75a7fb",
+                        Data.Entities.TaskStatus.InProgress => "#7955fd",
+                        Data.Entities.TaskStatus.Cancelled => "#fb5a9d"
+                    }
                 });
             }
+            var t = Tasks;
         }
 
-        private string CalculateDaysAgo(DateTime? createdDate)
+        private string CalculateTimeDifference(DateTime? dueDate)
         {
-            int? days = (DateTime.Now - createdDate)?.Days; 
+            if (!dueDate.HasValue) return "No due date";
+
+            var difference = dueDate.Value.Date - DateTime.Today;
+            int days = difference.Days;
+
             return days switch
             {
-                null => "Unknown",
                 0 => "Today",
-                _ => $"{days} Days Ago"
+                1 => "Tomorrow",
+                > 1 => $"in {days} days",
+                -1 => "Yesterday",
+                < -1 => $"{Math.Abs(days)} days ago"
             };
         }
     }

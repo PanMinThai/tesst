@@ -7,15 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="580"
              Background="Transparent">
-    <Border Background="#f7f3ff" 
-            BorderBrush="#E0E0E0" 
+    <Border BorderBrush="#E0E0E0" 
             BorderThickness="1" 
             CornerRadius="8" 
             Margin="5"
-            Padding="15">
-
-        
-
+            Padding="15" Background="{Binding Background}">
+        <!--<Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#A855F7" Offset="0"/>
+                <GradientStop Color="#EC4899" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>-->
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

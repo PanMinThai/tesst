@@ -10,15 +10,13 @@ using TodoList_PhanMinhThai.Models;
 
 namespace TodoList_PhanMinhThai.Repositories
 {
-    public interface ITaskRepository
+    public interface ITaskRepository : ITaskCountRepository
     {
         Task<IEnumerable<TaskModel>> GetAllTasksAsync();
         Task<Task> GetTaskByIdAsync(int id);
         Task AddTaskAsync(TaskModel task);
         Task UpdateTaskAsync(TaskModel task);
         Task DeleteTaskAsync(int id);
-        int GetInProgressCount();
-        int GetCompletedCount();
-        int GetCancelledCount();
+        
     }
 }

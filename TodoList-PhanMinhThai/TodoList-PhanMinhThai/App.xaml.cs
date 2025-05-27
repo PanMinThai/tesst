@@ -37,7 +37,7 @@ namespace TodoList_PhanMinhThai
             services.AddTransient<StartViewModel>();
             services.AddTransient<TaskItemViewModel>();
             services.AddTransient<TaskItemViewModel>();
-
+            services.AddTransient<ListTaskViewModel>();
             // Views
             services.AddSingleton<MainWindow>();
             services.AddSingleton<HomeView>();
@@ -46,9 +46,6 @@ namespace TodoList_PhanMinhThai
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            //var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            //mainWindow.DataContext = _serviceProvider.GetRequiredService<TaskViewModel>();
-            //mainWindow.Show();
             var homeWindow = _serviceProvider.GetRequiredService<HomeView>();
             homeWindow.DataContext = _serviceProvider.GetRequiredService<HomeViewModel>();
             homeWindow.Show();

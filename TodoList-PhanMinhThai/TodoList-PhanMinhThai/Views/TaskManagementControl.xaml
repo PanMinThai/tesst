@@ -11,7 +11,54 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
+        <GroupBox Grid.Column="0" Header="Task List" Margin="20,0,20,20" Foreground="#333333" BorderBrush="#CCCCCC">
+            <DataGrid ItemsSource="{Binding Tasks}" 
+              SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+              AutoGenerateColumns="False"
+              IsReadOnly="True"
+              SelectionMode="Single"
+              Background="White"
+              Foreground="#333333"
+              BorderBrush="#CCCCCC"
+              RowBackground="White"
+              AlternatingRowBackground="#F5F9FC"
+              GridLinesVisibility="None"
+              HeadersVisibility="Column"
+              ColumnHeaderHeight="30">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#F0F5F9"/>
+                        <Setter Property="Foreground" Value="#333333"/>
+                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="Padding" Value="5,0,0,0"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="5"/>
+                        <Setter Property="Foreground" Value="#333333"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#E1F0FA"/>
+                                <Setter Property="Foreground" Value="#333333"/>
+                                <Setter Property="BorderBrush" Value="#4CC9F0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                    <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat={}{0:dd/MM/yyyy}}" Width="*"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                    <DataGridTextColumn Header="Priority" Binding="{Binding Priority}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
         <!-- Form nhập liệu công việc -->
         <GroupBox Grid.Column="1" Header="Task Information" Margin="20,20,20,20" Foreground="#333333" BorderBrush="#CCCCCC" Grid.ColumnSpan="2">
             <Grid>
@@ -86,53 +133,6 @@
         </GroupBox>
 
         <!-- DataGrid hiển thị danh sách công việc -->
-        <GroupBox Grid.Column="0" Header="Task List" Margin="20,0,20,20" Foreground="#333333" BorderBrush="#CCCCCC" Grid.ColumnSpan="2">
-            <DataGrid ItemsSource="{Binding Tasks}" 
-                      SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      SelectionMode="Single"
-                      Background="White"
-                      Foreground="#333333"
-                      BorderBrush="#CCCCCC"
-                      RowBackground="White"
-                      AlternatingRowBackground="#F5F9FC"
-                      GridLinesVisibility="None"
-                      HeadersVisibility="Column"
-                      ColumnHeaderHeight="30">
-                <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="{x:Type DataGridColumnHeader}">
-                        <Setter Property="Background" Value="#F0F5F9"/>
-                        <Setter Property="Foreground" Value="#333333"/>
-                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
-                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                        <Setter Property="Padding" Value="5,0,0,0"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
-                    </Style>
-                </DataGrid.ColumnHeaderStyle>
-                <DataGrid.CellStyle>
-                    <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
-                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                        <Setter Property="Padding" Value="5"/>
-                        <Setter Property="Foreground" Value="#333333"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#E1F0FA"/>
-                                <Setter Property="Foreground" Value="#333333"/>
-                                <Setter Property="BorderBrush" Value="#4CC9F0"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.CellStyle>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
-                    <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat={}{0:dd/MM/yyyy}}" Width="*"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
-                    <DataGridTextColumn Header="Priority" Binding="{Binding Priority}" Width="*"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </GroupBox>
+        
     </Grid>
 </UserControl>

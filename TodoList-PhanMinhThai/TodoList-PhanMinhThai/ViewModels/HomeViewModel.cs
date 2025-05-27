@@ -70,6 +70,7 @@ namespace TodoList_PhanMinhThai.ViewModels
         public ICommand ShowAddNewTaskViewCommand { get; }
         public ICommand ShowStartViewCommand { get; }
         public ICommand ShowTaskManagementViewCommand { get; }
+        public ICommand ShowListTaskViewCommand { get; }
         public HomeViewModel(ITaskRepository taskRepository)
         {
             this.taskRepository = taskRepository;
@@ -80,6 +81,8 @@ namespace TodoList_PhanMinhThai.ViewModels
             ShowAddNewTaskViewCommand = new ViewModelCommand(ExecuteAddNewTaskViewCommand);
             ShowStartViewCommand = new ViewModelCommand(ExecuteShowStartViewCommand);
             ShowTaskManagementViewCommand = new ViewModelCommand(ExecuteTaskManagementViewCommand);
+            ShowListTaskViewCommand = new ViewModelCommand(ExecuteListTaskViewCommand);
+
             ExecuteShowHomeViewCommand(null);
             CurrentChildView = new StartViewModel(taskRepository);
             //LoadCurrentUserData();
@@ -94,7 +97,7 @@ namespace TodoList_PhanMinhThai.ViewModels
         {
           //  CurrentChildView = new TaskViewModel();
             Caption = "Dashboard";
-            Icon = IconChar.Home;
+            Icon = IconChar.Home;   
         }
         private void ExecuteShowStartViewCommand(object obj)
         {
@@ -105,6 +108,12 @@ namespace TodoList_PhanMinhThai.ViewModels
         private void ExecuteTaskManagementViewCommand(object obj)
         {
             CurrentChildView = new TaskViewModel(taskRepository);
+            Caption = "Dashboard";
+            Icon = IconChar.Home;
+        }
+        private void ExecuteListTaskViewCommand(object obj)
+        {
+            CurrentChildView = new ListTaskViewModel(taskRepository);
             Caption = "Dashboard";
             Icon = IconChar.Home;
         }

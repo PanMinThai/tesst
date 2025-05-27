@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TodoList_PhanMinhThai.Data.Entities;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
 
 namespace TodoList_PhanMinhThai.ViewModels
@@ -11,6 +12,16 @@ namespace TodoList_PhanMinhThai.ViewModels
     class TaskItemViewModel :ViewModelBase
     {
         // Properties
+        private string _background = "#FFFFFF";
+        public string Background
+        {
+            get => _background;
+            set
+            {
+                _background = value;
+                OnPropertyChanged(nameof(Background));
+            }
+        }
         private string _title = "UX Design Project";
         public string Title
         {

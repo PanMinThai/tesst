@@ -24,5 +24,6 @@ namespace TodoList_PhanMinhThai.Views
         {
             InitializeComponent();
         }
+
     }
 }

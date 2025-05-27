@@ -160,6 +160,26 @@ namespace TodoList_PhanMinhThai.Repositories
             }
         }
 
+        public int GetTodayTaskCount()
+        {
+            DateTime today = DateTime.Today;
+            return _context.Tasks.Count(t => t.DueDate.HasValue && t.DueDate.Value.Date == today);
+        }
+
+        public int GetYesterdayTaskCount()
+        {
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+            return _context.Tasks.Count(t => t.DueDate.HasValue && t.DueDate.Value.Date == yesterday);
+        }
+
+        public int GetThisWeekTaskCount()
+        {
+            DateTime today = DateTime.Today;
+            DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            DateTime endOfWeek = startOfWeek.AddDays(6);
+
+            return _context.Tasks.Count(t => t.DueDate.HasValue && t.DueDate.Value.Date >= startOfWeek && t.DueDate.Value.Date <= endOfWeek);
+        }
     }
 
 }

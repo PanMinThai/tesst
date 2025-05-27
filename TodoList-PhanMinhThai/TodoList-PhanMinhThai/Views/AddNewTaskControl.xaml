@@ -4,108 +4,101 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TodoList_PhanMinhThai.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="#ffffff">
-    <Grid Margin="30" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+             mc:Ignorable="d">
+    <Border CornerRadius="12" Background="#200F53" Margin="10,0,10,0">
+        <Grid Margin="10" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Grid Grid.Row="0" Margin="0,0,0,30">
-            <TextBlock Text="New Task" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Foreground="#333"
-                       HorizontalAlignment="Left"/>
-            <Button Content="⋯" 
-                    Background="Transparent" 
-                    BorderThickness="0" 
-                    FontSize="20" 
-                    Foreground="#999"
-                    HorizontalAlignment="Right"
-                    Cursor="Hand"/>
-        </Grid>
-
-        <!-- Task Title Input -->
-        <TextBox Grid.Row="1" 
-                 Name="TaskTitleTextBox"
-                 Text="Task Title Here"
-                 FontSize="16"
-                 Foreground="#999"
-                 Background="#F5F5F5"
-                 BorderThickness="0"
-                 Padding="15"
-                 Height="50"
-                 Margin="0,0,0,20">
-            <TextBox.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="8"/>
-                </Style>
-            </TextBox.Resources>
-        </TextBox>
-
-        <!-- Category Buttons -->
-        <WrapPanel Grid.Row="2" Margin="0,0,0,30">
-            <Button Name="MeetingBtn" Content="Meeting" Style="{StaticResource SelectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
-            <Button Name="DesignBtn" Content="Design" Style="{StaticResource UnselectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
-            <Button Name="PlannerBtn" Content="Planner" Style="{StaticResource UnselectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
-            <Button Name="SecurityBtn" Content="Security" Style="{StaticResource UnselectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
-            <Button Name="SurveyBtn" Content="Survey" Style="{StaticResource UnselectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
-            <Button Name="BuilderBtn" Content="Builder" Style="{StaticResource UnselectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
-        </WrapPanel>
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Margin="0,0,0,30">
-
-                <TextBlock Text="Priority" 
-               FontSize="16" 
-               FontWeight="Medium" 
-               Foreground="#999" 
-               Margin="0,0,0,15"/>
-
-                <StackPanel Orientation="Horizontal">
-
-                    <RadioButton Name="HighPriorityRb" 
-                     Content="High" 
-                     GroupName="Priority"
-                     Style="{StaticResource PriorityRadioButtonStyle}"
-                     Foreground="#FF4444"
-                     Margin="0,0,30,0"/>
-                    <RadioButton Name="MediumPriorityRb" 
-                     Content="Medium" 
-                     GroupName="Priority"
-                     IsChecked="True"
-                     Style="{StaticResource PriorityRadioButtonStyle}"
-                     Foreground="#FF9800"
-                     Margin="0,0,30,0"/>
-                    <RadioButton Name="LowPriorityRb" 
-                     Content="Low" 
-                     GroupName="Priority"
-                     Style="{StaticResource PriorityRadioButtonStyle}"
-                     Foreground="#4CAF50"/>
-                </StackPanel>
-            </StackPanel>
-            <Grid Grid.Column="1" >
-                <DatePicker Margin="10" Width="150" Height="50"></DatePicker>
+            <!-- Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,30">
+                <TextBlock Text="New Task" 
+                   FontSize="20" 
+                   FontWeight="Bold" 
+                   Foreground="#BCBEE0"
+                   HorizontalAlignment="Left"/>
+                <Button Content="⋯" 
+                Background="Transparent" 
+                BorderThickness="0" 
+                FontSize="20" 
+                Foreground="#999"
+                HorizontalAlignment="Right"
+                Cursor="Hand"/>
             </Grid>
-        </Grid>
-        <!-- Priority Section -->
-        
 
-        <!-- Create Task Button -->
-        <Button Grid.Row="6" 
-                Content="Create Task" 
-                Style="{StaticResource CreateTaskButtonStyle}"
-                Click="CreateTaskButton_Click"/>
-    </Grid>
+            <!-- Task Title Input -->
+            <TextBox Grid.Row="1" 
+             Name="TaskTitleTextBox"
+             Text="Task Title Here"
+             FontSize="16"
+             Foreground="#BCBEE0"
+             Background="#2e1579"
+             BorderThickness="0"
+             Padding="15"
+             Height="50"
+             Margin="0,0,0,10">
+                <TextBox.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="8"/>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+
+            <!-- Category Buttons -->
+            <WrapPanel Grid.Row="2" Margin="0,0,0,10">
+                <Button Name="MeetingBtn" Content="Meeting" Style="{StaticResource SelectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
+                <Button Name="DesignBtn" Content="Design" Style="{StaticResource UnselectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
+                <Button Name="PlannerBtn" Content="Planner" Style="{StaticResource UnselectedCategoryButtonStyle}" Click="CategoryButton_Click"/>
+
+            </WrapPanel>
+            <Grid Grid.Row="3">
+                <StackPanel Margin="0,0,0,10">
+                    <TextBlock Text="Priority" 
+                       FontSize="16" 
+                       FontWeight="Medium" 
+                       Foreground="#999" 
+                       Margin="0,0,0,15"/>
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <RadioButton Name="HighPriorityRb" 
+                                     Content="High" 
+                                     GroupName="Priority"
+                                     Style="{StaticResource PriorityRadioButtonStyle}"
+                                     Foreground="#FF4444"
+                                     Margin="0,0,10,0"/>
+                        <RadioButton Name="MediumPriorityRb" 
+                                     Content="Medium" 
+                                     GroupName="Priority"
+                                     IsChecked="True"
+                                     Style="{StaticResource PriorityRadioButtonStyle}"
+                                     Foreground="#FF9800"
+                                     Margin="0,0,10,0"/>
+                        <RadioButton Name="LowPriorityRb" 
+                                     Content="Low" 
+                                     GroupName="Priority"
+                                     Style="{StaticResource PriorityRadioButtonStyle}"
+                                     Foreground="#4CAF50"/>
+                    </StackPanel>
+                </StackPanel>
+                
+            </Grid>
+            <!-- Priority Section -->
+            <Grid Grid.Row="4">
+                <DatePicker Margin="5" Width="120" Height="50"></DatePicker>
+            </Grid>
+
+            <!-- Create Task Button -->
+            <Button Grid.Row="6" 
+            Content="Create Task" 
+            Style="{StaticResource CreateTaskButtonStyle}"
+            Click="CreateTaskButton_Click"/>
+        </Grid>
+    </Border>
 </UserControl>

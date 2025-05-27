@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -14,8 +14,12 @@ using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
 
 namespace TodoList_PhanMinhThai.ViewModels
 {
-    public class TaskViewModel :ViewModelBase
+    public class ListTaskViewModel : ViewModelBase
     {
+        public int YesterdayTaskCount { get; private set; }
+        public int TodayTaskCount { get; private set; }
+        public int ThisWeekTaskCount { get; private set; }
+
         private readonly ITaskRepository _taskRepository;
         private TaskModel _selectedTask;
         private TaskModel _currentTask = new TaskModel();
@@ -24,7 +28,6 @@ namespace TodoList_PhanMinhThai.ViewModels
         public ObservableCollection<TaskStatus> StatusOptions { get; } = new ObservableCollection<TaskStatus>(Enum.GetValues(typeof(TaskStatus)).Cast<TaskStatus>());
 
         public ObservableCollection<TaskPriority> PriorityOptions { get; } = new ObservableCollection<TaskPriority>(Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>());
-
 
         public TaskModel SelectedTask
         {
@@ -64,8 +67,9 @@ namespace TodoList_PhanMinhThai.ViewModels
         public ICommand DeleteTaskCommand { get; }
         public ICommand ClearTaskCommand { get; }
         public ICommand MarkCompleteCommand { get; }
-
-        public TaskViewModel(ITaskRepository taskRepository)
+        public ICommand SearchTaskCommand { get; }
+            
+        public ListTaskViewModel(ITaskRepository taskRepository)
         {
             _taskRepository = taskRepository;
 
@@ -76,8 +80,9 @@ namespace TodoList_PhanMinhThai.ViewModels
             DeleteTaskCommand = new RelayCommand(async _ => await DeleteTaskAsync(), _ => CanExecuteTaskCommand());
             ClearTaskCommand = new RelayCommand(_ => ClearTaskFields());
             MarkCompleteCommand = new RelayCommand(async _ => await MarkTaskCompleteAsync(), _ => CanExecuteTaskCommand());
-
+          //  SearchTaskCommand = new RelayCommand(async _ => await SearchTaskAsync());
             // Tải tasks khi khởi tạo
+            LoadTaskCounts();
             LoadTasksCommand.Execute(null);
         }
 
@@ -89,6 +94,16 @@ namespace TodoList_PhanMinhThai.ViewModels
             {
                 Tasks.Add(task);
             }
+        }
+        private void LoadTaskCounts()
+        {
+            YesterdayTaskCount = _taskRepository.GetYesterdayTaskCount();
+            TodayTaskCount = _taskRepository.GetTodayTaskCount();
+            ThisWeekTaskCount = _taskRepository.GetThisWeekTaskCount();
+
+            OnPropertyChanged(nameof(YesterdayTaskCount));
+            OnPropertyChanged(nameof(TodayTaskCount));
+            OnPropertyChanged(nameof(ThisWeekTaskCount));
         }
 
         private async Task AddTaskAsync()
@@ -156,6 +171,5 @@ namespace TodoList_PhanMinhThai.ViewModels
         {
             return SelectedTask != null;
         }
-
     }
 }
