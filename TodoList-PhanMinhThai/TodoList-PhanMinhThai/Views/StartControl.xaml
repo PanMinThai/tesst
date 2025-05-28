@@ -125,7 +125,7 @@
                         <ItemsControl ItemsSource="{Binding Tasks}" VerticalAlignment="Stretch">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <local:TaskItemControl Margin="0,5"/>
+                                        <local:TaskItemControl Margin="0,5"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

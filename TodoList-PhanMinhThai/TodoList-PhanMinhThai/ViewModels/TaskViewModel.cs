@@ -9,22 +9,21 @@ using System.Windows.Input;
 using TodoList_PhanMinhThai.Data.Entities;
 using TodoList_PhanMinhThai.Models;
 using TodoList_PhanMinhThai.Repositories;
+using TodoList_PhanMinhThai.Services;
 using TodoList_PhanMinhThai.Utilities;
 using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
 
 namespace TodoList_PhanMinhThai.ViewModels
 {
-    public class TaskViewModel :ViewModelBase
+    public class TaskViewModel : ViewModelBase
     {
-        private readonly ITaskRepository _taskRepository;
+        private readonly ITaskService _taskService;
         private TaskModel _selectedTask;
         private TaskModel _currentTask = new TaskModel();
 
         public ObservableCollection<TaskModel> Tasks { get; } = new ObservableCollection<TaskModel>();
         public ObservableCollection<TaskStatus> StatusOptions { get; } = new ObservableCollection<TaskStatus>(Enum.GetValues(typeof(TaskStatus)).Cast<TaskStatus>());
-
         public ObservableCollection<TaskPriority> PriorityOptions { get; } = new ObservableCollection<TaskPriority>(Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>());
-
 
         public TaskModel SelectedTask
         {
@@ -65,11 +64,10 @@ namespace TodoList_PhanMinhThai.ViewModels
         public ICommand ClearTaskCommand { get; }
         public ICommand MarkCompleteCommand { get; }
 
-        public TaskViewModel(ITaskRepository taskRepository)
+        public TaskViewModel(ITaskService taskService)
         {
-            _taskRepository = taskRepository;
+            _taskService = taskService;
 
-            // Khởi tạo commands
             LoadTasksCommand = new RelayCommand(async _ => await LoadTasksAsync());
             AddTaskCommand = new RelayCommand(async _ => await AddTaskAsync());
             UpdateTaskCommand = new RelayCommand(async _ => await UpdateTaskAsync(), _ => CanExecuteTaskCommand());
@@ -77,14 +75,13 @@ namespace TodoList_PhanMinhThai.ViewModels
             ClearTaskCommand = new RelayCommand(_ => ClearTaskFields());
             MarkCompleteCommand = new RelayCommand(async _ => await MarkTaskCompleteAsync(), _ => CanExecuteTaskCommand());
 
-            // Tải tasks khi khởi tạo
             LoadTasksCommand.Execute(null);
         }
 
         private async Task LoadTasksAsync()
         {
             Tasks.Clear();
-            var tasks = await _taskRepository.GetAllTasksAsync();
+            var tasks = await _taskService.GetAllTasksAsync();
             foreach (var task in tasks.OrderBy(t => t.DueDate))
             {
                 Tasks.Add(task);
@@ -93,7 +90,6 @@ namespace TodoList_PhanMinhThai.ViewModels
 
         private async Task AddTaskAsync()
         {
-
             try
             {
                 if (string.IsNullOrWhiteSpace(CurrentTask.Title))
@@ -102,14 +98,9 @@ namespace TodoList_PhanMinhThai.ViewModels
                     return;
                 }
 
-                await _taskRepository.AddTaskAsync(CurrentTask);
+                await _taskService.AddTaskAsync(CurrentTask);
                 await LoadTasksAsync();
                 ClearTaskFields();
-            }
-            catch (RepositoryException ex)
-            {
-                MessageBox.Show($"Database error: {ex.Message}");
-                // Log error (ex.InnerException) nếu cần
             }
             catch (Exception ex)
             {
@@ -120,14 +111,14 @@ namespace TodoList_PhanMinhThai.ViewModels
         private async Task UpdateTaskAsync()
         {
             CurrentTask.UpdatedAt = DateTime.Now;
-            await _taskRepository.UpdateTaskAsync(CurrentTask);
+            await _taskService.UpdateTaskAsync(CurrentTask);
             await LoadTasksAsync();
             ClearTaskFields();
         }
 
         private async Task DeleteTaskAsync()
         {
-            await _taskRepository.DeleteTaskAsync(SelectedTask.Id);
+            await _taskService.DeleteTaskAsync(SelectedTask.Id);
             await LoadTasksAsync();
             ClearTaskFields();
         }
@@ -136,7 +127,7 @@ namespace TodoList_PhanMinhThai.ViewModels
         {
             SelectedTask.Status = Data.Entities.TaskStatus.Completed;
             SelectedTask.UpdatedAt = DateTime.Now;
-            await _taskRepository.UpdateTaskAsync(SelectedTask);
+            await _taskService.UpdateTaskAsync(SelectedTask);
             await LoadTasksAsync();
             ClearTaskFields();
         }
@@ -156,6 +147,6 @@ namespace TodoList_PhanMinhThai.ViewModels
         {
             return SelectedTask != null;
         }
-
     }
+
 }

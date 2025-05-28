@@ -32,24 +32,15 @@ namespace TodoList_PhanMinhThai.Data.Entities
 
     public enum TaskStatus
     {
-        [Display(Name = "Đang làm")]
         InProgress,
-
-        [Display(Name = "Hoàn thành")]
         Completed,
-        [Display(Name = "Hủy")]
         Cancelled
     }
 
     public enum TaskPriority
     {
-        [Display(Name = "Cao")]
         High,
-
-        [Display(Name = "Trung bình")]
         Medium,
-
-        [Display(Name = "Thấp")]
         Low
     }
 }

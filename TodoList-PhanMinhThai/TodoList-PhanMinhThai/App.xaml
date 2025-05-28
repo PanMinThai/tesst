@@ -7,12 +7,15 @@
              xmlns:viewModels="clr-namespace:TodoList_PhanMinhThai.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
 
                 <ResourceDictionary Source="Styles/UIColor.xaml"/>
                 <ResourceDictionary Source="Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="Styles/TaskItemStyle.xaml"/>
+                <ResourceDictionary Source="Styles/ComboboxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
             <DataTemplate DataType="{x:Type viewModels:AddNewTaskViewModel}">
                 <views:AddNewTaskControl />
             </DataTemplate>

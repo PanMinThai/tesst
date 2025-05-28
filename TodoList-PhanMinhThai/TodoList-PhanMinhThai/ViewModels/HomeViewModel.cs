@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TodoList_PhanMinhThai.Repositories;
+using TodoList_PhanMinhThai.Services;
 
 namespace TodoList_PhanMinhThai.ViewModels
 {
@@ -16,19 +17,10 @@ namespace TodoList_PhanMinhThai.ViewModels
         private string _caption;
         private IconChar _icon;
         private ITaskRepository taskRepository;
-        
-        //public UserAccountModel CurrentUserAccount
-        //{
-        //    get
-        //    {
-        //        return _currentUserAccount;
-        //    }
-        //    set
-        //    {
-        //        _currentUserAccount = value;
-        //        OnPropertyChanged(nameof(CurrentUserAccount));
-        //    }
-        //}
+
+        private ITaskService _taskService;
+        private ITaskFilterService _taskFilterService;
+        private ITaskStatisticsService _taskStatisticsService;
         public ViewModelBase CurrentChildView
         {
             get
@@ -71,12 +63,13 @@ namespace TodoList_PhanMinhThai.ViewModels
         public ICommand ShowStartViewCommand { get; }
         public ICommand ShowTaskManagementViewCommand { get; }
         public ICommand ShowListTaskViewCommand { get; }
-        public HomeViewModel(ITaskRepository taskRepository)
+        public HomeViewModel(ITaskRepository taskRepository, ITaskService taskService, ITaskStatisticsService taskStatisticsService, ITaskFilterService taskFilterService)
         {
             this.taskRepository = taskRepository;
+            _taskFilterService = taskFilterService;
+            _taskService = taskService;
+            _taskStatisticsService = taskStatisticsService;
 
-            //userRepository = new UserRepository();
-            //CurrentUserAccount = new UserAccountModel();
             ShowHomeViewCommand = new ViewModelCommand(ExecuteShowHomeViewCommand);
             ShowAddNewTaskViewCommand = new ViewModelCommand(ExecuteAddNewTaskViewCommand);
             ShowStartViewCommand = new ViewModelCommand(ExecuteShowStartViewCommand);
@@ -84,8 +77,7 @@ namespace TodoList_PhanMinhThai.ViewModels
             ShowListTaskViewCommand = new ViewModelCommand(ExecuteListTaskViewCommand);
 
             ExecuteShowHomeViewCommand(null);
-            CurrentChildView = new StartViewModel(taskRepository);
-            //LoadCurrentUserData();
+            CurrentChildView = new StartViewModel(_taskService);
         }
         private void ExecuteAddNewTaskViewCommand(object obj)
         {
@@ -101,21 +93,21 @@ namespace TodoList_PhanMinhThai.ViewModels
         }
         private void ExecuteShowStartViewCommand(object obj)
         {
-            CurrentChildView = new StartViewModel(taskRepository);
+            CurrentChildView = new StartViewModel(_taskService);
             Caption = "Dashboard";  
-            Icon = IconChar.Home;
+            Icon = IconChar.Calendar;
         }
         private void ExecuteTaskManagementViewCommand(object obj)
         {
-            CurrentChildView = new TaskViewModel(taskRepository);
+            CurrentChildView = new TaskViewModel(_taskService);
             Caption = "Dashboard";
-            Icon = IconChar.Home;
+            Icon = IconChar.ListCheck;
         }
         private void ExecuteListTaskViewCommand(object obj)
         {
-            CurrentChildView = new ListTaskViewModel(taskRepository);
-            Caption = "Dashboard";
-            Icon = IconChar.Home;
+            CurrentChildView = new ListTaskViewModel(_taskService,_taskFilterService,_taskStatisticsService);
+            Caption = "List Task";
+            Icon = IconChar.ChartBar;
         }
     }
 }

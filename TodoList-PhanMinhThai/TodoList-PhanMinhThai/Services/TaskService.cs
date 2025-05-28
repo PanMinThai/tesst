@@ -1,0 +1,62 @@
+﻿using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TodoList_PhanMinhThai.Data.Entities;
+using TodoList_PhanMinhThai.Models;
+using TodoList_PhanMinhThai.Repositories;
+
+namespace TodoList_PhanMinhThai.Services
+{
+    public class TaskService : ITaskService
+    {
+        private readonly IMapper _mapper;
+        private readonly ITaskRepository _repository;
+
+        public TaskService(ITaskRepository repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public async Task<TaskStatistics> GetTaskStatisticsAsync()
+        {
+            return new TaskStatistics
+            {
+                InProgressCount = await _repository.GetInProgressCountAsync(),
+                CompletedCount = await _repository.GetCompletedCountAsync(),
+                CancelledCount = await _repository.GetCancelledCountAsync(),
+                TodayTasksCount = await _repository.GetTodayTaskCountAsync(),
+                YesterdayTasksCount = await _repository.GetYesterdayTaskCountAsync(),
+                ThisWeekTasksCount = await _repository.GetThisWeekTaskCountAsync()
+            };
+        }
+        public async Task AddTaskAsync(TaskModel model)
+        {
+            var entity = _mapper.Map<TaskEntity>(model);
+            await _repository.AddAsync(entity);
+            _mapper.Map(entity, model);
+        }
+        public async Task<IEnumerable<TaskModel>> GetAllTasksAsync()
+        {
+            var entities = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<TaskModel>>(entities);
+        }
+        public async Task UpdateTaskAsync(TaskModel model)
+        {
+            var existingEntity = await _repository.GetByIdAsync(model.Id);
+            if (existingEntity == null)
+                throw new KeyNotFoundException($"Task with ID {model.Id} not found");
+
+            _mapper.Map(model, existingEntity);
+            await _repository.UpdateAsync(existingEntity);
+
+            model.UpdatedAt = existingEntity.UpdatedAt;
+        }
+        public async Task DeleteTaskAsync(int id)
+        {
+            await _repository.DeleteAsync(id);
+        }
+    }
+}

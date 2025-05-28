@@ -5,15 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TodoList_PhanMinhThai.Repositories;
-
+using TodoList_PhanMinhThai.Services;
+//TODO: sử dụng MVVMToolkit
 namespace TodoList_PhanMinhThai.ViewModels
 {
-    class StartViewModel : ViewModelBase
+    public class StartViewModel : ViewModelBase
     {
-        private readonly ITaskRepository _taskRepository;
+        private readonly ITaskService _taskService;
+
         public int InProgressCount { get; private set; }
         public int CompletedCount { get; private set; }
         public int CancelledCount { get; private set; }
+
         private ObservableCollection<TaskItemViewModel> _tasks;
         public ObservableCollection<TaskItemViewModel> Tasks
         {
@@ -24,48 +27,59 @@ namespace TodoList_PhanMinhThai.ViewModels
                 OnPropertyChanged(nameof(Tasks));
             }
         }
-        public StartViewModel(ITaskRepository taskRepository)
+
+        public StartViewModel(ITaskService taskService)
         {
-            _taskRepository = taskRepository;
+            _taskService = taskService;
             Tasks = new ObservableCollection<TaskItemViewModel>();
-            LoadTaskCounts();
-            LoadTasks();
+
+            // Gọi async từ constructor thông qua Task.Run hoặc dùng async void
+            LoadDataAsync();
         }
 
-        private void LoadTaskCounts()
+        private async void LoadDataAsync()
         {
-            InProgressCount = _taskRepository.GetInProgressCount();
-            CompletedCount = _taskRepository.GetCompletedCount();
-            CancelledCount = _taskRepository.GetCancelledCount();
+            await LoadTaskCountsAsync();
+            await LoadTasksAsync();
+        }
+
+        private async Task LoadTaskCountsAsync()
+        {
+            var statistics = await _taskService.GetTaskStatisticsAsync();
+
+            InProgressCount = statistics.InProgressCount;
+            CompletedCount = statistics.CompletedCount;
+            CancelledCount = statistics.CancelledCount;
 
             OnPropertyChanged(nameof(InProgressCount));
             OnPropertyChanged(nameof(CompletedCount));
             OnPropertyChanged(nameof(CancelledCount));
         }
-        private async Task LoadTasks()
+
+        private async Task LoadTasksAsync()
         {
-            var tasksFromDb = await _taskRepository.GetAllTasksAsync(); 
+            var taskModels = await _taskService.GetAllTasksAsync();
 
             Tasks.Clear();
 
-            foreach (var task in tasksFromDb)
+            foreach (var task in taskModels)
             {
                 Tasks.Add(new TaskItemViewModel
                 {
                     Title = task.Title,
-                    DueDate = task.DueDate?.ToString("MMMM dd, yyyy") ?? "No due date", // Nếu null sẽ hiển thị "No due date" 
-                    DaysAgo = CalculateTimeDifference(task.DueDate), // Tính toán số ngày trước
+                    DueDate = task.DueDate?.ToString("MMMM dd, yyyy") ?? "No due date",
+                    DaysAgo = CalculateTimeDifference(task.DueDate),
                     Priority = task.Priority,
                     Status = task.Status,
                     Background = task.Status switch
                     {
                         Data.Entities.TaskStatus.Completed => "#75a7fb",
                         Data.Entities.TaskStatus.InProgress => "#7955fd",
-                        Data.Entities.TaskStatus.Cancelled => "#fb5a9d"
+                        Data.Entities.TaskStatus.Cancelled => "#fb5a9d",
+                        _ => "#dcdcdc"
                     }
                 });
             }
-            var t = Tasks;
         }
 
         private string CalculateTimeDifference(DateTime? dueDate)
@@ -85,4 +99,5 @@ namespace TodoList_PhanMinhThai.ViewModels
             };
         }
     }
+
 }

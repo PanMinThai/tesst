@@ -9,7 +9,7 @@ using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
 
 namespace TodoList_PhanMinhThai.ViewModels
 {
-    class TaskItemViewModel :ViewModelBase
+    public class TaskItemViewModel :ViewModelBase
     {
         // Properties
         private string _background = "#FFFFFF";

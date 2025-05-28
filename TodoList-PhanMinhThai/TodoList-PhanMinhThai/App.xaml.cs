@@ -5,7 +5,9 @@ using System.Data;
 using System.Windows;
 using System.Windows.Forms;
 using TodoList_PhanMinhThai.Data;
+using TodoList_PhanMinhThai.Mappings;
 using TodoList_PhanMinhThai.Repositories;
+using TodoList_PhanMinhThai.Services;
 using TodoList_PhanMinhThai.ViewModels;
 using TodoList_PhanMinhThai.Views;
 using Application = System.Windows.Application;
@@ -29,7 +31,16 @@ namespace TodoList_PhanMinhThai
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=.\\SQLEXPRESS;Database=TodoList;Trusted_Connection=True;TrustServerCertificate=True;"));
+
+            // Repositories
             services.AddScoped<ITaskRepository, TaskRepository>();
+
+            //Services
+            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<ITaskFilterService, TaskFilterService>();
+            services.AddScoped<ITaskStatisticsService, TaskStatisticsService>();
+            //Mapper
+            services.AddAutoMapper(typeof(TaskMappingProfile));
 
             // ViewModels
             services.AddTransient<TaskViewModel>();
