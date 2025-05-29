@@ -14,5 +14,7 @@ namespace TodoList_PhanMinhThai.Services
         Task UpdateTaskAsync(TaskModel task);
         Task DeleteTaskAsync(int id);
         Task<TaskStatistics> GetTaskStatisticsAsync();
+        Task<List<TaskModel>> GetTasksByDate(DateTime date);
+        Task<List<TaskModel>> GetTasksByDateRange(DateTime fromDate, DateTime toDate);
     }
 }

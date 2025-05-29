@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TodoList_PhanMinhThai.Data.Entities;
-using TodoList_PhanMinhThai.Dtos;
 using TodoList_PhanMinhThai.Models;
 
 namespace TodoList_PhanMinhThai.Repositories
@@ -14,5 +13,7 @@ namespace TodoList_PhanMinhThai.Repositories
     {
         //
         Task<IEnumerable<TaskEntity>> GetTasksDueThisWeekAsync();
+        Task<IQueryable<TaskEntity>> GetTasksByDateAsync(DateTime date);
+        Task<IQueryable<TaskEntity>> GetTasksByDateRangeAsync(DateTime from, DateTime to);
     }
 }

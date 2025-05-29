@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TodoList_PhanMinhThai.Views"
              xmlns:converter="clr-namespace:TodoList_PhanMinhThai.Converters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="588" d:DesignWidth="998">
     <UserControl.Resources>
@@ -28,7 +29,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0" Style="{StaticResource StatCardStyle2}">
+                    <!-- Card 1-->
+                    <Border Grid.Column="0" Style="{StaticResource StatCardStyle2}"  MouseDown="YesterdayBorder_MouseDown">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Color="#7950fd" Offset="0"/>
@@ -53,7 +55,7 @@
                     </Border>
 
                     <!-- Card 2 -->
-                    <Border Grid.Column="1" Style="{StaticResource StatCardStyle2}">
+                    <Border Grid.Column="1" Style="{StaticResource StatCardStyle2}" MouseDown="TodayBorder_MouseDown">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Color="#78a3fc" Offset="0"/>
@@ -74,7 +76,7 @@
                     </Border>
 
                     <!-- Card 3 -->
-                    <Border Grid.Column="2" Style="{StaticResource StatCardStyle2}">
+                    <Border Grid.Column="2" Style="{StaticResource StatCardStyle2}" MouseDown="ThisWeekBorder_MouseDown">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Color="#A855F7" Offset="0"/>
@@ -110,9 +112,10 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Grid.Column="0">
                             <fa:IconImage Icon="Search" Height="20" Width="20" Foreground="{StaticResource plainTextColor3}"/>
-                            <TextBox Text="Search..." FontSize="13" Height="24" Width="300" Background="transparent"
+                            <TextBox FontSize="13" Height="24" Width="300" Background="transparent"
                                      FontWeight="Medium"
-                                     FontFamily="Montserrat"                            
+                                     FontFamily="Montserrat" 
+                                     Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" 
                                      Foreground="{StaticResource plainTextColor3}"
                                      CaretBrush="{StaticResource plainTextColor3}"
                                      BorderBrush="{StaticResource plainTextColor3}"
@@ -155,7 +158,8 @@
                         <ComboBox Grid.Column="2" 
                                   ItemsSource="{Binding StatusFilters}" 
                                   SelectedItem="{Binding SelectedStatus}"
-                                  Width="120" 
+                                  Width="120" materialDesign:HintAssist.Hint="Status"
+                                  MinWidth="120"
                                   Margin="10,0,0,0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -163,11 +167,10 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-
                         <ComboBox Grid.Column="3" 
                                   ItemsSource="{Binding PriorityFilters}" 
                                   SelectedItem="{Binding SelectedPriority}"
-                                  Width="100" 
+                                  Width="100" materialDesign:HintAssist.Hint="Priority"
                                   Margin="10,0,0,0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -234,14 +237,20 @@
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
                     <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Calendar/>
+                <Grid Grid.Row="0" >
+                    <Calendar Margin="15,5,15,15" SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                        materialDesign:CalendarAssist.HeaderBackground="#fb5b9d"
+                        materialDesign:CalendarAssist.HeaderForeground="Black"
+                        Background="#200f53"
+                        CalendarButtonStyle="{StaticResource CustomCalendarButton}"
+                        CalendarDayButtonStyle="{StaticResource CustomCalendarDayButton}"
+                        Foreground="White" />
                 </Grid>
                 <Grid Grid.Row="1">
-                    <local:AddNewTaskControl></local:AddNewTaskControl>
+                    
                 </Grid>
             </Grid>
         </Grid>

@@ -129,6 +129,19 @@ namespace TodoList_PhanMinhThai.Repositories
                 .ToListAsync()
                 .ConfigureAwait(false);
         }
+        public IQueryable<TaskEntity> GetTasksByDate(DateTime date)
+        {
+            return _context.Tasks
+                .Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == date.Date);
+        }
+
+        public IQueryable<TaskEntity> GetTasksByDateRange(DateTime from, DateTime to)
+        {
+            return _context.Tasks
+                .Where(t => t.DueDate.HasValue &&
+                            t.DueDate.Value.Date >= from.Date &&
+                            t.DueDate.Value.Date <= to.Date);
+        }
         #endregion
 
         #region IDisposable Implementation

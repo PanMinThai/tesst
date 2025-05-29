@@ -10,7 +10,7 @@ namespace TodoList_PhanMinhThai.Services
 {
     public class TaskFilterService : ITaskFilterService
     {
-        public IEnumerable<TaskModel> ApplyFilters(IEnumerable<TaskModel> tasks, Data.Entities.TaskStatus? status, TaskPriority? priority)
+        public IQueryable<TaskModel> ApplyFilters(IQueryable<TaskModel> tasks, Data.Entities.TaskStatus? status, TaskPriority? priority)
         {
             if (status.HasValue)
                 tasks = tasks.Where(t => t.Status == status.Value);
@@ -19,6 +19,13 @@ namespace TodoList_PhanMinhThai.Services
                 tasks = tasks.Where(t => t.Priority == priority.Value);
 
             return tasks;
+        }
+        public IQueryable<TaskModel> SearchTasks(IQueryable<TaskModel> tasks, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                return tasks;
+
+            return tasks.Where(t => t.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

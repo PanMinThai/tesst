@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,19 @@ namespace TodoList_PhanMinhThai.Services
         public async Task DeleteTaskAsync(int id)
         {
             await _repository.DeleteAsync(id);
+        }
+        public async Task<List<TaskModel>> GetTasksByDate(DateTime date)
+        {
+            var entities = await _repository.GetTasksByDateAsync(date);
+
+            return _mapper.Map<List<TaskModel>>(entities);
+        }
+
+        public async Task<List<TaskModel>> GetTasksByDateRange(DateTime fromDate, DateTime toDate)
+        {
+            var entities = await _repository.GetTasksByDateRangeAsync(fromDate, toDate);
+
+            return _mapper.Map<List<TaskModel>>(entities);
         }
     }
 }

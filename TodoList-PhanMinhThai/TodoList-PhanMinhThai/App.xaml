@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:TodoList_PhanMinhThai"
              xmlns:views="clr-namespace:TodoList_PhanMinhThai.Views"
              xmlns:view="clr-namespace:TodoList_PhanMinhThai"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:TodoList_PhanMinhThai.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
@@ -14,6 +15,10 @@
                 <ResourceDictionary Source="Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="Styles/TaskItemStyle.xaml"/>
                 <ResourceDictionary Source="Styles/ComboboxStyle.xaml"/>
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModels:AddNewTaskViewModel}">
@@ -34,6 +39,28 @@
             <DataTemplate DataType="{x:Type viewModels:ListTaskViewModel}">
                 <views:ListTaskControl />
             </DataTemplate>
+            <Style
+      x:Key="CustomCalendarDayButton"
+      TargetType="CalendarDayButton"
+      BasedOn="{StaticResource MaterialDesignCalendarDayButton}">
+                <Setter
+        Property="materialDesign:CalendarAssist.SelectionColor"
+        Value="#B2F39B" />
+                <Setter
+        Property="materialDesign:CalendarAssist.SelectionForegroundColor"
+        Value="Black" />
+            </Style>
+            <Style
+      x:Key="CustomCalendarButton"
+      TargetType="CalendarButton"
+      BasedOn="{StaticResource MaterialDesignCalendarButton}">
+                <Setter
+        Property="materialDesign:CalendarAssist.SelectionColor"
+        Value="#B2F39B" />
+                <Setter
+        Property="materialDesign:CalendarAssist.SelectionForegroundColor"
+        Value="Black" />
+            </Style>
         </ResourceDictionary>
         
     </Application.Resources>

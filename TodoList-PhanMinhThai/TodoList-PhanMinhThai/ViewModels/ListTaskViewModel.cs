@@ -79,18 +79,43 @@ namespace TodoList_PhanMinhThai.ViewModels
                 ApplyFilters();
             }
         }
+        private string _searchKeyword;
+        public string SearchKeyword
+        {
+            get => _searchKeyword;
+            set
+            {
+                _searchKeyword = value;
+                OnPropertyChanged(nameof(SearchKeyword));
+            }
+        }
+        private DateTime? _selectedDate;
+        public DateTime? SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                _selectedDate = value;
+                OnPropertyChanged(nameof(SelectedDate));
+                ApplyDateFilter(); // mỗi lần chọn ngày sẽ lọc
+            }
+        }
+
 
         public int YesterdayTaskCount { get; private set; }
         public int TodayTaskCount { get; private set; }
         public int ThisWeekTaskCount { get; private set; }
 
+        public ICommand FilterTodayCommand { get; }
+        public ICommand FilterYesterdayCommand { get; }
+        public ICommand FilterThisWeekCommand { get; }
         public ICommand LoadTasksCommand { get; }
         public ICommand AddTaskCommand { get; }
         public ICommand UpdateTaskCommand { get; }
         public ICommand DeleteTaskCommand { get; }
+        public ICommand SearchTaskCommand { get; }
         public ICommand ClearTaskCommand { get; }
         public ICommand MarkCompleteCommand { get; }
-
         public ListTaskViewModel( ITaskService taskService, ITaskFilterService filterService, ITaskStatisticsService statisticsService)
         {
             _taskService = taskService;
@@ -106,6 +131,10 @@ namespace TodoList_PhanMinhThai.ViewModels
             DeleteTaskCommand = new RelayCommand(async _ => await DeleteTaskAsync(), _ => SelectedTask != null);
             ClearTaskCommand = new RelayCommand(_ => ClearTaskFields());
             MarkCompleteCommand = new RelayCommand(async _ => await MarkTaskCompleteAsync(), _ => SelectedTask != null);
+            SearchTaskCommand = new RelayCommand(_ => ApplySearch());
+            FilterTodayCommand = new RelayCommand(_ => FilterByToday());
+            FilterYesterdayCommand = new RelayCommand(_ => FilterByYesterday());
+            FilterThisWeekCommand = new RelayCommand(_ => FilterByThisWeek());
 
             LoadTasksCommand.Execute(null);
         }
@@ -127,9 +156,48 @@ namespace TodoList_PhanMinhThai.ViewModels
             OnPropertyChanged(nameof(ThisWeekTaskCount));
         }
 
-        private void ApplyFilters()
+        private async Task ApplyFilters()
         {
-            var filtered = _filterService.ApplyFilters(AllTasks, SelectedStatus, SelectedPriority).ToList();
+            var filtered = await _filterService.ApplyFilters(SelectedStatus, SelectedPriority);
+            Tasks.Clear();
+            foreach (var task in filtered) Tasks.Add(task);
+        }
+        private void ApplySearch()
+        {
+            var searched = await _taskService.SearchTasksAsync(SearchKeyword, SelectedStatus, SelectedPriority);
+
+            Tasks.Clear();
+            foreach (var task in searched) Tasks.Add(task);
+        }
+        private void ApplyDateFilter()
+        {
+            if (SelectedDate.HasValue)
+            {
+                var filtered = AllTasks.Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == SelectedDate.Value.Date);
+                Tasks.Clear();
+                foreach (var task in filtered) Tasks.Add(task);
+            }
+        }
+            
+        private void FilterByToday()
+        {
+            SelectedDate = DateTime.Today;
+        }
+
+        private void FilterByYesterday()
+        {
+            SelectedDate = DateTime.Today.AddDays(-1);
+        }
+
+        private void FilterByThisWeek()
+        {
+            var startOfWeek = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            var endOfWeek = startOfWeek.AddDays(7);
+
+            var filtered = AllTasks.Where(t =>
+                t.DueDate?.Date >= startOfWeek &&
+                t.DueDate?.Date < endOfWeek);
+
             Tasks.Clear();
             foreach (var task in filtered) Tasks.Add(task);
         }

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TodoList_PhanMinhThai.ViewModels;
 
 namespace TodoList_PhanMinhThai.Views
 {
@@ -23,6 +24,23 @@ namespace TodoList_PhanMinhThai.Views
         public ListTaskControl()
         {
             InitializeComponent();
+        }
+        private void YesterdayBorder_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is ListTaskViewModel vm)
+                vm.FilterYesterdayCommand.Execute(null);
+        }
+
+        private void TodayBorder_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is ListTaskViewModel vm)
+                vm.FilterTodayCommand.Execute(null);
+        }
+
+        private void ThisWeekBorder_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is ListTaskViewModel vm)
+                vm.FilterThisWeekCommand.Execute(null);
         }
 
     }

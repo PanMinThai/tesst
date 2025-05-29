@@ -10,6 +10,7 @@ namespace TodoList_PhanMinhThai.Services
 {
     public interface ITaskFilterService
     {
-        IEnumerable<TaskModel> ApplyFilters(IEnumerable<TaskModel> tasks, Data.Entities.TaskStatus? status, TaskPriority? priority);
+        IQueryable<TaskModel> ApplyFilters(IQueryable<TaskModel> tasks, Data.Entities.TaskStatus? status, TaskPriority? priority);
+        IQueryable<TaskModel> SearchTasks(IQueryable<TaskModel> tasks, string keyword);
     }
 }
