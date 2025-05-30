@@ -11,7 +11,9 @@ using TodoList_PhanMinhThai.Models;
 using TodoList_PhanMinhThai.Repositories;
 using TodoList_PhanMinhThai.Services;
 using TodoList_PhanMinhThai.Utilities;
-using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
+using TodoList_PhanMinhThai.Data.Enums;
+using TaskStatus = TodoList_PhanMinhThai.Data.Enums.TaskStatus;
+
 
 namespace TodoList_PhanMinhThai.ViewModels
 {
@@ -125,7 +127,7 @@ namespace TodoList_PhanMinhThai.ViewModels
 
         private async Task MarkTaskCompleteAsync()
         {
-            SelectedTask.Status = Data.Entities.TaskStatus.Completed;
+            SelectedTask.Status = TaskStatus.Completed;
             SelectedTask.UpdatedAt = DateTime.Now;
             await _taskService.UpdateTaskAsync(SelectedTask);
             await LoadTasksAsync();
@@ -137,8 +139,8 @@ namespace TodoList_PhanMinhThai.ViewModels
             CurrentTask = new TaskModel
             {
                 DueDate = DateTime.Today,
-                Status = Data.Entities.TaskStatus.Completed,
-                Priority = Data.Entities.TaskPriority.Medium
+                Status = TaskStatus.Completed,
+                Priority = TaskPriority.Medium
             };
             SelectedTask = null;
         }

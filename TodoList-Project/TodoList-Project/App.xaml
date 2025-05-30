@@ -1,0 +1,47 @@
+﻿<Application x:Class="TodoList_Project.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TodoList_Project"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:main="clr-namespace:TodoList_Project.Features.Main"
+             xmlns:task="clr-namespace:TodoList_Project.Features.Tasks.Views">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="Core/Themes/UIColor.xaml"/>
+                <ResourceDictionary Source="Core/Themes/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="Core/Themes/TaskItemStyle.xaml"/>
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type main:MainViewModel}">
+                <main:MainView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type main:StartViewModel}">
+                <main:StartControl />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type main:TaskItemViewModel}">
+                <main:TaskItemControl />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type task:ListTaskViewModel}">
+                <task:ListTaskControl />
+            </DataTemplate>
+            <Style x:Key="CustomCalendarDayButton"
+               TargetType="CalendarDayButton"                  
+               BasedOn="{StaticResource MaterialDesignCalendarDayButton}">
+                <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#B2F39B" />
+                <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="Black" />
+            </Style>
+            <Style x:Key="CustomCalendarButton" TargetType="CalendarButton" 
+               BasedOn="{StaticResource MaterialDesignCalendarButton}">
+                <Setter Property="materialDesign:CalendarAssist.SelectionColor" Value="#B2F39B" />
+                <Setter Property="materialDesign:CalendarAssist.SelectionForegroundColor" Value="Black" />
+            </Style>
+        </ResourceDictionary>
+
+    </Application.Resources>
+</Application>

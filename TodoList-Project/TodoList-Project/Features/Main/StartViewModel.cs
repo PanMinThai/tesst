@@ -1,46 +1,44 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TodoList_PhanMinhThai.Repositories;
-using TodoList_PhanMinhThai.Services;
-using TodoList_PhanMinhThai.Data.Enums;
-using TaskStatus = TodoList_PhanMinhThai.Data.Enums.TaskStatus;
+using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
+using TodoList_Project.Features.Tasks.Services;
 
-//TODO: sử dụng MVVMToolkit
-namespace TodoList_PhanMinhThai.ViewModels
+namespace TodoList_Project.Features.Main
 {
-    public class StartViewModel : ViewModelBase
+    public partial class StartViewModel : ObservableObject
     {
         private readonly ITaskService _taskService;
 
-        public int InProgressCount { get; private set; }
-        public int CompletedCount { get; private set; }
-        public int CancelledCount { get; private set; }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalTasks))] // Tự động notify khi thay đổi
+        private int _inProgressCount;
 
-        private ObservableCollection<TaskItemViewModel> _tasks;
-        public ObservableCollection<TaskItemViewModel> Tasks
-        {
-            get => _tasks;
-            set
-            {
-                _tasks = value;
-                OnPropertyChanged(nameof(Tasks));
-            }
-        }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalTasks))]
+        private int _completedCount;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalTasks))]
+        private int _cancelledCount;
+
+        public int TotalTasks => InProgressCount + CompletedCount + CancelledCount;
+
+        [ObservableProperty]
+        private ObservableCollection<TaskItemViewModel> _tasks = new();
 
         public StartViewModel(ITaskService taskService)
         {
             _taskService = taskService;
-            Tasks = new ObservableCollection<TaskItemViewModel>();
-
-            // Gọi async từ constructor thông qua Task.Run hoặc dùng async void
-            LoadDataAsync();
+            LoadDataCommand.Execute(null);
         }
 
-        private async void LoadDataAsync()
+        [RelayCommand]
+        private async Task LoadDataAsync()
         {
             await LoadTaskCountsAsync();
             await LoadTasksAsync();
@@ -49,14 +47,9 @@ namespace TodoList_PhanMinhThai.ViewModels
         private async Task LoadTaskCountsAsync()
         {
             var statistics = await _taskService.GetTaskStatisticsAsync();
-
             InProgressCount = statistics.InProgressCount;
             CompletedCount = statistics.CompletedCount;
             CancelledCount = statistics.CancelledCount;
-
-            OnPropertyChanged(nameof(InProgressCount));
-            OnPropertyChanged(nameof(CompletedCount));
-            OnPropertyChanged(nameof(CancelledCount));
         }
 
         private async Task LoadTasksAsync()
@@ -85,7 +78,7 @@ namespace TodoList_PhanMinhThai.ViewModels
             }
         }
 
-        private string CalculateTimeDifference(DateTime? dueDate)
+        private static string CalculateTimeDifference(DateTime? dueDate)
         {
             if (!dueDate.HasValue) return "No due date";
 
@@ -102,5 +95,4 @@ namespace TodoList_PhanMinhThai.ViewModels
             };
         }
     }
-
 }

@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TodoList_PhanMinhThai.Data.Entities;
-using TodoList_PhanMinhThai.Models;
-using TodoList_PhanMinhThai.Repositories;
-using TodoList_PhanMinhThai.Data.Enums;
-using TaskStatus = TodoList_PhanMinhThai.Data.Enums.TaskStatus;
+using TodoList_Project.Core.DAL.Enums;
+using TodoList_Project.Core.DAL.Repositories;
+using TodoList_Project.Features.Tasks.Models;
+using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
-
-namespace TodoList_PhanMinhThai.Services
+namespace TodoList_Project.Features.Tasks.Services
 {
     public class TaskFilterService : ITaskFilterService
     {
@@ -30,7 +28,7 @@ namespace TodoList_PhanMinhThai.Services
             return _mapper.Map<List<TaskModel>>(tasks);
         }
 
-        public async Task<IEnumerable<TaskModel>> SearchTasks( string keyword, TaskStatus? status = null, TaskPriority? priority = null)
+        public async Task<IEnumerable<TaskModel>> SearchTasks(string keyword, TaskStatus? status = null, TaskPriority? priority = null)
         {
             var tasks = await _taskRepository.GetFilteredTasksAsync(status, priority, keyword);
             return _mapper.Map<List<TaskModel>>(tasks);

@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TodoList_PhanMinhThai.Data.Entities;
-using TodoList_PhanMinhThai.Models;
-using TodoList_PhanMinhThai.Repositories;
+using TodoList_Project.Core.DAL.Entities.SQL;
+using TodoList_Project.Core.DAL.Repositories;
+using TodoList_Project.Features.Tasks.Models;
 
-namespace TodoList_PhanMinhThai.Services
+namespace TodoList_Project.Features.Tasks.Services
 {
     public class TaskService : ITaskService
     {

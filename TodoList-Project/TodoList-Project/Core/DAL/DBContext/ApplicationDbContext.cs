@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
-using TodoList_PhanMinhThai.Data.Entities;
+using System.Threading.Tasks;
+using TodoList_Project.Core.DAL.Entities.SQL;
 
-namespace TodoList_PhanMinhThai.Data
+namespace TodoList_Project.Core.DAL.DBContext
 {
-    // Data/ApplicationDbContext.cs
     public class ApplicationDbContext : DbContext
     {
 

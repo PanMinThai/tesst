@@ -7,22 +7,27 @@ using TodoList_PhanMinhThai.Data.Entities;
 using TodoList_PhanMinhThai.Models;
 using TodoList_PhanMinhThai.Services;
 using TodoList_PhanMinhThai.Utilities;
-using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
+using TodoList_PhanMinhThai.Data.Enums;
+using TaskStatus = TodoList_PhanMinhThai.Data.Enums.TaskStatus;
+
 
 namespace TodoList_PhanMinhThai.ViewModels
 {
     public class ListTaskViewModel : ViewModelBase
     {
+        #region Services
         private readonly ITaskService _taskService;
         private readonly ITaskFilterService _filterService;
         private readonly ITaskStatisticsService _statisticsService;
+        #endregion
 
+        #region Collections
         public ObservableCollection<TaskModel> Tasks { get; } = new();
-        public ObservableCollection<TaskModel> AllTasks { get; } = new();
-
         public ObservableCollection<TaskStatus?> StatusFilters { get; }
         public ObservableCollection<TaskPriority?> PriorityFilters { get; }
+        #endregion
 
+        #region Properties
         private TaskModel _selectedTask;
         public TaskModel SelectedTask
         {
@@ -49,9 +54,10 @@ namespace TodoList_PhanMinhThai.ViewModels
         public TaskModel CurrentTask
         {
             get => _currentTask;
-            set { 
-                _currentTask = value; 
-                OnPropertyChanged(nameof(CurrentTask)); 
+            set
+            {
+                _currentTask = value;
+                OnPropertyChanged(nameof(CurrentTask));
             }
         }
 
@@ -74,11 +80,11 @@ namespace TodoList_PhanMinhThai.ViewModels
             set
             {
                 _selectedPriority = value;
-
                 OnPropertyChanged(nameof(SelectedPriority));
                 ApplyFilters();
             }
         }
+
         private string _searchKeyword;
         public string SearchKeyword
         {
@@ -89,6 +95,7 @@ namespace TodoList_PhanMinhThai.ViewModels
                 OnPropertyChanged(nameof(SearchKeyword));
             }
         }
+
         private DateTime? _selectedDate;
         public DateTime? SelectedDate
         {
@@ -97,15 +104,16 @@ namespace TodoList_PhanMinhThai.ViewModels
             {
                 _selectedDate = value;
                 OnPropertyChanged(nameof(SelectedDate));
-                ApplyDateFilter(); // mỗi lần chọn ngày sẽ lọc
+                ApplyDateFilter();
             }
         }
-
 
         public int YesterdayTaskCount { get; private set; }
         public int TodayTaskCount { get; private set; }
         public int ThisWeekTaskCount { get; private set; }
+        #endregion
 
+        #region Commands
         public ICommand FilterTodayCommand { get; }
         public ICommand FilterYesterdayCommand { get; }
         public ICommand FilterThisWeekCommand { get; }
@@ -116,7 +124,10 @@ namespace TodoList_PhanMinhThai.ViewModels
         public ICommand SearchTaskCommand { get; }
         public ICommand ClearTaskCommand { get; }
         public ICommand MarkCompleteCommand { get; }
-        public ListTaskViewModel( ITaskService taskService, ITaskFilterService filterService, ITaskStatisticsService statisticsService)
+        #endregion
+
+        #region Constructor
+        public ListTaskViewModel(ITaskService taskService, ITaskFilterService filterService, ITaskStatisticsService statisticsService)
         {
             _taskService = taskService;
             _filterService = filterService;
@@ -131,20 +142,20 @@ namespace TodoList_PhanMinhThai.ViewModels
             DeleteTaskCommand = new RelayCommand(async _ => await DeleteTaskAsync(), _ => SelectedTask != null);
             ClearTaskCommand = new RelayCommand(_ => ClearTaskFields());
             MarkCompleteCommand = new RelayCommand(async _ => await MarkTaskCompleteAsync(), _ => SelectedTask != null);
-            SearchTaskCommand = new RelayCommand(_ => ApplySearch());
+            SearchTaskCommand = new RelayCommand(async _ => await ApplySearch());
             FilterTodayCommand = new RelayCommand(_ => FilterByToday());
             FilterYesterdayCommand = new RelayCommand(_ => FilterByYesterday());
             FilterThisWeekCommand = new RelayCommand(_ => FilterByThisWeek());
 
             LoadTasksCommand.Execute(null);
         }
+        #endregion
 
+        #region Private Methods
         private async Task LoadTasksAsync()
         {
             var allTasks = await _taskService.GetAllTasksAsync();
-            AllTasks.Clear();
-            foreach (var task in allTasks) AllTasks.Add(task);
-            ApplyFilters();
+            await ApplyFilters();                           // ***** phải đợi filter xong mới statistic  vì dùng cùng context
 
             var stats = await _statisticsService.GetStatisticsAsync();
             YesterdayTaskCount = stats.YesterdayTasksCount;
@@ -158,27 +169,25 @@ namespace TodoList_PhanMinhThai.ViewModels
 
         private async Task ApplyFilters()
         {
-            var filtered = await _filterService.ApplyFilters(SelectedStatus, SelectedPriority);
+            var filtered = await _filterService.ApplyFilters(SelectedStatus, SelectedPriority, SelectedDate);
             Tasks.Clear();
             foreach (var task in filtered) Tasks.Add(task);
         }
-        private void ApplySearch()
-        {
-            var searched = await _taskService.SearchTasksAsync(SearchKeyword, SelectedStatus, SelectedPriority);
 
+        private async Task ApplySearch()
+        {
+            var searched = await _filterService.SearchTasks(SearchKeyword, SelectedStatus, SelectedPriority);
             Tasks.Clear();
             foreach (var task in searched) Tasks.Add(task);
         }
-        private void ApplyDateFilter()
+
+        private async void ApplyDateFilter()
         {
-            if (SelectedDate.HasValue)
-            {
-                var filtered = AllTasks.Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == SelectedDate.Value.Date);
-                Tasks.Clear();
-                foreach (var task in filtered) Tasks.Add(task);
-            }
+            var tasks = await _filterService.ApplyFilters(SelectedStatus, SelectedPriority, SelectedDate);
+            Tasks.Clear();
+            foreach (var task in tasks) Tasks.Add(task);
         }
-            
+
         private void FilterByToday()
         {
             SelectedDate = DateTime.Today;
@@ -189,17 +198,16 @@ namespace TodoList_PhanMinhThai.ViewModels
             SelectedDate = DateTime.Today.AddDays(-1);
         }
 
-        private void FilterByThisWeek()
+        private async Task FilterByThisWeek()
         {
-            var startOfWeek = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
-            var endOfWeek = startOfWeek.AddDays(7);
+            SelectedDate = null;
+            var today = DateTime.Today;
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            var endOfWeek = startOfWeek.AddDays(6);
 
-            var filtered = AllTasks.Where(t =>
-                t.DueDate?.Date >= startOfWeek &&
-                t.DueDate?.Date < endOfWeek);
-
+            var weekTasks = await _taskService.GetTasksByDateRange(startOfWeek, endOfWeek);
             Tasks.Clear();
-            foreach (var task in filtered) Tasks.Add(task);
+            foreach (var task in weekTasks) Tasks.Add(task);
         }
 
         private async Task AddTaskAsync()
@@ -249,6 +257,6 @@ namespace TodoList_PhanMinhThai.ViewModels
             };
             SelectedTask = null;
         }
+        #endregion
     }
-
 }

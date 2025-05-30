@@ -1,12 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using TodoList_PhanMinhThai.Data;
-using TodoList_PhanMinhThai.Data.Entities;
+using TodoList_Project.Core.DAL.DBContext;
+using TodoList_Project.Core.DAL.Entities.SQL;
+using TodoList_Project.Core.DAL.Enums;
+using Microsoft.EntityFrameworkCore;
+using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
-namespace TodoList_PhanMinhThai.Repositories
+namespace TodoList_Project.Core.DAL.Repositories
 {
     public class TaskRepository : ITaskRepository
     {
@@ -31,9 +34,7 @@ namespace TodoList_PhanMinhThai.Repositories
             if (id is not int taskId)
                 throw new ArgumentException("ID must be an integer");
 
-            return await _context.Tasks
-                .FirstOrDefaultAsync(t => t.Id == taskId)
-                .ConfigureAwait(false);
+            return await _context.Tasks.FirstOrDefaultAsync(t => t.Id == taskId).ConfigureAwait(false);
         }
 
         public async Task AddAsync(TaskEntity entity)
@@ -72,21 +73,21 @@ namespace TodoList_PhanMinhThai.Repositories
         public async Task<int> GetInProgressCountAsync()
         {
             return await _context.Tasks
-                .CountAsync(t => t.Status == Data.Entities.TaskStatus.InProgress)
+                .CountAsync(t => t.Status == TaskStatus.InProgress)
                 .ConfigureAwait(false);
         }
 
         public async Task<int> GetCompletedCountAsync()
         {
             return await _context.Tasks
-                .CountAsync(t => t.Status == Data.Entities.TaskStatus.Completed)
+                .CountAsync(t => t.Status == TaskStatus.Completed)
                 .ConfigureAwait(false);
         }
 
         public async Task<int> GetCancelledCountAsync()
         {
             return await _context.Tasks
-                .CountAsync(t => t.Status == Data.Entities.TaskStatus.Cancelled)
+                .CountAsync(t => t.Status == TaskStatus.Cancelled)
                 .ConfigureAwait(false);
         }
 
@@ -135,12 +136,34 @@ namespace TodoList_PhanMinhThai.Repositories
                 .Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == date.Date);
         }
 
-        public IQueryable<TaskEntity> GetTasksByDateRange(DateTime from, DateTime to)
+        public async Task<IEnumerable<TaskEntity>> GetTasksByDateRange(DateTime from, DateTime to)
         {
-            return _context.Tasks
+            var query = _context.Tasks
                 .Where(t => t.DueDate.HasValue &&
-                            t.DueDate.Value.Date >= from.Date &&
-                            t.DueDate.Value.Date <= to.Date);
+                           t.DueDate.Value.Date >= from.Date &&
+                           t.DueDate.Value.Date <= to.Date);
+            return await query.AsNoTracking().ToListAsync();
+        }
+        public async Task<IEnumerable<TaskEntity>> GetFilteredTasksAsync(TaskStatus? status = null, TaskPriority? priority = null, string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            var query = _context.Tasks.AsQueryable();
+
+            if (status.HasValue)
+                query = query.Where(t => t.Status == status.Value);
+
+            if (priority.HasValue)
+                query = query.Where(t => t.Priority == priority.Value);
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+                query = query.Where(t => t.Title.Contains(keyword));
+
+            if (date.HasValue)
+                query = query.Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == date.Value.Date);
+
+            if (fromDate.HasValue && toDate.HasValue)
+                query = query.Where(t => t.DueDate >= fromDate && t.DueDate <= toDate);
+
+            return await query.AsNoTracking().ToListAsync();
         }
         #endregion
 

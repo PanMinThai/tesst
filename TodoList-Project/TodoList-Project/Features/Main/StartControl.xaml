@@ -1,0 +1,237 @@
+﻿<UserControl x:Class="TodoList_Project.Features.Main.StartControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TodoList_Project.Features.Main"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             mc:Ignorable="d" 
+             d:DesignHeight="588" d:DesignWidth="998">
+    <Border CornerRadius="12" Padding ="10" Background="#2a156f">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Stats Cards -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Card 1 -->
+                <Border Grid.Column="0" Style="{StaticResource StatCardStyle}">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#7950fd" Offset="0"/>
+                            <GradientStop Color="#78a2fc" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="36*"/>
+                                <RowDefinition Height="17*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.RowSpan="2">
+                                <fa:IconImage Icon="ArrowTrendUp" Foreground="White" Width="30" Height="30" Margin="0,0,10,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="InProgress" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding InProgressCount, StringFormat={}{0} Tasks}"  Foreground="White" FontSize="18" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 2 -->
+                <Border Grid.Column="1" Style="{StaticResource StatCardStyle}">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#78a3fc" Offset="0"/>
+                            <GradientStop Color="#4bd9ec" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel>
+                        <Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Check" Foreground="White" Width="30" Height="30" Margin="0,0,10,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="Completed" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding CompletedCount, StringFormat={}{0} Tasks}"  Foreground="White" FontSize="18" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card 3 -->
+                <Border Grid.Column="2" Style="{StaticResource StatCardStyle}">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#fb569c" Offset="0"/>
+                            <GradientStop Color="#fba0aa" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel>
+                        <Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="RectangleXmark" Foreground="White" Width="30" Height="30" Margin="0,0,10,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="Cancelled" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding CancelledCount, StringFormat={}{0} Tasks}"  Foreground="White" FontSize="18" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Stat Card 4 -->
+                <Border Grid.Column="3" Style="{StaticResource StatCardStyle}" >
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#A855F7" Offset="0"/>
+                            <GradientStop Color="#EC4899" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel>
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="Your income" Foreground="White" FontSize="12" Opacity="0.8" Margin="0,10,0,0"/>
+                                <TextBlock Text="$1,780" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                            </StackPanel>
+                            <Rectangle Fill="White" Width="50" Height="30" RadiusX="5" RadiusY="5" 
+                         HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.2"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Middle Row -->
+            <Grid Grid.Row="1" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Tasks Today -->
+                <Border Grid.Column="0" Style="{StaticResource TodayTaskStyle}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Tasks}" VerticalAlignment="Stretch">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:TaskItemControl Margin="0,5"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+
+
+                <!-- Last Tasks -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <Calendar></Calendar>
+                    <Border Grid.Row="1" Style="{StaticResource LastTaskCardStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,15">
+                                <TextBlock Text="Last Tasks" Foreground="White" FontSize="16" FontWeight="SemiBold"/>
+                                <TextBlock Text="See all" Foreground="#06B6D4" FontSize="14" HorizontalAlignment="Right" Cursor="Hand"/>
+                            </Grid>
+
+                            <ScrollViewer Height="180" VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <!-- Last tasks Items -->
+                                    <Grid Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Background="#F59E0B" CornerRadius="6" Width="32" Height="32" Margin="0,0,12,0">
+                                            <TextBlock Text="💰" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Trả Nợ 1" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                            <TextBlock Text="F88" Foreground="#9CA3AF" FontSize="12"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                            <TextBlock Text="$1000" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                            <TextBlock Text="22/5/2025" Foreground="#9CA3AF" FontSize="12"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Background="#F59E0B" CornerRadius="6" Width="32" Height="32" Margin="0,0,12,0">
+                                            <TextBlock Text="💰" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Mua quà tặng bạn gái" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                            <TextBlock Text="Iphone 18 promax" Foreground="#9CA3AF" FontSize="12"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                            <TextBlock Text="$2000" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                            <TextBlock Text="23/5/2025" Foreground="#9CA3AF" FontSize="12"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Background="#EC4899" CornerRadius="6" Width="32" Height="32" Margin="0,0,12,0">
+                                            <TextBlock Text="💸" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Bán thận phải" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                            <TextBlock Text="Bệnh viện CampuChina" Foreground="#9CA3AF" FontSize="12"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                            <TextBlock Text="300000" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                            <TextBlock Text="24/5/2025" Foreground="#9CA3AF" FontSize="12"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Background="#F59E0B" CornerRadius="6" Width="32" Height="32" Margin="0,0,12,0">
+                                            <TextBlock Text="💰" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Bán bạn thân" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                            <TextBlock Text="Khu tự trị KamPuChi" Foreground="#9CA3AF" FontSize="12"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                                            <TextBlock Text="$70000" Foreground="White" FontSize="14" FontWeight="Medium"/>
+                                            <TextBlock Text="25/5/2025" Foreground="#9CA3AF" FontSize="12"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+
+
+        </Grid>
+    </Border>
+</UserControl>

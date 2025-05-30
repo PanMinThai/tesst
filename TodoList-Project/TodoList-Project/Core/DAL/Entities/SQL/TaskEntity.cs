@@ -4,11 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using TodoList_PhanMinhThai.Data.Entities.Base;
-using TodoList_PhanMinhThai.Data.Enums;
-using TaskStatus = TodoList_PhanMinhThai.Data.Enums.TaskStatus;
+using System.Threading.Tasks;
+using TodoList_Project.Core.DAL.Entities.Base;
+using TodoList_Project.Core.DAL.Enums;
+using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
-namespace TodoList_PhanMinhThai.Data.Entities
+namespace TodoList_Project.Core.DAL.Entities.SQL
 {
     public class TaskEntity : BaseEntity<int>
     {
@@ -30,6 +31,4 @@ namespace TodoList_PhanMinhThai.Data.Entities
         // Navigation properties
         public ICollection<TaskCategoryEntity> TaskCategories { get; set; } = new List<TaskCategoryEntity>();
     }
-
-
 }

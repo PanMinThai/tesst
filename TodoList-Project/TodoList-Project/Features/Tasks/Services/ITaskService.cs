@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TodoList_PhanMinhThai.Models;
+using TodoList_Project.Features.Tasks.Models;
 
-namespace TodoList_PhanMinhThai.Services
+namespace TodoList_Project.Features.Tasks.Services
 {
     public interface ITaskService
     {

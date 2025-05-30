@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoList_PhanMinhThai.Data.Entities;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
-using TaskStatus = TodoList_PhanMinhThai.Data.Entities.TaskStatus;
+using TodoList_PhanMinhThai.Data.Enums;
+using TaskStatus = TodoList_PhanMinhThai.Data.Enums.TaskStatus;
+
 
 namespace TodoList_PhanMinhThai.ViewModels
 {
