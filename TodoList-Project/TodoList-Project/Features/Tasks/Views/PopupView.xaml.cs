@@ -10,20 +10,29 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace TodoList_Project.Features.Tasks.Views
 {
     /// <summary>
-    /// Interaction logic for ListTaskControl.xaml
+    /// Interaction logic for PopupView.xaml
     /// </summary>
-    public partial class ListTaskControl : UserControl
+    public partial class PopupView : Window
     {
-        public ListTaskControl()
+        public PopupView()
         {
             InitializeComponent();
         }
-     
+        public PopupView(object content, string title)
+        {
+            InitializeComponent();
+            Content = content;
+            Title = title;
+        }
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            this.Close();
+        }
     }
 }

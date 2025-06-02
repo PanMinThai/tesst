@@ -29,6 +29,8 @@
 
   <ItemGroup>
     <Folder Include="Features\Categories\" />
+    <Folder Include="UI\Colors\" />
+    <Folder Include="UI\Styles\" />
   </ItemGroup>
 
 </Project>

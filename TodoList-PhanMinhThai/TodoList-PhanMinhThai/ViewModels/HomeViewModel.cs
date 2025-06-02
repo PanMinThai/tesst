@@ -98,7 +98,7 @@ namespace TodoList_PhanMinhThai.ViewModels
             Icon = IconChar.Calendar;
         }
         private void ExecuteTaskManagementViewCommand(object obj)
-        {
+        {   
             CurrentChildView = new TaskViewModel(_taskService);
             Caption = "Dashboard";
             Icon = IconChar.ListCheck;

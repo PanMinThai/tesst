@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace TodoList_Project.Features.Tasks.Views
 {
     /// <summary>
-    /// Interaction logic for ListTaskControl.xaml
+    /// Interaction logic for TaskControl.xaml
     /// </summary>
-    public partial class ListTaskControl : UserControl
+    public partial class TaskControl : UserControl
     {
-        public ListTaskControl()
+        public TaskControl()
         {
             InitializeComponent();
         }
-     
     }
 }

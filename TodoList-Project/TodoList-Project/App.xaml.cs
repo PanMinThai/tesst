@@ -9,6 +9,7 @@ using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Core.Utils.Mapper;
 using TodoList_Project.Features.Main;
 using TodoList_Project.Features.Tasks.Services;
+using TodoList_Project.Features.Tasks.Views;
 using Application = System.Windows.Application;
 
 namespace TodoList_Project
@@ -44,10 +45,9 @@ namespace TodoList_Project
             // ViewModels
             
             services.AddTransient<MainViewModel>();
-            //services.AddTransient<StartViewModel>();
-            //services.AddTransient<TaskItemViewModel>();
-            //services.AddTransient<TaskItemViewModel>();
-            //services.AddTransient<ListTaskViewModel>();
+            services.AddTransient<StartViewModel>();
+            services.AddTransient<TaskItemViewModel>();
+            services.AddTransient<ListTaskViewModel>();
             //services.AddTransient<TaskViewModel>();
             // Views
             services.AddSingleton<MainWindow>();

@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Core.MVVM;
 using TodoList_Project.Features.Tasks.Services;
+using TodoList_Project.Features.Tasks.Views;
 
 namespace TodoList_Project.Features.Main
 {
@@ -52,7 +54,7 @@ namespace TodoList_Project.Features.Main
         }
 
         [RelayCommand]
-        private void AddNewTaskView()
+        private void ShowAddNewTaskView()
         {
             //CurrentChildView = new AddNewTaskViewModel();
             Caption = "AddTaskModel";
@@ -68,7 +70,7 @@ namespace TodoList_Project.Features.Main
         }
 
         [RelayCommand]
-        private void TaskManagementView()
+        private void ShowTaskManagementView()
         {
             //CurrentChildView = new TaskViewModel(_taskService);
             Caption = "Dashboard";
@@ -76,9 +78,9 @@ namespace TodoList_Project.Features.Main
         }
 
         [RelayCommand]
-        private void ListTaskView()
+        private void ShowListTaskView()
         {
-            //CurrentChildView = new ListTaskViewModel(_taskService, _taskFilterService, _taskStatisticsService);
+            CurrentChildView = new ListTaskViewModel(_taskService, _taskFilterService, _taskStatisticsService);
             Caption = "List Task";
             Icon = IconChar.ChartBar;
         }

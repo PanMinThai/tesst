@@ -30,7 +30,10 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <!-- Card 1-->
-                    <Border Grid.Column="0" Style="{StaticResource StatCardStyle2}"  MouseDown="YesterdayBorder_MouseDown">
+                    <Border Grid.Column="0" Style="{StaticResource StatCardStyle2}">
+                        <Border.InputBindings>
+                            <MouseBinding MouseAction="LeftClick" Command="{Binding FilterYesterdayCommand}"/>
+                        </Border.InputBindings>
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Color="#7950fd" Offset="0"/>
@@ -55,7 +58,10 @@
                     </Border>
 
                     <!-- Card 2 -->
-                    <Border Grid.Column="1" Style="{StaticResource StatCardStyle2}" MouseDown="TodayBorder_MouseDown">
+                    <Border Grid.Column="1" Style="{StaticResource StatCardStyle2}">
+                        <Border.InputBindings>
+                            <MouseBinding MouseAction="LeftClick" Command="{Binding FilterTodayCommand}"/>
+                        </Border.InputBindings>
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Color="#78a3fc" Offset="0"/>
@@ -76,7 +82,10 @@
                     </Border>
 
                     <!-- Card 3 -->
-                    <Border Grid.Column="2" Style="{StaticResource StatCardStyle2}" MouseDown="ThisWeekBorder_MouseDown">
+                    <Border Grid.Column="2" Style="{StaticResource StatCardStyle2}">
+                        <Border.InputBindings>
+                            <MouseBinding MouseAction="LeftClick" Command="{Binding FilterThisWeekCommand}"/>
+                        </Border.InputBindings>
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <GradientStop Color="#A855F7" Offset="0"/>
@@ -115,7 +124,7 @@
                             <TextBox FontSize="13" Height="24" Width="300" Background="transparent"
                                  FontWeight="Medium"
                                  FontFamily="Montserrat" 
-                                 Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged, Delay=300}"
                                  Foreground="{StaticResource plainTextColor3}"
                                  CaretBrush="{StaticResource plainTextColor3}"
                                  BorderBrush="{StaticResource plainTextColor3}"
@@ -124,7 +133,7 @@
                                  Margin="5,5,0,0"></TextBox>
                         </StackPanel>
                         <Button Grid.Column="1"
-                            Command="{Binding SearchTaskCommand}"                            
+                            Command="{Binding ApplySearchAsyncCommand}"                            
                             Content="Search"                            
                             FontSize="12"
                             FontFamily="Montserrat"
@@ -237,11 +246,14 @@
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" >
-                    <Calendar Margin="15,5,15,15" SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                <Grid Grid.Row="0">
+
+                </Grid>
+                <Grid Grid.Row="1" >
+                    <Calendar Margin="15,5,15,0" SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
                     materialDesign:CalendarAssist.HeaderBackground="#fb5b9d"
                     materialDesign:CalendarAssist.HeaderForeground="Black"
                     Background="#200f53"
@@ -249,9 +261,7 @@
                     CalendarDayButtonStyle="{StaticResource CustomCalendarDayButton}"
                     Foreground="White" />
                 </Grid>
-                <Grid Grid.Row="1">
-
-                </Grid>
+                
             </Grid>
         </Grid>
     </Border>

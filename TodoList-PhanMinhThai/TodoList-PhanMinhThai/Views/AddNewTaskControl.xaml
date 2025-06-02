@@ -18,7 +18,7 @@
 
             <!-- Header -->
             <Grid Grid.Row="0" Margin="0,0,0,30">
-                <TextBlock Text="New Task" 
+                <TextBlock Text="Detail Task" 
                    FontSize="20" 
                    FontWeight="Bold" 
                    Foreground="#BCBEE0"
@@ -87,18 +87,21 @@
                                      Foreground="#4CAF50"/>
                     </StackPanel>
                 </StackPanel>
-                
             </Grid>
             <!-- Priority Section -->
             <Grid Grid.Row="4">
-                <DatePicker Margin="5" Width="120" Height="50"></DatePicker>
+                <DatePicker Margin="5" Width="120" Height="50"
+                             Style="{StaticResource MaterialDesignFilledDatePicker}"></DatePicker>
+            </Grid>
+            <Grid Grid.Row="6" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Update" Style="{StaticResource CreateTaskButtonStyle}" Margin="10"/>
+                <Button Grid.Column="1" Content="Delete" Style="{StaticResource CreateTaskButtonStyle}" Margin="10"/>
             </Grid>
 
-            <!-- Create Task Button -->
-            <Button Grid.Row="6" 
-            Content="Create Task" 
-            Style="{StaticResource CreateTaskButtonStyle}"
-            Click="CreateTaskButton_Click"/>
         </Grid>
     </Border>
 </UserControl>
