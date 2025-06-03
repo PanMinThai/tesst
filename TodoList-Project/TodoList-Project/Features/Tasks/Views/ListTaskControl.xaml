@@ -1,56 +1,74 @@
 ﻿<UserControl x:Class="TodoList_Project.Features.Tasks.Views.ListTaskControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TodoList_Project.Features.Tasks.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:converter="clr-namespace:TodoList_Project.Core.Utils.Converters"
-             mc:Ignorable="d" 
-             d:DesignHeight="588" d:DesignWidth="998">
+             mc:Ignorable="d"
+             d:DesignHeight="588"
+             d:DesignWidth="998">
     <UserControl.Resources>
-        <converter:EnumToDisplayNameConverter x:Key="EnumToDisplayNameConverter"/>
+        <converter:EnumToDisplayNameConverter x:Key="EnumToDisplayNameConverter" />
     </UserControl.Resources>
-    <Border CornerRadius="12" Padding ="10" Background="#2a156f">
-        <Grid >
+    <Border CornerRadius="12"
+            Padding="10"
+            Background="#2a156f">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="7*" />
+                <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="5*" />
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <!-- Card 1-->
-                    <Border Grid.Column="0" Style="{StaticResource StatCardStyle2}">
+                    <Border Grid.Column="0"
+                            Style="{StaticResource StatCardStyle2}">
                         <Border.InputBindings>
-                            <MouseBinding MouseAction="LeftClick" Command="{Binding FilterYesterdayCommand}"/>
+                            <MouseBinding MouseAction="LeftClick"
+                                          Command="{Binding FilterYesterdayCommand}" />
                         </Border.InputBindings>
                         <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#7950fd" Offset="0"/>
-                                <GradientStop Color="#78a2fc" Offset="1"/>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,1">
+                                <GradientStop Color="#7950fd"
+                                              Offset="0" />
+                                <GradientStop Color="#78a2fc"
+                                              Offset="1" />
                             </LinearGradientBrush>
                         </Border.Background>
                         <StackPanel>
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="36*"/>
-                                    <RowDefinition Height="17*"/>
+                                    <RowDefinition Height="36*" />
+                                    <RowDefinition Height="17*" />
                                 </Grid.RowDefinitions>
-                                <StackPanel Orientation="Horizontal" Grid.RowSpan="2">
-                                    <fa:IconImage Icon="Bomb" Foreground="White" Width="30" Height="30" Margin="0,0,10,0"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Grid.RowSpan="2">
+                                    <fa:IconImage Icon="Bomb"
+                                                  Foreground="White"
+                                                  Width="30"
+                                                  Height="30"
+                                                  Margin="0,0,10,0" />
                                     <StackPanel>
-                                        <TextBlock Text="Yesterday" Foreground="White" FontSize="20" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding YesterdayTaskCount, StringFormat={}{0} Tasks}"  Foreground="White" FontSize="16" />
+                                        <TextBlock Text="Yesterday"
+                                                   Foreground="White"
+                                                   FontSize="20"
+                                                   FontWeight="Bold" />
+                                        <TextBlock Text="{Binding YesterdayTaskCount, StringFormat={}{0} Tasks}"
+                                                   Foreground="White"
+                                                   FontSize="16" />
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
@@ -58,23 +76,37 @@
                     </Border>
 
                     <!-- Card 2 -->
-                    <Border Grid.Column="1" Style="{StaticResource StatCardStyle2}">
+                    <Border Grid.Column="1"
+                            Style="{StaticResource StatCardStyle2}">
                         <Border.InputBindings>
-                            <MouseBinding MouseAction="LeftClick" Command="{Binding FilterTodayCommand}"/>
+                            <MouseBinding MouseAction="LeftClick"
+                                          Command="{Binding FilterTodayCommand}" />
                         </Border.InputBindings>
                         <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#78a3fc" Offset="0"/>
-                                <GradientStop Color="#4bd9ec" Offset="1"/>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,1">
+                                <GradientStop Color="#78a3fc"
+                                              Offset="0" />
+                                <GradientStop Color="#4bd9ec"
+                                              Offset="1" />
                             </LinearGradientBrush>
                         </Border.Background>
                         <StackPanel>
                             <Grid>
                                 <StackPanel Orientation="Horizontal">
-                                    <fa:IconImage Icon="Rocket" Foreground="White" Width="30" Height="30" Margin="0,0,10,0"/>
+                                    <fa:IconImage Icon="Rocket"
+                                                  Foreground="White"
+                                                  Width="30"
+                                                  Height="30"
+                                                  Margin="0,0,10,0" />
                                     <StackPanel>
-                                        <TextBlock Text="Today" Foreground="White" FontSize="20" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding TodayTaskCount, StringFormat=\{0\} Tasks}"  Foreground="White" FontSize="16" />
+                                        <TextBlock Text="Today"
+                                                   Foreground="White"
+                                                   FontSize="20"
+                                                   FontWeight="Bold" />
+                                        <TextBlock Text="{Binding TodayTaskCount, StringFormat=\{0\} Tasks}"
+                                                   Foreground="White"
+                                                   FontSize="16" />
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
@@ -82,23 +114,37 @@
                     </Border>
 
                     <!-- Card 3 -->
-                    <Border Grid.Column="2" Style="{StaticResource StatCardStyle2}">
+                    <Border Grid.Column="2"
+                            Style="{StaticResource StatCardStyle2}">
                         <Border.InputBindings>
-                            <MouseBinding MouseAction="LeftClick" Command="{Binding FilterThisWeekCommand}"/>
+                            <MouseBinding MouseAction="LeftClick"
+                                          Command="{Binding FilterThisWeekCommand}" />
                         </Border.InputBindings>
                         <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#A855F7" Offset="0"/>
-                                <GradientStop Color="#EC4899" Offset="1"/>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,1">
+                                <GradientStop Color="#A855F7"
+                                              Offset="0" />
+                                <GradientStop Color="#EC4899"
+                                              Offset="1" />
                             </LinearGradientBrush>
                         </Border.Background>
                         <StackPanel>
                             <Grid>
                                 <StackPanel Orientation="Horizontal">
-                                    <fa:IconImage Icon="Bed" Foreground="White" Width="30" Height="30" Margin="0,0,10,0"/>
+                                    <fa:IconImage Icon="Bed"
+                                                  Foreground="White"
+                                                  Width="30"
+                                                  Height="30"
+                                                  Margin="0,0,10,0" />
                                     <StackPanel>
-                                        <TextBlock Text="This week" Foreground="White" FontSize="20" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding ThisWeekTaskCount, StringFormat={}{0} Tasks}"  Foreground="White" FontSize="16" />
+                                        <TextBlock Text="This week"
+                                                   Foreground="White"
+                                                   FontSize="20"
+                                                   FontWeight="Bold" />
+                                        <TextBlock Text="{Binding ThisWeekTaskCount, StringFormat={}{0} Tasks}"
+                                                   Foreground="White"
+                                                   FontSize="16" />
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
@@ -109,100 +155,100 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="60" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Grid.Column="0">
-                            <fa:IconImage Icon="Search" Height="20" Width="20" Foreground="{StaticResource plainTextColor3}"/>
-                            <TextBox FontSize="13" Height="24" Width="300" Background="transparent"
-                                 FontWeight="Medium"
-                                 FontFamily="Montserrat" 
-                                 Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged, Delay=300}"
-                                 Foreground="{StaticResource plainTextColor3}"
-                                 CaretBrush="{StaticResource plainTextColor3}"
-                                 BorderBrush="{StaticResource plainTextColor3}"
-                                 BorderThickness="0,0,0,1"                             
-                                 VerticalContentAlignment="Center"
-                                 Margin="5,5,0,0"></TextBox>
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    Grid.Column="0">
+                            <fa:IconImage Icon="Search"
+                                          Height="20"
+                                          Width="20"
+                                          Foreground="{StaticResource plainTextColor3}" />
+                            <TextBox FontSize="13"
+                                     Height="24"
+                                     Width="300"
+                                     Background="transparent"
+                                     FontWeight="Medium"
+                                     FontFamily="Montserrat"
+                                     Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged, Delay=300}"
+                                     Foreground="{StaticResource plainTextColor3}"
+                                     CaretBrush="{StaticResource plainTextColor3}"
+                                     BorderBrush="{StaticResource plainTextColor3}"
+                                     BorderThickness="0,0,0,1"
+                                     VerticalContentAlignment="Center"
+                                     Margin="5,5,0,0"></TextBox>
                         </StackPanel>
-                        <Button Grid.Column="1"
-                            Command="{Binding ApplySearchAsyncCommand}"                            
-                            Content="Search"                            
-                            FontSize="12"
-                            FontFamily="Montserrat"
-                            Cursor="Hand"
-                            BorderThickness="0"
-                            Foreground="White"
-                            VerticalAlignment="Center">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Background" Value="#773DFF"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Height="30"
-                                                CornerRadius="15"
-                                                Background="{TemplateBinding Background}">
-                                                    <ContentPresenter VerticalAlignment="Center"
-                                                                  HorizontalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#836EFB"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <ComboBox Grid.Column="2" 
-                              ItemsSource="{Binding StatusFilters}" 
-                              SelectedItem="{Binding SelectedStatus}"
-                              Width="120" materialDesign:HintAssist.Hint="Status"
-                              MinWidth="120"
-                              Margin="10,0,0,0">
+
+                        <ComboBox Grid.Column="1"
+                                  ItemsSource="{Binding StatusFilters}"
+                                  SelectedItem="{Binding SelectedStatusFilter, Mode=TwoWay}"
+                                  Width="140"
+                                  MinWidth="140"
+                                  Style="{StaticResource DashboardComboBoxStyle}"
+                                  ItemContainerStyle="{StaticResource DashboardComboBoxItemStyle}"
+                                  Margin="5">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding ., Converter={StaticResource EnumToDisplayNameConverter}}"/>
+                                    <TextBlock Text="{Binding ., Converter={StaticResource EnumToDisplayNameConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            
+                        </ComboBox>
+                        <ComboBox Grid.Column="2"
+                                  ItemsSource="{Binding PriorityFilters}"
+                                  SelectedItem="{Binding SelectedPriorityFilter, Mode=TwoWay}"
+                                  Width="140"
+                                  MinWidth="140"
+                                  Style="{StaticResource DashboardComboBoxStyle}"
+                                  ItemContainerStyle="{StaticResource DashboardComboBoxItemStyle}"
+                                  Margin="5">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ., Converter={StaticResource EnumToDisplayNameConverter}}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <ComboBox Grid.Column="3" 
-                              ItemsSource="{Binding PriorityFilters}" 
-                              SelectedItem="{Binding SelectedPriority}"
-                              Width="100" materialDesign:HintAssist.Hint="Priority"
-                              Margin="10,0,0,0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ., Converter={StaticResource EnumToDisplayNameConverter}}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                        <Button Grid.Column="3"
+                                Content="Add"
+                                Command="{Binding OpenAddTaskPopupCommand}"></Button>
                     </Grid>
-                    <Border Grid.Row="1" Background="#200F53" CornerRadius="10" Padding="10">
-                        <DataGrid ColumnWidth="*" Background="#200F53" 
-                              BorderThickness="0" ItemsSource="{Binding Tasks}" 
-                              SelectedItem="{Binding SelectedTask, Mode=TwoWay}" 
-                              AutoGenerateColumns="False" IsReadOnly="True"
-                              Foreground="#FFFFFF" GridLinesVisibility="None"
-                              RowHeight="40" RowHeaderWidth="0"
-                              RowBackground="Transparent" AlternatingRowBackground="#25175B">
+                    <Border Grid.Row="1"
+                            Background="#200F53"
+                            CornerRadius="10"
+                            Padding="10">
+                        <DataGrid ColumnWidth="*"
+                                  Background="#200F53"
+                                  BorderThickness="0"
+                                  ItemsSource="{Binding Tasks}"
+                                  SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  Foreground="#FFFFFF"
+                                  GridLinesVisibility="None"
+                                  RowHeight="40"
+                                  RowHeaderWidth="0"
+                                  RowBackground="Transparent"
+                                  AlternatingRowBackground="#25175B">
                             <DataGrid.ColumnHeaderStyle>
                                 <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="Foreground" Value="#BCBEE0"/>
-                                    <Setter Property="Padding" Value="10,0,0,10"/>
-                                    <Setter Property="FontFamily" Value="Montserrat"/>
-                                    <Setter Property="FontSize" Value="15"/>
+                                    <Setter Property="Background"
+                                            Value="Transparent" />
+                                    <Setter Property="Foreground"
+                                            Value="#BCBEE0" />
+                                    <Setter Property="Padding"
+                                            Value="10,0,0,10" />
+                                    <Setter Property="FontFamily"
+                                            Value="Montserrat" />
+                                    <Setter Property="FontSize"
+                                            Value="15" />
                                 </Style>
                             </DataGrid.ColumnHeaderStyle>
                             <DataGrid.CellStyle>
@@ -212,33 +258,46 @@
                                             <ControlTemplate TargetType="DataGridCell">
                                                 <Border Padding="0,5">
                                                     <!-- Padding top/bottom 5px -->
-                                                    <ContentPresenter VerticalAlignment="Center"/>
+                                                    <ContentPresenter VerticalAlignment="Center" />
                                                 </Border>
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
-                                    <Setter Property="Foreground" Value="#E0E0FF"/>
+                                    <Setter Property="Foreground"
+                                            Value="#E0E0FF" />
                                     <!-- Màu chữ -->
-                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Background"
+                                            Value="Transparent" />
                                     <!-- Nền cell -->
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                    <Setter Property="FontFamily" Value="Montserrat"/>
-                                    <Setter Property="FontSize" Value="13"/>
-                                    <Setter Property="Padding" Value="10,5"/>
+                                    <Setter Property="BorderThickness"
+                                            Value="0" />
+                                    <Setter Property="FontFamily"
+                                            Value="Montserrat" />
+                                    <Setter Property="FontSize"
+                                            Value="13" />
+                                    <Setter Property="Padding"
+                                            Value="10,5" />
                                     <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="#3A2A7A"/>
-                                            <Setter Property="Foreground" Value="White"/>
+                                        <Trigger Property="IsSelected"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="#3A2A7A" />
+                                            <Setter Property="Foreground"
+                                                    Value="White" />
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
                             </DataGrid.CellStyle>
                             <DataGrid.Columns>
                                 <!--<DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="ID" HeaderStringFormat=""/>-->
-                                <DataGridTextColumn Binding="{Binding Title}" Header="Tittle"/>
-                                <DataGridTextColumn Binding="{Binding DueDate, StringFormat={}{0:dd/MM/yyyy}}" Header="Due date"/>
-                                <DataGridTextColumn Binding="{Binding Status}" Header="Status"/>
-                                <DataGridTextColumn Binding="{Binding Priority}" Header="Priority"/>
+                                <DataGridTextColumn Binding="{Binding Title}"
+                                                    Header="Tittle" />
+                                <DataGridTextColumn Binding="{Binding DueDate, StringFormat={}{0:dd/MM/yyyy}}"
+                                                    Header="Due date" />
+                                <DataGridTextColumn Binding="{Binding Status}"
+                                                    Header="Status" />
+                                <DataGridTextColumn Binding="{Binding Priority}"
+                                                    Header="Priority" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>
@@ -246,22 +305,23 @@
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
 
                 </Grid>
-                <Grid Grid.Row="1" >
-                    <Calendar Margin="15,5,15,0" SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
-                    materialDesign:CalendarAssist.HeaderBackground="#fb5b9d"
-                    materialDesign:CalendarAssist.HeaderForeground="Black"
-                    Background="#200f53"
-                    CalendarButtonStyle="{StaticResource CustomCalendarButton}"
-                    CalendarDayButtonStyle="{StaticResource CustomCalendarDayButton}"
-                    Foreground="White" />
+                <Grid Grid.Row="1">
+                    <Calendar Margin="15,5,15,0"
+                              SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                              materialDesign:CalendarAssist.HeaderBackground="#fb5b9d"
+                              materialDesign:CalendarAssist.HeaderForeground="Black"
+                              Background="#200f53"
+                              CalendarButtonStyle="{StaticResource CustomCalendarButton}"
+                              CalendarDayButtonStyle="{StaticResource CustomCalendarDayButton}"
+                              Foreground="White" />
                 </Grid>
-                
+
             </Grid>
         </Grid>
     </Border>

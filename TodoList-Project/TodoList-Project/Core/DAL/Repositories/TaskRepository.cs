@@ -55,12 +55,9 @@ namespace TodoList_Project.Core.DAL.Repositories
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public async Task DeleteAsync(object id)
+        public async Task DeleteAsync(int id)
         {
-            if (id is not int taskId)
-                throw new ArgumentException("ID must be an integer");
-
-            var entity = await GetByIdAsync(taskId).ConfigureAwait(false);
+            var entity = await GetByIdAsync(id).ConfigureAwait(false);
             if (entity != null)
             {
                 _context.Tasks.Remove(entity);
@@ -144,27 +141,40 @@ namespace TodoList_Project.Core.DAL.Repositories
                            t.DueDate.Value.Date <= to.Date);
             return await query.AsNoTracking().ToListAsync();
         }
-        public async Task<IEnumerable<TaskEntity>> GetFilteredTasksAsync(TaskStatus? status = null, TaskPriority? priority = null, string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null)
+        public async Task<IEnumerable<TaskEntity>> GetFilteredTasksAsync(
+    TaskStatus? status = null,
+    TaskPriority? priority = null,
+    string keyword = null,
+    DateTime? date = null,
+    DateTime? fromDate = null,
+    DateTime? toDate = null)
         {
             var query = _context.Tasks.AsQueryable();
 
+            // Filter by Status
             if (status.HasValue)
                 query = query.Where(t => t.Status == status.Value);
 
+            // Filter by Priority
             if (priority.HasValue)
                 query = query.Where(t => t.Priority == priority.Value);
 
+            // Filter by Title
             if (!string.IsNullOrWhiteSpace(keyword))
                 query = query.Where(t => t.Title.Contains(keyword));
 
+            // Filter by specific date
             if (date.HasValue)
                 query = query.Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == date.Value.Date);
 
+            // Filter by time period
             if (fromDate.HasValue && toDate.HasValue)
                 query = query.Where(t => t.DueDate >= fromDate && t.DueDate <= toDate);
 
             return await query.AsNoTracking().ToListAsync();
         }
+
+
         #endregion
 
         #region IDisposable Implementation

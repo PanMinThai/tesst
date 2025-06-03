@@ -1,21 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TodoList_Project.Core.DAL.Enums;
+using TodoList_Project.Core.Utils;
 using TodoList_Project.Features.Tasks.Models;
 using TodoList_Project.Features.Tasks.Services;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
 namespace TodoList_Project.Features.Tasks.Views
-{ 
-
+{
     public partial class ListTaskViewModel : ObservableObject
     {
         #region Services
@@ -26,35 +24,27 @@ namespace TodoList_Project.Features.Tasks.Views
 
         #region Collections
         public ObservableCollection<TaskModel> Tasks { get; } = new();
-        public ObservableCollection<TaskStatus?> StatusFilters { get; }
-        public ObservableCollection<TaskPriority?> PriorityFilters { get; }
+        public ObservableCollection<FilterOption<TaskStatus>> StatusFilters { get; }
+        public ObservableCollection<FilterOption<TaskPriority>> PriorityFilters { get; }
         #endregion
 
-        #region Observable Properties
-        [ObservableProperty]
-        private TaskModel _selectedTask;
+        #region Filter Properties
 
         [ObservableProperty]
-        private TaskModel _currentTask = new();
+        private FilterOption<TaskStatus> _selectedStatusFilter;
 
         [ObservableProperty]
-        private TaskStatus? _selectedStatus;
+        private FilterOption<TaskPriority> _selectedPriorityFilter;
 
-        partial void OnSelectedStatusChanged(TaskStatus? value)
+        partial void OnSelectedStatusFilterChanged(FilterOption<TaskStatus> value)
         {
             _ = ApplyFilters();
         }
 
-        [ObservableProperty]
-        private TaskPriority? _selectedPriority;
-
-        partial void OnSelectedPriorityChanged(TaskPriority? value)
+        partial void OnSelectedPriorityFilterChanged(FilterOption<TaskPriority> value)
         {
             _ = ApplyFilters();
         }
-
-        [ObservableProperty]
-        private string _searchKeyword;
 
         [ObservableProperty]
         private DateTime? _selectedDate;
@@ -63,6 +53,23 @@ namespace TodoList_Project.Features.Tasks.Views
         {
             ApplyDateFilter();
         }
+
+        [ObservableProperty]
+        private string _searchKeyword;
+
+        partial void OnSearchKeywordChanged(string value)
+        {
+            SearchTaskCommand.Execute(null);
+        }
+
+        #endregion
+
+        #region State Properties
+        [ObservableProperty]
+        private TaskModel _selectedTask;
+
+        [ObservableProperty]
+        private TaskModel _currentTask = new();
 
         [ObservableProperty]
         private int _yesterdayTaskCount;
@@ -80,9 +87,16 @@ namespace TodoList_Project.Features.Tasks.Views
         public ICommand FilterThisWeekCommand => new RelayCommand(async () => await FilterByThisWeekAsync());
 
         [RelayCommand]
+        private void ClearTaskFields() => CurrentTask = new TaskModel
+        {
+            DueDate = DateTime.Today,
+            Status = TaskStatus.Completed,
+            Priority = TaskPriority.Medium
+        };
+
+        [RelayCommand]
         private async Task LoadTasksAsync()
         {
-            var allTasks = await _taskService.GetAllTasksAsync();
             await ApplyFilters();
 
             var stats = await _statisticsService.GetStatisticsAsync();
@@ -133,59 +147,57 @@ namespace TodoList_Project.Features.Tasks.Views
         }
 
         [RelayCommand]
-        private async Task ApplySearchAsync()
-        {
-            var searched = await _filterService.SearchTasks(SearchKeyword, SelectedStatus, SelectedPriority);
-            Tasks.Clear();
-            foreach (var task in searched) Tasks.Add(task);
-        }
+        private async Task ApplySearchAsync() => await SearchTaskAsync();
+
         [RelayCommand]
         private async Task SearchTaskAsync()
         {
-            var searched = await _filterService.SearchTasks(SearchKeyword, SelectedStatus, SelectedPriority);
+            var searched = await _filterService.SearchTasks(
+                SearchKeyword,
+                SelectedStatusFilter?.Value,
+                SelectedPriorityFilter?.Value);
+
             Tasks.Clear();
             foreach (var task in searched) Tasks.Add(task);
         }
-
-        partial void OnSearchKeywordChanged(string value)
-        {
-            SearchTaskCommand.Execute(null);  
-        }
         [RelayCommand]
-        private void ClearTaskFields()
+        private void OpenAddTaskPopup()
         {
-            CurrentTask = new TaskModel
-            {
-                DueDate = DateTime.Today,
-                Status = TaskStatus.Completed,
-                Priority = TaskPriority.Medium
-            };
-            SelectedTask = null;
+            var addTaskViewModel = new AddTaskViewModel(_taskService);
+            ShowAddTaskPopup(addTaskViewModel);
         }
+
+       
         #endregion
 
         #region Constructor
-        public ListTaskViewModel(ITaskService taskService, ITaskFilterService filterService, ITaskStatisticsService statisticsService)
+        public ListTaskViewModel(
+            ITaskService taskService,
+            ITaskFilterService filterService,
+            ITaskStatisticsService statisticsService)
         {
             _taskService = taskService;
             _filterService = filterService;
             _statisticsService = statisticsService;
 
-            StatusFilters = new ObservableCollection<TaskStatus?>
+            StatusFilters = new ObservableCollection<FilterOption<TaskStatus>>
             {
-                null,
-                TaskStatus.InProgress,
-                TaskStatus.Completed,
-                TaskStatus.Cancelled
+                new() { Value = null, DisplayName = "All" },
+                new() { Value = TaskStatus.InProgress, DisplayName = "In Progress" },
+                new() { Value = TaskStatus.Completed, DisplayName = "Completed" },
+                new() { Value = TaskStatus.Cancelled, DisplayName = "Cancelled" },
             };
 
-            PriorityFilters = new ObservableCollection<TaskPriority?>
+            PriorityFilters = new ObservableCollection<FilterOption<TaskPriority>>
             {
-                null,
-                TaskPriority.High,
-                TaskPriority.Medium,
-                TaskPriority.Low
+                new() { Value = null, DisplayName = "All" },
+                new() { Value = TaskPriority.High, DisplayName = "High" },
+                new() { Value = TaskPriority.Medium, DisplayName = "Medium" },
+                new() { Value = TaskPriority.Low, DisplayName = "Low" },
             };
+
+            SelectedStatusFilter = StatusFilters[0];
+            SelectedPriorityFilter = PriorityFilters[0];
 
             LoadTasksCommand.Execute(null);
         }
@@ -194,14 +206,22 @@ namespace TodoList_Project.Features.Tasks.Views
         #region Private Methods
         private async Task ApplyFilters()
         {
-            var filtered = await _filterService.ApplyFilters(SelectedStatus, SelectedPriority, SelectedDate);
+            var filtered = await _filterService.ApplyFilters(
+                SelectedStatusFilter?.Value,
+                SelectedPriorityFilter?.Value,
+                SelectedDate);
+
             Tasks.Clear();
             foreach (var task in filtered) Tasks.Add(task);
         }
 
         private async void ApplyDateFilter()
         {
-            var tasks = await _filterService.ApplyFilters(SelectedStatus, SelectedPriority, SelectedDate);
+            var tasks = await _filterService.ApplyFilters(
+                SelectedStatusFilter?.Value,
+                SelectedPriorityFilter?.Value,
+                SelectedDate);
+
             Tasks.Clear();
             foreach (var task in tasks) Tasks.Add(task);
         }
@@ -223,14 +243,6 @@ namespace TodoList_Project.Features.Tasks.Views
         }
 
         private bool CanExecuteSelectedTask() => SelectedTask != null;
-        #endregion
-
-        [RelayCommand]
-        private void OpenAddTaskPopup()
-        {
-            var taskViewModel = new TaskViewModel(_taskService);
-            ShowTaskPopup(taskViewModel);
-        }
 
         partial void OnSelectedTaskChanged(TaskModel value)
         {
@@ -243,26 +255,52 @@ namespace TodoList_Project.Features.Tasks.Views
 
         private void ShowTaskPopup(TaskViewModel viewModel)
         {
-            var popupView = new PopupView();
+            var popupView = new PopupView
+            {
+                DataContext = viewModel,
+                Width = 800,
+                Height = 450,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = Application.Current.MainWindow
+            };
 
-            // Đặt DataContext cho PopupView
-            popupView.DataContext = viewModel;
-
-            var taskControl = new TaskControl();
-            taskControl.DataContext = viewModel;
+            var taskControl = new TaskControl
+            {
+                DataContext = viewModel
+            };
 
             var contentControl = (ContentControl)popupView.FindName("contentControl");
             contentControl.Content = taskControl;
-
-            popupView.Width = 800;
-            popupView.Height = 450;
-            popupView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            popupView.Owner = Application.Current.MainWindow;
 
             if (popupView.ShowDialog() == true)
             {
                 LoadTasksCommand.Execute(null);
             }
         }
+        private void ShowAddTaskPopup(AddTaskViewModel viewModel)
+        {
+            var popupView = new PopupView
+            {
+                DataContext = viewModel,
+                Width = 800,
+                Height = 450,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = Application.Current.MainWindow
+            };
+
+            var addTaskControl = new AddTaskControl
+            {
+                DataContext = viewModel
+            };
+
+            var contentControl = (ContentControl)popupView.FindName("contentControl");
+            contentControl.Content = addTaskControl;
+
+            if (popupView.ShowDialog() == true)
+            {
+                LoadTasksCommand.Execute(null);
+            }
+        }
+        #endregion
     }
 }

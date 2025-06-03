@@ -12,6 +12,6 @@ namespace TodoList_Project.Core.DAL.Repositories
         Task<T> GetByIdAsync(object id);
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
-        Task DeleteAsync(object id);
+        Task DeleteAsync(int id);
     }
 }

@@ -17,9 +17,15 @@ namespace TodoList_Project.Core.Utils.Converters
             if (value == null)
                 return "All";
 
-            var field = value.GetType().GetField(value.ToString());
-            var attribute = field?.GetCustomAttribute<DisplayAttribute>();
-            return attribute?.Name ?? value.ToString();
+            var enumValue = value as Enum;
+            if (enumValue == null) return value.ToString();
+
+            var displayAttr = enumValue.GetType()
+                .GetField(enumValue.ToString())
+                ?.GetCustomAttributes(typeof(DisplayAttribute), false)
+                .FirstOrDefault() as DisplayAttribute;
+
+            return displayAttr?.Name ?? enumValue.ToString();
 
         }
 

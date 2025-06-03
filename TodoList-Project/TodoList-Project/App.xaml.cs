@@ -30,7 +30,8 @@ namespace TodoList_Project
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=.\\SQLEXPRESS;Database=TodoList;Trusted_Connection=True;TrustServerCertificate=True;"));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=.\\SQLEXPRESS;Database=TodoList;Trusted_Connection=True;TrustServerCertificate=True;"),
+    ServiceLifetime.Transient);
 
             // Repositories
             services.AddScoped<ITaskRepository, TaskRepository>();

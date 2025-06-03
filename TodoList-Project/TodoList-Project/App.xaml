@@ -10,10 +10,14 @@
 
             <ResourceDictionary.MergedDictionaries>
 
-                <ResourceDictionary Source="Core/Themes/UIColor.xaml"/>
-                <ResourceDictionary Source="Core/Themes/ButtonStyles.xaml"/>
-                <ResourceDictionary Source="Core/Themes/TaskItemStyle.xaml"/>
-                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+                <ResourceDictionary Source="UI/Colors/UIColor.xaml" />
+                <ResourceDictionary Source="UI/Colors/ComboBoxColor.xaml" />
+                <ResourceDictionary Source="UI/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="UI/Styles/TaskItemStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/ComboBoxStyle.xaml" />
+                <materialDesign:BundledTheme BaseTheme="Light"
+                                             PrimaryColor="DeepPurple"
+                                             SecondaryColor="Lime" />
 
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
 
