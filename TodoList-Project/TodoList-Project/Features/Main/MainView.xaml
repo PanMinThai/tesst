@@ -6,24 +6,17 @@
         xmlns:local="clr-namespace:TodoList_Project.Features.Main"
         mc:Ignorable="d"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-        Title="MainView"
-        Height="700"
-        Width="1300"
+        Title="MainView" Height="700" Width="1300"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None"
-        Background="Transparent"
+        WindowStyle="None" Background="Transparent"
         AllowsTransparency="True">
     <Border CornerRadius="10"
             BorderThickness="1">
         <Border.BorderBrush>
-            <LinearGradientBrush StartPoint="0,0"
-                                 EndPoint="1,1">
-                <GradientStop Color="#6D2FFF"
-                              Offset="0" />
-                <GradientStop Color="#FB539B"
-                              Offset="0.5" />
-                <GradientStop Color="#836EFB"
-                              Offset="1" />
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#6D2FFF" Offset="0" />
+                <GradientStop Color="#FB539B" Offset="0.5" />
+                <GradientStop Color="#836EFB" Offset="1" />
             </LinearGradientBrush>
         </Border.BorderBrush>
         <Grid>
@@ -36,12 +29,9 @@
             <Border CornerRadius="10,0,0,10"
                     Grid.Column="0">
                 <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0.7">
-                        <GradientStop Color="{StaticResource secondaryBackColor1}"
-                                      Offset="0" />
-                        <GradientStop Color="{StaticResource secondaryBackColor2}"
-                                      Offset="1" />
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.7">
+                        <GradientStop Color="{StaticResource secondaryBackColor1}" Offset="0" />
+                        <GradientStop Color="{StaticResource secondaryBackColor2}" Offset="1" />
                     </LinearGradientBrush>
                 </Border.Background>
                 <StackPanel>
@@ -50,7 +40,6 @@
                     <StackPanel Orientation="Horizontal"
                                 Height="35"
                                 Margin="15,25,0,40">
-
                         <Image Source="/Features/Main/shin_picture.jpg"
                                Height="30" />
                         <TextBlock Text="PanMinTa"
@@ -61,7 +50,7 @@
                                    VerticalAlignment="Center"
                                    Margin="10,0,0,0" />
                     </StackPanel>
-
+                    
                     <!--Menu Buttons-->
                     <RadioButton Style="{DynamicResource menuButton}"
                                  Tag="{StaticResource color1}"
@@ -77,7 +66,7 @@
                     <RadioButton Style="{DynamicResource menuButton}"
                                  Tag="{StaticResource color2}"
                                  Click="btnAddTaskUserControl"
-                                 Command="{Binding ShowTaskManagementViewCommand}">
+                                 Command="{Binding ShowListTaskViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="ListCheck"
                                           Style="{StaticResource menuButtonIcon}" />
@@ -87,22 +76,18 @@
                     </RadioButton>
                     <RadioButton Style="{DynamicResource menuButton}"
                                  Tag="{DynamicResource color3}"
-                                 Command="{Binding ShowAddNewTaskViewCommand}">
+                                 Command="{Binding ShowListTaskViewCommand}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="Icons"
-                                          Style="{DynamicResource menuButtonIcon}" />
-                            <TextBlock Text="Categories"
-                                       Style="{DynamicResource menuButtonText}" />
+                            <fa:IconImage Icon="Icons" Style="{DynamicResource menuButtonIcon}" />
+                            <TextBlock Text="Categories" Style="{DynamicResource menuButtonText}" />
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{DynamicResource menuButton}"
                                  Tag="{DynamicResource color4}"
                                  Command="{Binding ShowListTaskViewCommand}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="PieChart"
-                                          Style="{DynamicResource menuButtonIcon}" />
-                            <TextBlock Text="Report"
-                                       Style="{DynamicResource menuButtonText}" />
+                            <fa:IconImage Icon="PieChart" Style="{DynamicResource menuButtonIcon}" />
+                            <TextBlock Text="Report" Style="{DynamicResource menuButtonText}" />
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
@@ -118,11 +103,8 @@
                 </Border.Background>
                 <Grid>
                     <Grid.RowDefinitions>
-
                         <RowDefinition Height="25" />
-
                         <RowDefinition Height="35" />
-
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -144,15 +126,13 @@
                                 Style="{StaticResource controlButton}"
                                 Tag="{StaticResource color6}"
                                 Click="btnMaximize_Click">
-                            <fa:IconImage Icon="Square"
-                                          Style="{StaticResource controlButtonIcon}" />
+                            <fa:IconImage Icon="Square" Style="{StaticResource controlButtonIcon}" />
                         </Button>
                         <Button x:Name="btnMinimize"
                                 Style="{StaticResource controlButton}"
                                 Tag="{StaticResource color8}"
                                 Click="btnMinimize_Click">
-                            <fa:IconImage Icon="WindowMinimize"
-                                          Width="12"
+                            <fa:IconImage Icon="WindowMinimize" Width="12"
                                           Style="{StaticResource controlButtonIcon}" />
                         </Button>
                     </StackPanel>

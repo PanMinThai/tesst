@@ -11,6 +11,12 @@
         <converter:EditModeToTextConverter x:Key="EditModeToTextConverter"/>
     </UserControl.Resources>
     <Border CornerRadius="12" Background="#200F53" Margin="10,0,10,0">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20"
+                              ShadowDepth="5"
+                              Opacity="0.7"
+                              Color="Black" />
+        </Border.Effect>
         <Grid Margin="10" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>

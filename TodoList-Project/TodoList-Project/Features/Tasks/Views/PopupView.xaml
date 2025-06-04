@@ -4,35 +4,58 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TodoList_Project.Features.Tasks.Views"
-        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
         Background="Transparent"
         AllowsTransparency="True"
         WindowStyle="None"
-        Title="PopupView" Height="450" Width="800">
-    <Border BorderThickness="1" CornerRadius="10" Background="#1c0e49">
+        Title="PopupView"
+        Height="850"
+        Width="850">
+    <Border BorderThickness="1"
+            CornerRadius="10">
         <Border.BorderBrush>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color = "#6D2FFF" Offset="0"/>
-                <GradientStop Color = "#FB539B" Offset="0.5"/>
-                <GradientStop Color = "#836EFB" Offset="1"/>
+            <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="1,1">
+                <GradientStop Color="#6D2FFF"
+                              Offset="0" />
+                <GradientStop Color="#FB539B"
+                              Offset="0.5" />
+                <GradientStop Color="#836EFB"
+                              Offset="1" />
             </LinearGradientBrush>
+
         </Border.BorderBrush>
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0"
+                EndPoint="1,1">
+                <GradientStop Color="#1a1b3a"
+                              Offset="0" />
+                <GradientStop Color="#2d1b69"
+                              Offset="0.5" />
+                <GradientStop Color="#1a1b3a"
+                              Offset="1" />
+            </LinearGradientBrush>
+        </Border.Background>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
-                <RowDefinition/>
+                <RowDefinition Height="25" />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0"  Orientation="Horizontal" FlowDirection="RightToLeft">
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        FlowDirection="RightToLeft">
+                <Grid Width="10"></Grid>
                 <Button x:Name="btnClose"
-             Style="{DynamicResource controlButton}"
-             Tag="{DynamicResource color4}"
-             Click="btnClose_Click">
-                    <fa:IconImage Icon="Xmark" Style="{DynamicResource controlButtonIcon}"/>
+                        Style="{DynamicResource controlButton}"
+                        Tag="{DynamicResource color4}"
+                        Click="btnClose_Click">
+                    <fa:IconImage Icon="Xmark"
+                                  Style="{DynamicResource controlButtonIcon}" />
                 </Button>
             </StackPanel>
             <Grid Grid.Row="1">
-                <ContentControl x:Name="contentControl"/>
+                <ContentControl x:Name="contentControl" />
             </Grid>
         </Grid>
     </Border>
