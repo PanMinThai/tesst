@@ -1,61 +1,52 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp">
+                    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:converter="clr-namespace:TodoList_Project.Core.Utils.Converters">
+    
 
     <!-- Colors -->
-    <SolidColorBrush x:Key="PrimaryPurple"
-                     Color="#3D1D5C" />
-    <SolidColorBrush x:Key="SecondaryPurple"
-                     Color="#4A2268" />
-    <SolidColorBrush x:Key="DarkPurple"
-                     Color="#2A1142" />
-    <SolidColorBrush x:Key="LightPurple"
-                     Color="#5D3077" />
-    <SolidColorBrush x:Key="WhiteColor"
-                     Color="#FFFFFF" />
-    <SolidColorBrush x:Key="LightGray"
-                     Color="#E0E0E0" />
-    <SolidColorBrush x:Key="MediumGray"
-                     Color="#9E9E9E" />
-    <SolidColorBrush x:Key="DarkGray"
-                     Color="#424242" />
-    <SolidColorBrush x:Key="BlueAccent"
-                     Color="#2196F3" />
-    <SolidColorBrush x:Key="GreenAccent"
-                     Color="#4CAF50" />
-    <SolidColorBrush x:Key="OrangeAccent"
-                     Color="#FF9800" />
-    <SolidColorBrush x:Key="RedAccent"
-                     Color="#F44336" />
+    <SolidColorBrush x:Key="PrimaryPurple" Color="#3D1D5C" />
+    <SolidColorBrush x:Key="SecondaryPurple" Color="#4A2268" />
+    <SolidColorBrush x:Key="DarkPurple" Color="#2A1142" />
+    <SolidColorBrush x:Key="LightPurple" Color="#5D3077" />
+    <SolidColorBrush x:Key="WhiteColor"  Color="#FFFFFF" />
+    <SolidColorBrush x:Key="LightGray" Color="#E0E0E0" />
+    <SolidColorBrush x:Key="MediumGray" Color="#9E9E9E" />
+    <SolidColorBrush x:Key="DarkGray" Color="#424242" />
+    <SolidColorBrush x:Key="BlueAccent" Color="#2196F3" />
+    <SolidColorBrush x:Key="GreenAccent" Color="#4CAF50" />
+    <SolidColorBrush x:Key="OrangeAccent" Color="#FF9800" />
+    <SolidColorBrush x:Key="RedAccent" Color="#F44336" />
 
     <!-- Gradients -->
     <LinearGradientBrush x:Key="PrimaryGradient"
                          StartPoint="0,0"
                          EndPoint="1,1">
-        <GradientStop Color="#2A1142"
+        <GradientStop Color="#FF200F53"
                       Offset="0" />
-        <GradientStop Color="#3D1D5C"
+        <GradientStop Color="#FF2A156E"
                       Offset="0.5" />
-        <GradientStop Color="#5D3077"
+        <GradientStop Color="#FF200F53"
                       Offset="1" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="CardGradient"
                          StartPoint="0,0"
                          EndPoint="1,1">
-        <GradientStop Color="#29146d"
+        <GradientStop Color="#FF200F53"
                       Offset="0" />
-        <GradientStop Color="#200f53"
+        <GradientStop Color="#FF2A156E"
+                      Offset="0.5" />
+        <GradientStop Color="#FF200F53"
                       Offset="1" />
     </LinearGradientBrush>
     <!-- Main Border Style -->
     <Style x:Key="MainBorderStyle"
            TargetType="Border">
-        <Setter Property="Background"
-                Value="{StaticResource CardGradient}" />
-        <Setter Property="CornerRadius"
-                Value="20" />
-        <Setter Property="Margin"
-                Value="20" />
+        <Setter Property="Background" Value="{StaticResource CardGradient}" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Margin" Value="20" />
+        <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect Color="Black"
@@ -202,46 +193,6 @@
         </Setter>
     </Style>
 
-    <!-- Star Button Style -->
-    <Style x:Key="StarButtonStyle"
-           TargetType="Button">
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="BorderThickness"
-                Value="0" />
-        <Setter Property="FontSize"
-                Value="20" />
-        <Setter Property="Padding"
-                Value="2" />
-        <Setter Property="Margin"
-                Value="2" />
-        <Setter Property="Cursor"
-                Value="Hand" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                            Padding="{TemplateBinding Padding}">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver"
-                     Value="True">
-                <Setter Property="Effect">
-                    <Setter.Value>
-                        <DropShadowEffect Color="#FFD700"
-                                          BlurRadius="5"
-                                          ShadowDepth="0" />
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
     <!-- RadioButton Style for Priority -->
     <Style x:Key="PriorityRadioButtonStyle"
            TargetType="RadioButton">
@@ -296,58 +247,61 @@
     </Style>
 
     <!-- Category Button Style -->
-    <Style x:Key="CategoryButtonStyle"
-           TargetType="ToggleButton">
+     <SolidColorBrush x:Key="NormalBorderColor" Color="#583e93"/> <!-- Màu tím -->
+        <SolidColorBrush x:Key="HoverPressedBorderColor" Color="#7a5fb5"/> <!-- Màu tím nhạt -->
+    <converter:OpacityConverter x:Key="OpacityConverter"
+                            Opacity="0.2" />
+    <!-- Kiểu cho ToggleButton -->
+    <Style x:Key="CategoryButtonStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="Foreground"
-                Value="{StaticResource WhiteColor}" />
-        <Setter Property="BorderBrush"
-                Value="{StaticResource BlueAccent}" />
-        <Setter Property="BorderThickness"
-                Value="1" />
-        <Setter Property="Padding"
-                Value="15,8" />
-        <Setter Property="Margin"
-                Value="0,0,10,10" />
-        <Setter Property="FontSize"
-                Value="13" />
-        <Setter Property="Cursor"
-                Value="Hand" />
+                Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}, Converter={StaticResource OpacityConverter}}" />
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Foreground" Value="#E5E7EB"/> <!-- Màu chữ xám nhạt -->
+        <Setter Property="FontFamily" Value="Inter"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="15,8" />
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Margin" Value="0,0,10,10" />
         <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="15"
-                            Padding="{TemplateBinding Padding}">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked"
-                                 Value="True">
-                            <Setter Property="Background"
-                                    TargetName="border"
-                                    Value="{StaticResource BlueAccent}" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
-                            <Setter Property="Background"
-                                    TargetName="border">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="#2196F3"
-                                                     Opacity="0.3" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="border" 
+                                CornerRadius="15"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter x:Name="contentPresenter"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"
+                                            RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Khi di chuột vào -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="#4ade80"/>
+                                <Setter Property="Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}, Converter={StaticResource OpacityConverter}}"/>
+                            </Trigger>
+                            
+                            <!-- Khi nhấn -->
+                            <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="#4ade80"/>
+                                <Setter Property="Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}, Converter={StaticResource OpacityConverter}}"/>
+                            </Trigger>
+                            
+                            <!-- Khi được chọn -->
+                            <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="#4ade80"/>
+                                <Setter Property="Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}, Converter={StaticResource OpacityConverter}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
     <!-- Primary Button Style -->
     <Style x:Key="PrimaryButtonStyle"
@@ -447,10 +401,19 @@
         </Setter>
     </Style>
     <!--Menu button icon-->
-<Style x:Key="TitleIcon" TargetType="fa:IconImage">   
-    <Setter Property="Width" Value="22"/>
-    <Setter Property="Height" Value="22"/>
-    <Setter Property="Margin" Value="0,0,10,0"/>
-</Style>
+    <Style x:Key="TitleIcon"
+           TargetType="fa:IconImage">
+        <Setter Property="Width"
+                Value="22" />
+        <Setter Property="Height"
+                Value="22" />
+        <Setter Property="Margin"
+                Value="0,0,10,0" />
+    </Style>
+
+    <!-- CATEGORY -->
+
+   
+
 
 </ResourceDictionary>

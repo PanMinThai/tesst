@@ -24,14 +24,14 @@ namespace TodoList_Project.Features.Tasks.Services
 
         public async Task<IEnumerable<TaskModel>> ApplyFilters(TaskStatus? status = null, TaskPriority? priority = null, DateTime? date = null)
         {
-            var tasks = await _taskRepository.GetFilteredTasksAsync(status, priority, date: date);
-            return _mapper.Map<List<TaskModel>>(tasks);
+            var taskEntities = await _taskRepository.GetFilteredTasksAsync(status, priority, date: date);
+            return _mapper.Map<List<TaskModel>>(taskEntities);
         }
 
         public async Task<IEnumerable<TaskModel>> SearchTasks(string keyword, TaskStatus? status = null, TaskPriority? priority = null)
         {
-            var tasks = await _taskRepository.GetFilteredTasksAsync(status, priority, keyword);
-            return _mapper.Map<List<TaskModel>>(tasks);
+            var taskEntities = await _taskRepository.GetFilteredTasksAsync(status, priority, keyword);
+            return _mapper.Map<List<TaskModel>>(taskEntities);
         }
     }
 }

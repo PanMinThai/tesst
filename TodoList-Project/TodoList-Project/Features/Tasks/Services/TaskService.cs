@@ -34,9 +34,9 @@ namespace TodoList_Project.Features.Tasks.Services
         }
         public async Task AddTaskAsync(TaskModel model)
         {
-            var entity = _mapper.Map<TaskEntity>(model);
-            await _repository.AddAsync(entity);
-            _mapper.Map(entity, model);
+            var taskEntity = _mapper.Map<TaskEntity>(model);
+            await _repository.AddAsync(taskEntity);
+            _mapper.Map(taskEntity, model);
         }
         public async Task<IEnumerable<TaskModel>> GetAllTasksAsync()
         {
@@ -60,16 +60,16 @@ namespace TodoList_Project.Features.Tasks.Services
         }
         public List<TaskModel> GetTasksByDate(DateTime date)
         {
-            var entities = _repository.GetTasksByDate(date);
+            var taskEntities = _repository.GetTasksByDate(date);
 
-            return _mapper.Map<List<TaskModel>>(entities);
+            return _mapper.Map<List<TaskModel>>(taskEntities);
         }
 
         public async Task<IEnumerable<TaskModel>> GetTasksByDateRange(DateTime fromDate, DateTime toDate)
         {
-            var entities = await _repository.GetTasksByDateRange(fromDate, toDate);
+            var taskEntities = await _repository.GetTasksByDateRange(fromDate, toDate);
 
-            return _mapper.Map<List<TaskModel>>(entities);
+            return _mapper.Map<List<TaskModel>>(taskEntities);
         }
     }
 }

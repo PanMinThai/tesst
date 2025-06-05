@@ -256,11 +256,6 @@ namespace TodoList_Project.Features.Tasks.Views
 
         private void ShowTaskPopup(TaskViewModel viewModel)
         {
-            //
-            //var blurEffect = new BlurEffect { Radius = 10 };
-            //Application.Current.MainWindow.Effect = blurEffect;
-            //Application.Current.MainWindow.Opacity = 0.9;
-            //
             var popupView = new PopupView
             {
                 DataContext = viewModel,
@@ -277,13 +272,7 @@ namespace TodoList_Project.Features.Tasks.Views
 
             var contentControl = (ContentControl)popupView.FindName("contentControl");
             contentControl.Content = taskControl;
-            //
-            //popupView.Closed += (sender, e) =>
-            //{
-            //    Application.Current.MainWindow.Effect = null;
-            //    Application.Current.MainWindow.Opacity = 1;
-            //};
-            //
+
             if (popupView.ShowDialog() == true)
             {
                 LoadTasksCommand.Execute(null);
