@@ -24,6 +24,10 @@ namespace TodoList_Project.Features.Tasks.Views
         {
             InitializeComponent();
         }
-     
+
+        private void DataGrid_SelectionChanged()
+        {
+
+        }
     }
 }

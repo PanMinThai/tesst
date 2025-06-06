@@ -9,6 +9,6 @@ namespace TodoList_Project.Features.Tasks.Services
 {
     public interface ITaskStatisticsService
     {
-        Task<TaskStatistics> GetStatisticsAsync();
+        Task<TaskStatistics> GetStatisticsAsync(CancellationToken cancellationToken = default);
     }
 }

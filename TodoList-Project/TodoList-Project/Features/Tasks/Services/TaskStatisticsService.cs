@@ -17,16 +17,17 @@ namespace TodoList_Project.Features.Tasks.Services
             _repository = repository;
         }
 
-        public async Task<TaskStatistics> GetStatisticsAsync()
+        public async Task<TaskStatistics> GetStatisticsAsync(CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return new TaskStatistics
             {
-                InProgressCount = await _repository.GetInProgressCountAsync(),
-                CompletedCount = await _repository.GetCompletedCountAsync(),
-                CancelledCount = await _repository.GetCancelledCountAsync(),
-                TodayTasksCount = await _repository.GetTodayTaskCountAsync(),
-                YesterdayTasksCount = await _repository.GetYesterdayTaskCountAsync(),
-                ThisWeekTasksCount = await _repository.GetThisWeekTaskCountAsync()
+                InProgressCount = await _repository.GetInProgressCountAsync(cancellationToken),
+                CompletedCount = await _repository.GetCompletedCountAsync(cancellationToken),
+                CancelledCount = await _repository.GetCancelledCountAsync(cancellationToken),
+                TodayTasksCount = await _repository.GetTodayTaskCountAsync(cancellationToken),
+                YesterdayTasksCount = await _repository.GetYesterdayTaskCountAsync(cancellationToken),
+                ThisWeekTasksCount = await _repository.GetThisWeekTaskCountAsync(cancellationToken)
             };
         }
     }

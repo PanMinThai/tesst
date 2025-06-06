@@ -3,7 +3,7 @@
                     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:converter="clr-namespace:TodoList_Project.Core.Utils.Converters">
-    
+    <converter:OpacityConverter x:Key="OpacityConverter" Opacity="0.2" />
 
     <!-- Colors -->
     <SolidColorBrush x:Key="PrimaryPurple" Color="#3D1D5C" />
@@ -249,8 +249,7 @@
     <!-- Category Button Style -->
      <SolidColorBrush x:Key="NormalBorderColor" Color="#583e93"/> <!-- Màu tím -->
         <SolidColorBrush x:Key="HoverPressedBorderColor" Color="#7a5fb5"/> <!-- Màu tím nhạt -->
-    <converter:OpacityConverter x:Key="OpacityConverter"
-                            Opacity="0.2" />
+    
     <!-- Kiểu cho ToggleButton -->
     <Style x:Key="CategoryButtonStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Background"

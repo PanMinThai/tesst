@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media.Effects;
 using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Core.Utils;
+using TodoList_Project.Core.Utils.Messages;
 using TodoList_Project.Features.Tasks.Models;
 using TodoList_Project.Features.Tasks.Services;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
@@ -17,6 +19,9 @@ namespace TodoList_Project.Features.Tasks.Views
 {
     public partial class ListTaskViewModel : ObservableObject
     {
+        private CancellationTokenSource _cancellationTokenSource;
+        private readonly object _tasksLock = new object();
+
         #region Services
         private readonly ITaskService _taskService;
         private readonly ITaskFilterService _filterService;
@@ -98,12 +103,20 @@ namespace TodoList_Project.Features.Tasks.Views
         [RelayCommand]
         private async Task LoadTasksAsync()
         {
-            await ApplyFilters();
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
 
-            var stats = await _statisticsService.GetStatisticsAsync();
-            YesterdayTaskCount = stats.YesterdayTasksCount;
-            TodayTaskCount = stats.TodayTasksCount;
-            ThisWeekTaskCount = stats.ThisWeekTasksCount;
+            try
+            {
+                await ApplyFilters(_cancellationTokenSource.Token);
+                var stats = await _statisticsService.GetStatisticsAsync(_cancellationTokenSource.Token);
+                YesterdayTaskCount = stats.YesterdayTasksCount;
+                TodayTaskCount = stats.TodayTasksCount;
+                ThisWeekTaskCount = stats.ThisWeekTasksCount;
+            }
+            catch (OperationCanceledException)
+            {
+            }
         }
 
         [RelayCommand]
@@ -168,14 +181,11 @@ namespace TodoList_Project.Features.Tasks.Views
             ShowAddTaskPopup(addTaskViewModel);
         }
 
-       
+
         #endregion
 
         #region Constructor
-        public ListTaskViewModel(
-            ITaskService taskService,
-            ITaskFilterService filterService,
-            ITaskStatisticsService statisticsService)
+        public ListTaskViewModel(ITaskService taskService, ITaskFilterService filterService, ITaskStatisticsService statisticsService)
         {
             _taskService = taskService;
             _filterService = filterService;
@@ -199,21 +209,29 @@ namespace TodoList_Project.Features.Tasks.Views
 
             SelectedStatusFilter = StatusFilters[0];
             SelectedPriorityFilter = PriorityFilters[0];
-
+            WeakReferenceMessenger.Default.Register<TaskAddedMessage>(this, (r, message) =>
+            {
+                Tasks.Add(message.Value);
+            });
             LoadTasksCommand.Execute(null);
         }
         #endregion
 
         #region Private Methods
-        private async Task ApplyFilters()
+        private async Task ApplyFilters(CancellationToken cancellationToken = default)
         {
-            var filtered = await _filterService.ApplyFilters(
-                SelectedStatusFilter?.Value,
-                SelectedPriorityFilter?.Value,
-                SelectedDate);
+            
+            var filtered = await _filterService.ApplyFilters( SelectedStatusFilter?.Value, SelectedPriorityFilter?.Value, SelectedDate);
 
-            Tasks.Clear();
-            foreach (var task in filtered) Tasks.Add(task);
+            lock (_tasksLock)
+            {
+                Tasks.Clear();
+                foreach (var task in filtered)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    Tasks.Add(task);
+                }
+            }
         }
 
         private async void ApplyDateFilter()

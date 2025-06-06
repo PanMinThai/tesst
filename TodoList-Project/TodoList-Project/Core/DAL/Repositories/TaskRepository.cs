@@ -67,51 +67,51 @@ namespace TodoList_Project.Core.DAL.Repositories
         #endregion
 
         #region Implementation of ITaskRepository
-        public async Task<int> GetInProgressCountAsync()
+        public async Task<int> GetInProgressCountAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Tasks
-                .CountAsync(t => t.Status == TaskStatus.InProgress)
+                .CountAsync(t => t.Status == TaskStatus.InProgress,cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<int> GetCompletedCountAsync()
+        public async Task<int> GetCompletedCountAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Tasks
-                .CountAsync(t => t.Status == TaskStatus.Completed)
+                .CountAsync(t => t.Status == TaskStatus.Completed, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<int> GetCancelledCountAsync()
+        public async Task<int> GetCancelledCountAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Tasks
-                .CountAsync(t => t.Status == TaskStatus.Cancelled)
+                .CountAsync(t => t.Status == TaskStatus.Cancelled, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<int> GetTodayTaskCountAsync()
+        public async Task<int> GetTodayTaskCountAsync(CancellationToken cancellationToken = default)
         {
             var today = DateTime.Today;
             return await _context.Tasks
-                .CountAsync(t => t.DueDate.HasValue && t.DueDate.Value.Date == today)
+                .CountAsync(t => t.DueDate.HasValue && t.DueDate.Value.Date == today, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<int> GetYesterdayTaskCountAsync()
+        public async Task<int> GetYesterdayTaskCountAsync(CancellationToken cancellationToken = default)
         {
             var yesterday = DateTime.Today.AddDays(-1);
             return await _context.Tasks
-                .CountAsync(t => t.DueDate.HasValue && t.DueDate.Value.Date == yesterday)
+                .CountAsync(t => t.DueDate.HasValue && t.DueDate.Value.Date == yesterday, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<int> GetThisWeekTaskCountAsync()
+        public async Task<int> GetThisWeekTaskCountAsync(CancellationToken cancellationToken = default)
         {
             var today = DateTime.Today;
             var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
             var endOfWeek = startOfWeek.AddDays(6);
 
             return await _context.Tasks
-                .CountAsync(t => t.DueDate >= startOfWeek && t.DueDate <= endOfWeek)
+                .CountAsync(t => t.DueDate >= startOfWeek && t.DueDate <= endOfWeek, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -141,13 +141,8 @@ namespace TodoList_Project.Core.DAL.Repositories
                            t.DueDate.Value.Date <= to.Date);
             return await query.AsNoTracking().ToListAsync();
         }
-        public async Task<IEnumerable<TaskEntity>> GetFilteredTasksAsync(
-    TaskStatus? status = null,
-    TaskPriority? priority = null,
-    string keyword = null,
-    DateTime? date = null,
-    DateTime? fromDate = null,
-    DateTime? toDate = null)
+        public async Task<IEnumerable<TaskEntity>> GetFilteredTasksAsync( TaskStatus? status = null, TaskPriority? priority = null,
+    string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null)
         {
             var query = _context.Tasks.AsQueryable();
 
@@ -171,7 +166,7 @@ namespace TodoList_Project.Core.DAL.Repositories
             if (fromDate.HasValue && toDate.HasValue)
                 query = query.Where(t => t.DueDate >= fromDate && t.DueDate <= toDate);
 
-            return await query.AsNoTracking().ToListAsync();
+            return await query.AsNoTracking().ToListAsync().ConfigureAwait(false); 
         }
 
 

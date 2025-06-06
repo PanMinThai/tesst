@@ -34,12 +34,12 @@ namespace TodoList_Project
     ServiceLifetime.Transient);
 
             // Repositories
-            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddTransient<ITaskRepository, TaskRepository>();
 
             //Services
-            services.AddScoped<ITaskService, TaskService>();
-            services.AddScoped<ITaskFilterService, TaskFilterService>();
-            services.AddScoped<ITaskStatisticsService, TaskStatisticsService>();
+            services.AddTransient<ITaskService, TaskService>();
+            services.AddTransient<ITaskFilterService, TaskFilterService>();
+            services.AddTransient<ITaskStatisticsService, TaskStatisticsService>();
             //Mapper
             services.AddAutoMapper(typeof(TaskMappingProfile));
 

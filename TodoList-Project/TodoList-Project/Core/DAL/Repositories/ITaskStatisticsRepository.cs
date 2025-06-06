@@ -8,12 +8,12 @@ namespace TodoList_Project.Core.DAL.Repositories
 {
     public interface ITaskStatisticsRepository
     {
-        Task<int> GetInProgressCountAsync();
-        Task<int> GetCompletedCountAsync();
-        Task<int> GetCancelledCountAsync();
+        Task<int> GetInProgressCountAsync(CancellationToken cancellationToken = default);
+        Task<int> GetCompletedCountAsync(CancellationToken cancellationToken = default);
+        Task<int> GetCancelledCountAsync(CancellationToken cancellationToken = default);
 
-        Task<int> GetTodayTaskCountAsync();
-        Task<int> GetYesterdayTaskCountAsync();
-        Task<int> GetThisWeekTaskCountAsync();
+        Task<int> GetTodayTaskCountAsync(CancellationToken cancellationToken = default);
+        Task<int> GetYesterdayTaskCountAsync(CancellationToken cancellationToken = default);
+        Task<int> GetThisWeekTaskCountAsync(CancellationToken cancellationToken = default);
     }
 }
