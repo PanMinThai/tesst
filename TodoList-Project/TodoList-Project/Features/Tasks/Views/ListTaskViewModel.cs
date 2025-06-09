@@ -2,12 +2,14 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Effects;
 using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Core.Utils;
 using TodoList_Project.Core.Utils.Messages;
@@ -28,6 +30,35 @@ namespace TodoList_Project.Features.Tasks.Views
         private readonly ITaskStatisticsService _statisticsService;
         #endregion
 
+        #region Pagination Properties
+        [ObservableProperty]
+        private int _currentPage = 1;
+
+        [ObservableProperty]
+        private int _pageSize = 10;
+
+        [ObservableProperty]
+        private int _totalItems;
+
+        [ObservableProperty]
+        private int _totalPages;
+
+        [ObservableProperty]
+        private bool _canGoToPreviousPage;
+
+        [ObservableProperty]
+        private bool _canGoToNextPage;
+
+        [ObservableProperty]
+        private int _currentPageStartItem;
+
+        [ObservableProperty]
+        private int _currentPageEndItem;
+
+        public ObservableCollection<int> PageNumbers { get; } = new();
+        public ObservableCollection<int> PageSizeOptions { get; } = new() { 5, 10, 20, 50 };
+        #endregion
+
         #region Collections
         public ObservableCollection<TaskModel> Tasks { get; } = new();
         public ObservableCollection<FilterOption<TaskStatus>> StatusFilters { get; }
@@ -35,7 +66,6 @@ namespace TodoList_Project.Features.Tasks.Views
         #endregion
 
         #region Filter Properties
-
         [ObservableProperty]
         private FilterOption<TaskStatus> _selectedStatusFilter;
 
@@ -67,7 +97,6 @@ namespace TodoList_Project.Features.Tasks.Views
         {
             SearchTaskCommand.Execute(null);
         }
-
         #endregion
 
         #region State Properties
@@ -166,14 +195,18 @@ namespace TodoList_Project.Features.Tasks.Views
         [RelayCommand]
         private async Task SearchTaskAsync()
         {
-            var searched = await _filterService.SearchTasks(
+            var (searched, totalCount) = await _filterService.SearchTasks(
                 SearchKeyword,
                 SelectedStatusFilter?.Value,
-                SelectedPriorityFilter?.Value);
+                SelectedPriorityFilter?.Value,
+                CurrentPage,
+                PageSize);
 
+            UpdatePagination(totalCount);
             Tasks.Clear();
             foreach (var task in searched) Tasks.Add(task);
         }
+
         [RelayCommand]
         private void OpenAddTaskPopup()
         {
@@ -181,7 +214,62 @@ namespace TodoList_Project.Features.Tasks.Views
             ShowAddTaskPopup(addTaskViewModel);
         }
 
+        // Pagination commands
+        [RelayCommand]
+        private async Task FirstPageAsync()
+        {
+            CurrentPage = 1;
+            await ApplyFilters();
+        }
 
+        [RelayCommand]
+        private async Task PreviousPageAsync()
+        {
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+                await ApplyFilters();
+            }
+        }
+
+        [RelayCommand]
+        private async Task NextPageAsync()
+        {
+            if (CurrentPage < TotalPages)
+            {
+                CurrentPage++;
+                await ApplyFilters();
+            }
+        }
+
+        [RelayCommand]
+        private async Task LastPageAsync()
+        {
+            CurrentPage = TotalPages;
+            await ApplyFilters();
+        }
+
+        [RelayCommand]
+        private async Task GoToPageAsync(int page)
+        {
+            MessageBox.Show("1");
+            if (page >= 1 && page <= TotalPages)
+            {
+                CurrentPage = page;
+                await ApplyFilters();
+            }
+        }
+
+        partial void OnPageSizeChanged(int value)
+        {
+            CurrentPage = 1;
+            _ = ApplyFilters();
+        }
+
+        partial void OnCurrentPageChanged(int value)
+        {
+            UpdatePaginationState();
+        }
         #endregion
 
         #region Constructor
@@ -220,27 +308,35 @@ namespace TodoList_Project.Features.Tasks.Views
         #region Private Methods
         private async Task ApplyFilters(CancellationToken cancellationToken = default)
         {
-            
-            var filtered = await _filterService.ApplyFilters( SelectedStatusFilter?.Value, SelectedPriorityFilter?.Value, SelectedDate);
+            var (filtered, totalCount) = await _filterService.ApplyFilters(
+                SelectedStatusFilter?.Value,
+                SelectedPriorityFilter?.Value,
+                SelectedDate,
+                CurrentPage,
+                PageSize);
 
-            lock (_tasksLock)
+            Application.Current.Dispatcher.Invoke(() =>
             {
+                UpdatePagination(totalCount);
                 Tasks.Clear();
                 foreach (var task in filtered)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     Tasks.Add(task);
                 }
-            }
+            });
         }
 
         private async void ApplyDateFilter()
         {
-            var tasks = await _filterService.ApplyFilters(
+            var (tasks, totalCount) = await _filterService.ApplyFilters(
                 SelectedStatusFilter?.Value,
                 SelectedPriorityFilter?.Value,
-                SelectedDate);
+                SelectedDate,
+                CurrentPage,
+                PageSize);
 
+            UpdatePagination(totalCount);
             Tasks.Clear();
             foreach (var task in tasks) Tasks.Add(task);
         }
@@ -251,17 +347,76 @@ namespace TodoList_Project.Features.Tasks.Views
 
         private async Task FilterByThisWeekAsync()
         {
-            SelectedDate = null;
-            var today = DateTime.Today;
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(6);
+            //SelectedDate = null;
+            //var today = DateTime.Today;
+            //var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            //var endOfWeek = startOfWeek.AddDays(6);
 
-            var weekTasks = await _taskService.GetTasksByDateRange(startOfWeek, endOfWeek);
-            Tasks.Clear();
-            foreach (var task in weekTasks) Tasks.Add(task);
+            //var (weekTasks, totalCount) = await _taskService.GetTasksByDateRange(startOfWeek, endOfWeek, CurrentPage, PageSize);
+            //UpdatePagination(totalCount);
+            //Tasks.Clear();
+            //foreach (var task in weekTasks) Tasks.Add(task);
         }
 
         private bool CanExecuteSelectedTask() => SelectedTask != null;
+
+        private void UpdatePagination(int totalItems)
+        {
+            TotalItems = totalItems;
+            TotalPages = (int)Math.Ceiling((double)TotalItems / PageSize);
+
+            CurrentPageStartItem = (CurrentPage - 1) * PageSize + 1;
+            CurrentPageEndItem = Math.Min(CurrentPage * PageSize, TotalItems);
+
+            UpdatePaginationState();
+            UpdatePageNumbers();
+        }
+
+        private void UpdatePaginationState()
+        {
+            CanGoToPreviousPage = CurrentPage > 1;
+            CanGoToNextPage = CurrentPage < TotalPages;
+        }
+
+        private void UpdatePageNumbers()
+        {
+            PageNumbers.Clear();
+
+            const int maxVisiblePages = 5;
+            int startPage, endPage;
+
+            if (TotalPages <= maxVisiblePages)
+            {
+                startPage = 1;
+                endPage = TotalPages;
+            }
+            else
+            {
+                int maxPagesBeforeCurrent = (int)Math.Floor((double)maxVisiblePages / 2);
+                int maxPagesAfterCurrent = (int)Math.Ceiling((double)maxVisiblePages / 2) - 1;
+
+                if (CurrentPage <= maxPagesBeforeCurrent)
+                {
+                    startPage = 1;
+                    endPage = maxVisiblePages;
+                }
+                else if (CurrentPage + maxPagesAfterCurrent >= TotalPages)
+                {
+                    startPage = TotalPages - maxVisiblePages + 1;
+                    endPage = TotalPages;
+                }
+                else
+                {
+                    startPage = CurrentPage - maxPagesBeforeCurrent;
+                    endPage = CurrentPage + maxPagesAfterCurrent;
+                }
+            }
+
+            for (int i = startPage; i <= endPage; i++)
+            {
+                PageNumbers.Add(i);
+            }
+        }
 
         partial void OnSelectedTaskChanged(TaskModel value)
         {
@@ -296,6 +451,7 @@ namespace TodoList_Project.Features.Tasks.Views
                 LoadTasksCommand.Execute(null);
             }
         }
+
         private void ShowAddTaskPopup(AddTaskViewModel viewModel)
         {
             var popupView = new PopupView

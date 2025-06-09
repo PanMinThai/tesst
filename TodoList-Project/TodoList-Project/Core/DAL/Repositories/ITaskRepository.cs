@@ -14,7 +14,7 @@ namespace TodoList_Project.Core.DAL.Repositories
         //
         Task<IEnumerable<TaskEntity>> GetTasksDueThisWeekAsync();
         IQueryable<TaskEntity> GetTasksByDate(DateTime date);
-        Task<IEnumerable<TaskEntity>> GetTasksByDateRange(DateTime from, DateTime to);
-        Task<IEnumerable<TaskEntity>> GetFilteredTasksAsync(TaskStatus? status = null, TaskPriority? priority = null, string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null);
+        Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetTasksByDateRange(DateTime from, DateTime to, int pageNumber = 1, int pageSize = 10);
+        Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetFilteredTasksAsync(TaskStatus? status = null, TaskPriority? priority = null, string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null, int pageNumber = 1, int pageSize = 10);
     }
 }

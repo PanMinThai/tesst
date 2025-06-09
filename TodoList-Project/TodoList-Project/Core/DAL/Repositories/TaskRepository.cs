@@ -9,7 +9,7 @@ using TodoList_Project.Core.DAL.Enums;
 using Microsoft.EntityFrameworkCore;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
-namespace TodoList_Project.Core.DAL.Repositories
+namespace TodoList_Project.Core.DAL.Repositories    
 {
     public class TaskRepository : ITaskRepository
     {
@@ -133,16 +133,26 @@ namespace TodoList_Project.Core.DAL.Repositories
                 .Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == date.Date);
         }
 
-        public async Task<IEnumerable<TaskEntity>> GetTasksByDateRange(DateTime from, DateTime to)
+        public async Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetTasksByDateRange( DateTime from, DateTime to, int pageNumber = 1, int pageSize = 10)
         {
             var query = _context.Tasks
                 .Where(t => t.DueDate.HasValue &&
                            t.DueDate.Value.Date >= from.Date &&
                            t.DueDate.Value.Date <= to.Date);
-            return await query.AsNoTracking().ToListAsync();
+
+            int totalCount = await query.CountAsync();
+
+            var tasks = await query
+                .OrderBy(t => t.DueDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return (tasks, totalCount);
         }
-        public async Task<IEnumerable<TaskEntity>> GetFilteredTasksAsync( TaskStatus? status = null, TaskPriority? priority = null,
-    string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null)
+        public async Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetFilteredTasksAsync( TaskStatus? status = null, TaskPriority? priority = null, string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null, int pageNumber = 1,
+        int pageSize = 10)
         {
             var query = _context.Tasks.AsQueryable();
 
@@ -166,7 +176,19 @@ namespace TodoList_Project.Core.DAL.Repositories
             if (fromDate.HasValue && toDate.HasValue)
                 query = query.Where(t => t.DueDate >= fromDate && t.DueDate <= toDate);
 
-            return await query.AsNoTracking().ToListAsync().ConfigureAwait(false); 
+            // Get total count before pagination
+            int totalCount = await query.CountAsync();
+
+            // Apply pagination
+            var tasks = await query
+                .OrderBy(t => t.DueDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return (tasks, totalCount);
         }
 
 

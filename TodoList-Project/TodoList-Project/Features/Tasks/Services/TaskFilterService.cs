@@ -22,16 +22,30 @@ namespace TodoList_Project.Features.Tasks.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TaskModel>> ApplyFilters(TaskStatus? status = null, TaskPriority? priority = null, DateTime? date = null)
+        public async Task<(IEnumerable<TaskModel> Tasks, int TotalCount)> ApplyFilters( TaskStatus? status = null, TaskPriority? priority = null,
+            DateTime? date = null, int pageNumber = 1, int pageSize = 10)
         {
-            var taskEntities = await _taskRepository.GetFilteredTasksAsync(status, priority, date: date);
-            return _mapper.Map<List<TaskModel>>(taskEntities);
+            var (taskEntities, totalCount) = await _taskRepository.GetFilteredTasksAsync(
+                status: status, 
+                priority: priority, 
+                date: date, 
+                pageNumber: pageNumber, 
+                pageSize: pageSize);
+
+            return (_mapper.Map<IEnumerable<TaskModel>>(taskEntities), totalCount);
         }
 
-        public async Task<IEnumerable<TaskModel>> SearchTasks(string keyword, TaskStatus? status = null, TaskPriority? priority = null)
+        public async Task<(IEnumerable<TaskModel> Tasks, int TotalCount)> SearchTasks( string keyword, TaskStatus? status = null, TaskPriority? priority = null, int pageNumber = 1, int pageSize = 10)
         {
-            var taskEntities = await _taskRepository.GetFilteredTasksAsync(status, priority, keyword);
-            return _mapper.Map<List<TaskModel>>(taskEntities);
+            var (taskEntities, totalCount) = await _taskRepository.GetFilteredTasksAsync(
+                status: status, 
+                priority: priority, 
+                keyword: keyword, 
+                pageNumber: pageNumber, 
+                pageSize: pageSize);
+
+            return (_mapper.Map<IEnumerable<TaskModel>>(taskEntities), totalCount);
         }
+
     }
 }
