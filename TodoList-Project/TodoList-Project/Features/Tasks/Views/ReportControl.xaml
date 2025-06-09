@@ -1,0 +1,211 @@
+﻿<UserControl x:Class="TodoList_Project.Features.Tasks.Views.ReportControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TodoList_Project.Features.Tasks.Views"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             mc:Ignorable="d"
+             d:DesignHeight="588"
+             d:DesignWidth="998">
+    <!--<UserControl.Resources>
+        <Style TargetType="TextBlock"
+               x:Key="ChartTitleStyle">
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="FontSize"
+                    Value="16" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="Margin"
+                    Value="20,20,20,10" />
+        </Style>
+
+        <Style TargetType="Border"
+               x:Key="ChartContainerStyle">
+            <Setter Property="Background"
+                    Value="#16213E" />
+            <Setter Property="CornerRadius"
+                    Value="12" />
+            <Setter Property="Margin"
+                    Value="10" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black"
+                                      BlurRadius="10"
+                                      ShadowDepth="3"
+                                      Opacity="0.3" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="StackPanel"
+               x:Key="LegendStyle">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="Margin"
+                    Value="0,10,0,20" />
+        </Style>
+
+        <Style TargetType="Border"
+               x:Key="LegendItemStyle">
+            <Setter Property="Width"
+                    Value="12" />
+            <Setter Property="Height"
+                    Value="12" />
+            <Setter Property="Margin"
+                    Value="5,0" />
+            <Setter Property="CornerRadius"
+                    Value="2" />
+        </Style>
+
+        <Style TargetType="TextBlock"
+               x:Key="LegendTextStyle">
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="FontSize"
+                    Value="12" />
+            <Setter Property="Margin"
+                    Value="5,0,15,0" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        --><!-- Top Row --><!--
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            --><!-- Task Status Distribution (Pie Chart) --><!--
+            <Border Grid.Column="0"
+                    Style="{StaticResource ChartContainerStyle}">
+                <StackPanel>
+                    <TextBlock Text="Task Status Distribution"
+                               Style="{StaticResource ChartTitleStyle}" />
+
+                    <lvc:PieChart Series="{Binding PieChartSeries}"
+                                  Height="300"
+                                  Margin="20"
+                                  LegendPosition="Hidden" />
+
+                    --><!-- Legend --><!--
+                    <StackPanel Style="{StaticResource LegendStyle}">
+                        <Border Background="#4ECDC4"
+                                Style="{StaticResource LegendItemStyle}" />
+                        <TextBlock Text="In Progress"
+                                   Style="{StaticResource LegendTextStyle}" />
+
+                        <Border Background="#9B59B6"
+                                Style="{StaticResource LegendItemStyle}" />
+                        <TextBlock Text="Completed"
+                                   Style="{StaticResource LegendTextStyle}" />
+
+                        <Border Background="#E74C3C"
+                                Style="{StaticResource LegendItemStyle}" />
+                        <TextBlock Text="Cancelled"
+                                   Style="{StaticResource LegendTextStyle}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            --><!-- Tasks by Priority & Status (Bar Chart) --><!--
+            <Border Grid.Column="1"
+                    Style="{StaticResource ChartContainerStyle}">
+                <StackPanel>
+                    <TextBlock Text="Tasks by Priority &amp; Status"
+                               Style="{StaticResource ChartTitleStyle}" />
+
+                    <lvc:CartesianChart Series="{Binding BarChartSeries}"
+                                        Height="300"
+                                        Margin="20"
+                                        LegendPosition="Hidden">
+                        <lvc:CartesianChart.XAxes>
+                            <lvc:Axis Labels="{Binding PriorityLabels}"
+                                      Foreground="White"
+                                      LabelsRotation="0"
+                                      TextSize="12" />
+                        </lvc:CartesianChart.XAxes>
+                        <lvc:CartesianChart.YAxes>
+                            <lvc:Axis Foreground="White"
+                                      TextSize="12" />
+                        </lvc:CartesianChart.YAxes>
+                    </lvc:CartesianChart>
+
+                    --><!-- Legend --><!--
+                    <StackPanel Style="{StaticResource LegendStyle}">
+                        <Border Background="#4ECDC4"
+                                Style="{StaticResource LegendItemStyle}" />
+                        <TextBlock Text="In Progress"
+                                   Style="{StaticResource LegendTextStyle}" />
+
+                        <Border Background="#9B59B6"
+                                Style="{StaticResource LegendItemStyle}" />
+                        <TextBlock Text="Completed"
+                                   Style="{StaticResource LegendTextStyle}" />
+
+                        <Border Background="#E74C3C"
+                                Style="{StaticResource LegendItemStyle}" />
+                        <TextBlock Text="Cancelled"
+                                   Style="{StaticResource LegendTextStyle}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        --><!-- Bottom Row - Task Trends Over Time (Line Chart) --><!--
+        <Border Grid.Row="1"
+                Style="{StaticResource ChartContainerStyle}">
+            <StackPanel>
+                <TextBlock Text="Task Trends Over Time"
+                           Style="{StaticResource ChartTitleStyle}" />
+
+                <lvc:CartesianChart Series="{Binding LineChartSeries}"
+                                    Height="300"
+                                    Margin="20"
+                                    LegendPosition="Hidden">
+                    <lvc:CartesianChart.XAxes>
+                        <lvc:Axis Labels="{Binding MonthLabels}"
+                                  Foreground="White"
+                                  LabelsRotation="0"
+                                  TextSize="12" />
+                    </lvc:CartesianChart.XAxes>
+                    <lvc:CartesianChart.YAxes>
+                        <lvc:Axis Foreground="White"
+                                  TextSize="12"
+                                  MinLimit="0"
+                                  MaxLimit="35" />
+                    </lvc:CartesianChart.YAxes>
+                </lvc:CartesianChart>
+
+                --><!-- Legend --><!--
+                <StackPanel Style="{StaticResource LegendStyle}">
+                    <Border Background="#4ECDC4"
+                            Style="{StaticResource LegendItemStyle}" />
+                    <TextBlock Text="In Progress"
+                               Style="{StaticResource LegendTextStyle}" />
+
+                    <Border Background="#9B59B6"
+                            Style="{StaticResource LegendItemStyle}" />
+                    <TextBlock Text="Completed"
+                               Style="{StaticResource LegendTextStyle}" />
+
+                    <Border Background="#E74C3C"
+                            Style="{StaticResource LegendItemStyle}" />
+                    <TextBlock Text="Cancelled"
+                               Style="{StaticResource LegendTextStyle}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>-->
+</UserControl>
