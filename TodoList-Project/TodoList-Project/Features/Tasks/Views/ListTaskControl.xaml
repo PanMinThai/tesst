@@ -401,7 +401,7 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Button Content="{Binding}"
-                                                        Command="{Binding DataContext.GoToPageAsyncCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        Command="{Binding DataContext.GoToPageCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                         CommandParameter="{Binding}"
                                                         Width="32"
                                                         Height="32"

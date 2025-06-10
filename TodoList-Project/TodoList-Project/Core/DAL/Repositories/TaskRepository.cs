@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TodoList_Project.Core.DAL.DBContext;
 using TodoList_Project.Core.DAL.Entities.SQL;
 using TodoList_Project.Core.DAL.Enums;
@@ -67,6 +66,25 @@ namespace TodoList_Project.Core.DAL.Repositories
         #endregion
 
         #region Implementation of ITaskRepository
+        public async Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await _context.Tasks
+                .GroupBy(t => t.Status)
+                .Select(g => new { Status = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.Status, x => x.Count, cancellationToken)
+                .ConfigureAwait(false);
+
+
+            foreach (TaskStatus status in Enum.GetValues(typeof(TaskStatus)))
+            {
+                if (!result.ContainsKey(status))
+                {
+                    result[status] = 0;
+                }
+            }
+
+            return result;
+        }
         public async Task<int> GetInProgressCountAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Tasks

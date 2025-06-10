@@ -49,6 +49,7 @@ namespace TodoList_Project
             services.AddTransient<StartViewModel>();
             services.AddTransient<TaskItemViewModel>();
             services.AddTransient<ListTaskViewModel>();
+            services.AddTransient<TaskReportViewModel>();
             //services.AddTransient<TaskViewModel>();
             // Views
             services.AddSingleton<MainWindow>();

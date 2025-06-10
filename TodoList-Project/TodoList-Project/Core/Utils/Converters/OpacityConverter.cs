@@ -18,7 +18,7 @@ namespace TodoList_Project.Core.Utils.Converters
             if (value is SolidColorBrush brush)
             {
                 Color color = brush.Color;
-                color.A = (byte)(Opacity * 255); // Áp dụng độ trong suốt
+                color.A = (byte)(Opacity * 255);
                 return new SolidColorBrush(color);
             }
             return value;

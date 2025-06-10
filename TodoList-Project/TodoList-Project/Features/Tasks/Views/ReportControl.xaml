@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TodoList_Project.Features.Tasks.Views"
-             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d"
              d:DesignHeight="588"
              d:DesignWidth="998">
-    <!--<UserControl.Resources>
+    <UserControl.Resources>
         <Style TargetType="TextBlock"
                x:Key="ChartTitleStyle">
             <Setter Property="Foreground"
@@ -80,14 +80,18 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        --><!-- Top Row --><!--
+        
+     <!--Top Row--> 
+    
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            --><!-- Task Status Distribution (Pie Chart) --><!--
+            
+     <!--Task Status Distribution (Pie Chart)--> 
+    
             <Border Grid.Column="0"
                     Style="{StaticResource ChartContainerStyle}">
                 <StackPanel>
@@ -96,10 +100,9 @@
 
                     <lvc:PieChart Series="{Binding PieChartSeries}"
                                   Height="300"
-                                  Margin="20"
-                                  LegendPosition="Hidden" />
+                                  Margin="20" />
 
-                    --><!-- Legend --><!--
+ 
                     <StackPanel Style="{StaticResource LegendStyle}">
                         <Border Background="#4ECDC4"
                                 Style="{StaticResource LegendItemStyle}" />
@@ -119,7 +122,9 @@
                 </StackPanel>
             </Border>
 
-            --><!-- Tasks by Priority & Status (Bar Chart) --><!--
+            
+     <!--Tasks by Priority & Status (Bar Chart)--> 
+    
             <Border Grid.Column="1"
                     Style="{StaticResource ChartContainerStyle}">
                 <StackPanel>
@@ -128,21 +133,9 @@
 
                     <lvc:CartesianChart Series="{Binding BarChartSeries}"
                                         Height="300"
-                                        Margin="20"
-                                        LegendPosition="Hidden">
-                        <lvc:CartesianChart.XAxes>
-                            <lvc:Axis Labels="{Binding PriorityLabels}"
-                                      Foreground="White"
-                                      LabelsRotation="0"
-                                      TextSize="12" />
-                        </lvc:CartesianChart.XAxes>
-                        <lvc:CartesianChart.YAxes>
-                            <lvc:Axis Foreground="White"
-                                      TextSize="12" />
-                        </lvc:CartesianChart.YAxes>
+                                        Margin="20">
                     </lvc:CartesianChart>
 
-                    --><!-- Legend --><!--
                     <StackPanel Style="{StaticResource LegendStyle}">
                         <Border Background="#4ECDC4"
                                 Style="{StaticResource LegendItemStyle}" />
@@ -163,7 +156,9 @@
             </Border>
         </Grid>
 
-        --><!-- Bottom Row - Task Trends Over Time (Line Chart) --><!--
+        
+     <!--Bottom Row - Task Trends Over Time (Line Chart)--> 
+    
         <Border Grid.Row="1"
                 Style="{StaticResource ChartContainerStyle}">
             <StackPanel>
@@ -172,23 +167,10 @@
 
                 <lvc:CartesianChart Series="{Binding LineChartSeries}"
                                     Height="300"
-                                    Margin="20"
-                                    LegendPosition="Hidden">
-                    <lvc:CartesianChart.XAxes>
-                        <lvc:Axis Labels="{Binding MonthLabels}"
-                                  Foreground="White"
-                                  LabelsRotation="0"
-                                  TextSize="12" />
-                    </lvc:CartesianChart.XAxes>
-                    <lvc:CartesianChart.YAxes>
-                        <lvc:Axis Foreground="White"
-                                  TextSize="12"
-                                  MinLimit="0"
-                                  MaxLimit="35" />
-                    </lvc:CartesianChart.YAxes>
+                                    Margin="20">
                 </lvc:CartesianChart>
 
-                --><!-- Legend --><!--
+    
                 <StackPanel Style="{StaticResource LegendStyle}">
                     <Border Background="#4ECDC4"
                             Style="{StaticResource LegendItemStyle}" />
@@ -207,5 +189,6 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-    </Grid>-->
+    </Grid>
 </UserControl>
+

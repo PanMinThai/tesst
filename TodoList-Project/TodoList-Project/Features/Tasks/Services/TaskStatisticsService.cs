@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Features.Tasks.Models;
+using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus; 
 
 namespace TodoList_Project.Features.Tasks.Services
 {
@@ -29,6 +29,11 @@ namespace TodoList_Project.Features.Tasks.Services
                 YesterdayTasksCount = await _repository.GetYesterdayTaskCountAsync(cancellationToken),
                 ThisWeekTasksCount = await _repository.GetThisWeekTaskCountAsync(cancellationToken)
             };
+        }
+        public async Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return await _repository.GetTaskStatusDistributionAsync(cancellationToken);
         }
     }
 }

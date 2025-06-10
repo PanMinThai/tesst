@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="TodoList_Project.Features.Tasks.Views.TaskReportControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TodoList_Project.Features.Tasks.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="588" d:DesignWidth="998"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf">
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="TaskReportControlStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Background = "{StaticResource backgroundColor1}"
+          Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Header -->
+            <RowDefinition Height="3*" />
+            <!-- Pie Chart, Bar Chart -->
+            <RowDefinition Height="2*" />
+            <!-- Line Chart -->
+        </Grid.RowDefinitions>
+
+        <!-- ========== HEADER ========== -->
+        <DockPanel Grid.Row="0"
+                   Margin="0,0,0,10">
+            <TextBlock Text="Tổng quan công việc"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center" />
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        DockPanel.Dock="Right">
+                <Button Content="🔄 Làm mới"
+                        Width="100"
+                        Height="30" />
+                <Button Content="📤 Xuất Excel"
+                        Width="110"
+                        Height="30" />
+                <Button Content="📆 Chọn thời gian"
+                        Width="130"
+                        Height="30" />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- ==========  Pie + Column ========== -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320" />
+                <!-- Pie Chart -->
+                <ColumnDefinition Width="*" />
+                <!-- Grouped Column Chart -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Pie Chart -->
+            <Border Background="{DynamicResource backgroundColor2}"
+                    CornerRadius="8"
+                    Padding="10"
+                    Margin="10">
+                
+                <!-- Pie Chart Placeholder -->
+                <lvc:PieChart Series="{Binding PieSeries}"
+                              LegendLocation="Right"
+                              InnerRadius="30"
+                              HoverPushOut="5"
+                              Margin="20">
+                    <lvc:PieChart.ChartLegend>
+                        <lvc:DefaultLegend />
+                    </lvc:PieChart.ChartLegend>
+                    <lvc:PieChart.DataTooltip>
+                        <lvc:DefaultTooltip />
+                    </lvc:PieChart.DataTooltip>
+                </lvc:PieChart>
+            </Border>
+
+            <!-- Grouped Column Chart -->
+            <Border Grid.Column="1"
+                    Background="{DynamicResource backgroundColor2}"
+                    CornerRadius="8"
+                    Margin="10"
+                    Padding="10">
+                <TextBlock Text="Biểu đồ Cột: Ưu tiên theo trạng thái" Foreground="White" />
+                <!-- Column Chart Placeholder -->
+            </Border>
+        </Grid>
+
+        <!-- ========== LINE CHART DƯỚI ========== -->
+        <Border Grid.Row="2"
+                Background="{DynamicResource backgroundColor2}"
+                CornerRadius="8"
+                Padding="10"
+                Margin="10">
+            <TextBlock Text="Biểu đồ Line: Số lượng công việc theo thời gian" Foreground="White" />
+            <!-- Line Chart Placeholder -->
+        </Border>
+    </Grid>
+</UserControl>

@@ -250,12 +250,11 @@ namespace TodoList_Project.Features.Tasks.Views
         }
 
         [RelayCommand]
-        private async Task GoToPageAsync(int page)
+        private async Task GoToPageAsync(object page)
         {
-            MessageBox.Show("1");
-            if (page >= 1 && page <= TotalPages)
+            if ((int)page >= 1 && (int)page <= TotalPages)
             {
-                CurrentPage = page;
+                CurrentPage = (int)page;
                 await ApplyFilters();
             }
         }

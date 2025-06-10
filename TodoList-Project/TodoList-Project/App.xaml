@@ -35,7 +35,10 @@
             <DataTemplate DataType="{x:Type task:ListTaskViewModel}">
                 <task:ListTaskControl />
             </DataTemplate>
-           
+            <DataTemplate DataType="{x:Type task:TaskReportViewModel}">
+                <task:TaskReportControl />
+            </DataTemplate>
+
         </ResourceDictionary>
 
     </Application.Resources>
