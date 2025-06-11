@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TodoList_Project.Features.Tasks.Views"
              mc:Ignorable="d"
              d:DesignHeight="588" d:DesignWidth="998"
+             xmlns:converter="clr-namespace:TodoList_Project.Core.Utils.Converters"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf">
     <UserControl.Resources>
 
@@ -13,6 +14,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="TaskReportControlStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converter:IndexToBrushConverter x:Key="IndexToBrushConverter" />
+            
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Background = "{StaticResource backgroundColor1}"
@@ -20,9 +23,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <!-- Header -->
-            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
             <!-- Pie Chart, Bar Chart -->
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="*" />
             <!-- Line Chart -->
         </Grid.RowDefinitions>
 
@@ -31,6 +34,7 @@
                    Margin="0,0,0,10">
             <TextBlock Text="Tổng quan công việc"
                        FontSize="20"
+                       Foreground="White"
                        FontWeight="Bold"
                        VerticalAlignment="Center" />
             <StackPanel Orientation="Horizontal"
@@ -38,13 +42,15 @@
                         DockPanel.Dock="Right">
                 <Button Content="🔄 Làm mới"
                         Width="100"
-                        Height="30" />
+                        Height="30" Margin="10,0,10,0"/>
                 <Button Content="📤 Xuất Excel"
                         Width="110"
-                        Height="30" />
+                        Height="30"
+                        Margin="10,0,10,0" />
                 <Button Content="📆 Chọn thời gian"
                         Width="130"
-                        Height="30" />
+                        Height="30"
+                        Margin="10,0,10,0" />
             </StackPanel>
         </DockPanel>
 
@@ -56,26 +62,31 @@
                 <ColumnDefinition Width="*" />
                 <!-- Grouped Column Chart -->
             </Grid.ColumnDefinitions>
-
+            
             <!-- Pie Chart -->
+            
             <Border Background="{DynamicResource backgroundColor2}"
                     CornerRadius="8"
                     Padding="10"
                     Margin="10">
                 
                 <!-- Pie Chart Placeholder -->
-                <lvc:PieChart Series="{Binding PieSeries}"
-                              LegendLocation="Right"
+                <lvc:PieChart Series="{Binding PieSeriesCollection}"
+                              Hoverable="True"
+                              HoverPushOut="10"
                               InnerRadius="30"
-                              HoverPushOut="5"
-                              Margin="20">
-                    <lvc:PieChart.ChartLegend>
-                        <lvc:DefaultLegend />
-                    </lvc:PieChart.ChartLegend>
+                              LegendLocation="Bottom">
                     <lvc:PieChart.DataTooltip>
-                        <lvc:DefaultTooltip />
+                        <lvc:DefaultTooltip SelectionMode="OnlySender"
+                                            FontSize="14"
+                                            Padding="5"
+                                            CornerRadius="4" />
                     </lvc:PieChart.DataTooltip>
+                    <lvc:PieChart.ChartLegend>
+                        <lvc:DefaultLegend Foreground="Gainsboro" />
+                    </lvc:PieChart.ChartLegend>
                 </lvc:PieChart>
+
             </Border>
 
             <!-- Grouped Column Chart -->
@@ -84,19 +95,60 @@
                     CornerRadius="8"
                     Margin="10"
                     Padding="10">
-                <TextBlock Text="Biểu đồ Cột: Ưu tiên theo trạng thái" Foreground="White" />
                 <!-- Column Chart Placeholder -->
+                <lvc:CartesianChart Grid.Column="1"
+                                    Series="{Binding BarSeriesCollection}"
+                                    LegendLocation="Top"
+                                    Margin="10">
+                    <lvc:CartesianChart.DataTooltip>
+                        <lvc:DefaultTooltip SelectionMode="OnlySender" />
+                    </lvc:CartesianChart.DataTooltip>
+                    <lvc:CartesianChart.ChartLegend>
+                        <lvc:DefaultLegend Foreground="Gainsboro" />
+                    </lvc:CartesianChart.ChartLegend>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Labels="{Binding BarLabels}"
+                                  FontSize="15"/>
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Task Count" />
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
+
             </Border>
         </Grid>
 
-        <!-- ========== LINE CHART DƯỚI ========== -->
+        <!-- ========== LINE CHART BELOW ========== -->
         <Border Grid.Row="2"
                 Background="{DynamicResource backgroundColor2}"
                 CornerRadius="8"
                 Padding="10"
                 Margin="10">
-            <TextBlock Text="Biểu đồ Line: Số lượng công việc theo thời gian" Foreground="White" />
             <!-- Line Chart Placeholder -->
+            <lvc:CartesianChart Grid.Column="2"
+                                Series="{Binding LineSeriesCollection}"
+                                LegendLocation="Top"
+                                Margin="10">
+                <lvc:CartesianChart.DataTooltip>
+                    <lvc:DefaultTooltip SelectionMode="OnlySender" />
+                </lvc:CartesianChart.DataTooltip>
+                <lvc:CartesianChart.AxisX>
+
+                    <lvc:Axis Title="Date"
+                              Labels="{Binding LineLabels}">
+                        <lvc:Axis.Separator>
+                            <lvc:Separator StrokeThickness="0"
+                                           IsEnabled="False" />
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Task Count" />
+                </lvc:CartesianChart.AxisY>
+                <lvc:CartesianChart.ChartLegend>
+                    <lvc:DefaultLegend Foreground="Gainsboro" />
+                </lvc:CartesianChart.ChartLegend>
+            </lvc:CartesianChart>
         </Border>
     </Grid>
 </UserControl>

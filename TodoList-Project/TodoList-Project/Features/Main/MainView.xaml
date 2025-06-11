@@ -84,7 +84,7 @@
                     </RadioButton>
                     <RadioButton Style="{DynamicResource menuButton}"
                                  Tag="{DynamicResource color4}"
-                                 Command="{Binding ShowListTaskViewCommand}">
+                                 Command="{Binding ShowTaskReportViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="PieChart" Style="{DynamicResource menuButtonIcon}" />
                             <TextBlock Text="Report" Style="{DynamicResource menuButtonText}" />

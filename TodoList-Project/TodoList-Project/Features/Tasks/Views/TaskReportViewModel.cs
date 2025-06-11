@@ -2,14 +2,21 @@
 using CommunityToolkit.Mvvm.Input;
 using LiveCharts;
 using LiveCharts.Wpf;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
+using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Features.Tasks.Services;
+using Application = System.Windows.Application;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
 namespace TodoList_Project.Features.Tasks.Views
@@ -18,32 +25,134 @@ namespace TodoList_Project.Features.Tasks.Views
     {
         private readonly ITaskStatisticsService _statisticsService;
 
+        private readonly Brush[] _brushes =
+        {
+            (Brush)Application.Current.FindResource("PieItem1Brush"),
+            (Brush)Application.Current.FindResource("PieItem2Brush"),
+            (Brush)Application.Current.FindResource("PieItem3Brush"),
+        };
+        private readonly Brush[] _barBrushes =
+        {
+            (Brush)Application.Current.FindResource("BarItem1Brush"), // In Progress
+            (Brush)Application.Current.FindResource("BarItem2Brush"), // Completed
+            (Brush)Application.Current.FindResource("BarItem3Brush")  // Cancelled
+        };
         [ObservableProperty]
-        private SeriesCollection _seriesCollection;
+        private SeriesCollection _pieSeriesCollection;
+        [ObservableProperty]
+        private SeriesCollection _barSeriesCollection;
+        [ObservableProperty]
+        private string[] _barLabels = { "Low Priority", "Medium Priority", "High Priority" };
+        [ObservableProperty]
+        private SeriesCollection _lineSeriesCollection;
 
+        [ObservableProperty]
+        private string[] _lineLabels;
         public TaskReportViewModel(ITaskStatisticsService statisticsService)
         {
             _statisticsService = statisticsService;
-            SeriesCollection = new SeriesCollection();
+            PieSeriesCollection = new SeriesCollection();
+            BarSeriesCollection = new SeriesCollection();
+            LineSeriesCollection = new SeriesCollection();
+            LoadDataAsync();
         }
 
         public async Task LoadDataAsync(CancellationToken cancellationToken = default)
         {
+             await LoadPieChartDataAsync(cancellationToken);
+             await LoadBarChartDataAsync(cancellationToken);
+             await LoadLineChartDataAsync(cancellationToken);
+        }
+        private async Task LoadPieChartDataAsync(CancellationToken cancellationToken = default)
+        {
+            var borderBrush = (Brush)Application.Current.FindResource("panelColor");
             var distribution = await _statisticsService.GetTaskStatusDistributionAsync(cancellationToken);
 
             var collection = new SeriesCollection();
+            int index = 0;
 
             foreach (var kvp in distribution)
             {
-                collection.Add(new PieSeries
+                var series = new PieSeries
                 {
                     Title = kvp.Key.ToString(),
                     Values = new ChartValues<int> { kvp.Value },
-                    DataLabels = true
-                });
+                    DataLabels = true,
+                    StrokeThickness = 5,
+                    Stroke = borderBrush,
+                    Fill = _brushes[index % _brushes.Length]
+                };
+                collection.Add(series);
+                index++;
             }
+            PieSeriesCollection = collection;
+        }
+        private async Task LoadBarChartDataAsync(CancellationToken cancellationToken = default)
+        {
+            var borderBrush = (Brush)Application.Current.FindResource("panelColor");
+            var priorityStatusData = await _statisticsService.GetTasksByPriorityAndStatusAsync(cancellationToken);
+            var barCollection = new SeriesCollection();
 
-            SeriesCollection = collection;
+            var statuses = new[] { TaskStatus.InProgress, TaskStatus.Completed, TaskStatus.Cancelled };
+            for (int i = 0; i < statuses.Length; i++)
+            {
+                var values = new ChartValues<int>();
+                foreach (var priority in Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>())
+                {
+                    values.Add(priorityStatusData.ContainsKey(priority) && priorityStatusData[priority].ContainsKey(statuses[i])
+                        ? priorityStatusData[priority][statuses[i]]
+                        : 0);
+                }
+
+                var series = new ColumnSeries
+                {
+                    Title = statuses[i].ToString(),
+                    Values = values,
+                    Fill = _barBrushes[i % _barBrushes.Length],
+                    StrokeThickness = 1,
+                    Stroke = borderBrush
+                };
+                barCollection.Add(series);
+            }
+            BarSeriesCollection = barCollection;
+        }
+        private async Task LoadLineChartDataAsync(CancellationToken cancellationToken = default)
+        {
+            var borderBrush = (Brush)Application.Current.FindResource("panelColor");
+            var fromDate = DateTime.Today.AddDays(-6); // 7 dáy ago  
+            var toDate = DateTime.Today;
+            var taskCountByDate = await _statisticsService.GetTaskCountByDateAsync(fromDate, toDate, cancellationToken);
+
+            var lineCollection = new SeriesCollection();
+            var values = new ChartValues<int>(taskCountByDate.Values);
+            var labels = taskCountByDate.Keys.Select(d => d.ToString("dd/MM")).ToArray();
+
+            // Tạo LinearGradientBrush cho Fill
+            var gradientBrush = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0), 
+                EndPoint = new Point(1, 0),  
+                Opacity = 0.5,               
+                GradientStops = new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#F1587F"), 0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#6B53FF"), 1) 
+                }
+            };
+
+            var series = new LineSeries
+            {
+                Title = "Total Tasks",
+                Values = values,
+                Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF8080")), 
+                StrokeThickness = 1,
+                Fill = gradientBrush,
+                PointGeometry = null 
+            };
+            lineCollection.Add(series);
+
+            LineSeriesCollection = lineCollection;
+            LineLabels = labels;
         }
     }
 }

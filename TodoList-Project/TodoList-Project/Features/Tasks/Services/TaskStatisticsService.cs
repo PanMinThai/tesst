@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Features.Tasks.Models;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus; 
@@ -34,6 +35,16 @@ namespace TodoList_Project.Features.Tasks.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
             return await _repository.GetTaskStatusDistributionAsync(cancellationToken);
+        }
+        public async Task<Dictionary<TaskPriority, Dictionary<TaskStatus, int>>> GetTasksByPriorityAndStatusAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return await _repository.GetTasksByPriorityAndStatusAsync(cancellationToken);
+        }
+        public async Task<Dictionary<DateTime, int>> GetTaskCountByDateAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return await _repository.GetTaskCountByDateAsync(fromDate, toDate, cancellationToken);
         }
     }
 }

@@ -70,11 +70,11 @@ namespace TodoList_Project.Features.Main
         }
 
         [RelayCommand]
-        private void ShowTaskManagementView()
+        private void ShowTaskReportView()
         {
-            //CurrentChildView = new TaskViewModel(_taskService);
-            Caption = "Dashboard";
-            Icon = IconChar.ListCheck;
+            CurrentChildView = new TaskReportViewModel(_taskStatisticsService);
+            Caption = "Report";
+            Icon = IconChar.PieChart;
         }
 
         [RelayCommand]

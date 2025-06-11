@@ -66,6 +66,53 @@ namespace TodoList_Project.Core.DAL.Repositories
         #endregion
 
         #region Implementation of ITaskRepository
+        public async Task<Dictionary<TaskPriority, Dictionary<TaskStatus, int>>> GetTasksByPriorityAndStatusAsync(CancellationToken cancellationToken = default)
+        {
+            var tasks = await _context.Tasks
+                .AsNoTracking()
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+
+            var result = tasks
+                .GroupBy(t => t.Priority)
+                .Select(g => new
+                {
+                    Priority = g.Key,
+                    StatusCounts = g.GroupBy(t => t.Status)
+                                   .ToDictionary(x => x.Key, x => x.Count())
+                })
+                .ToDictionary(
+                    x => x.Priority,
+                    x => x.StatusCounts.Any()
+                        ? x.StatusCounts
+                        : new Dictionary<TaskStatus, int> { { TaskStatus.InProgress, 0 }, { TaskStatus.Completed, 0 }, { TaskStatus.Cancelled, 0 } });
+
+            foreach (var priority in Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>())
+            {
+                if (!result.ContainsKey(priority))
+                {
+                    result[priority] = new Dictionary<TaskStatus, int>
+                    {
+                        { TaskStatus.InProgress, 0 },
+                        { TaskStatus.Completed, 0 },
+                        { TaskStatus.Cancelled, 0 }
+                    };
+                }
+                else
+                {
+                    var statusCounts = result[priority];
+                    foreach (TaskStatus status in Enum.GetValues(typeof(TaskStatus)))
+                    {
+                        if (!statusCounts.ContainsKey(status))
+                        {
+                            statusCounts[status] = 0;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
         public async Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(CancellationToken cancellationToken = default)
         {
             var result = await _context.Tasks
@@ -84,6 +131,24 @@ namespace TodoList_Project.Core.DAL.Repositories
             }
 
             return result;
+        }
+        public async Task<Dictionary<DateTime, int>> GetTaskCountByDateAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken = default)
+        {
+            var result = await _context.Tasks
+                .Where(t => t.DueDate.HasValue && t.DueDate.Value.Date >= fromDate.Date && t.DueDate.Value.Date <= toDate.Date)
+                .GroupBy(t => t.DueDate.Value.Date)
+                .Select(g => new { Date = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(
+                    x => x.Date,
+                    x => x.Count,
+                    cancellationToken)
+                .ConfigureAwait(false);
+
+            var allDates = Enumerable.Range(0, (toDate.Date - fromDate.Date).Days + 1)
+                .Select(d => fromDate.Date.AddDays(d))
+                .ToDictionary(d => d, d => result.ContainsKey(d) ? result[d] : 0);
+
+            return allDates;
         }
         public async Task<int> GetInProgressCountAsync(CancellationToken cancellationToken = default)
         {
