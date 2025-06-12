@@ -13,8 +13,5 @@ namespace TodoList_Project.Features.Tasks.Services
         Task AddTaskAsync(TaskModel task);
         Task UpdateTaskAsync(TaskModel task);
         Task DeleteTaskAsync(int id);
-        Task<TaskStatistics> GetTaskStatisticsAsync();
-        List<TaskModel> GetTasksByDate(DateTime date);
-        Task<IEnumerable<TaskModel>> GetTasksByDateRange(DateTime fromDate, DateTime toDate);
     }
 }

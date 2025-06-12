@@ -1,18 +1,23 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
+using System.Threading;
+using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Features.Tasks.Services;
+using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
 namespace TodoList_Project.Features.Main
 {
     public partial class StartViewModel : ObservableObject
     {
         private readonly ITaskService _taskService;
+        private readonly ITaskStatisticsService _taskStatisticsService;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(TotalTasks))] // Tự động notify khi thay đổi
@@ -31,9 +36,10 @@ namespace TodoList_Project.Features.Main
         [ObservableProperty]
         private ObservableCollection<TaskItemViewModel> _tasks = new();
 
-        public StartViewModel(ITaskService taskService)
+        public StartViewModel(ITaskService taskService, ITaskStatisticsService taskStatisticsService)
         {
             _taskService = taskService;
+            _taskStatisticsService = taskStatisticsService;
             LoadDataCommand.Execute(null);
         }
 
@@ -46,10 +52,18 @@ namespace TodoList_Project.Features.Main
 
         private async Task LoadTaskCountsAsync()
         {
-            var statistics = await _taskService.GetTaskStatisticsAsync();
-            InProgressCount = statistics.InProgressCount;
-            CompletedCount = statistics.CompletedCount;
-            CancelledCount = statistics.CancelledCount;
+            try
+            {
+                var statusCounts = await _taskStatisticsService.GetTaskStatusCountsAsync();
+
+                InProgressCount = statusCounts[TaskStatus.InProgress];
+                CompletedCount = statusCounts[TaskStatus.Completed];
+                CancelledCount = statusCounts[TaskStatus.Cancelled];
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading task counts: {ex.Message}");
+            }
         }
 
         private async Task LoadTasksAsync()

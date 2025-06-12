@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -20,9 +23,13 @@ namespace TodoList_Project
     public partial class App : Application
     {
         private readonly ServiceProvider _serviceProvider;
-
+        private readonly IConfiguration _configuration;
         public App()
         {
+            _configuration = new ConfigurationBuilder()
+                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
             var services = new ServiceCollection();
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
@@ -30,9 +37,15 @@ namespace TodoList_Project
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=.\\SQLEXPRESS;Database=TodoList;Trusted_Connection=True;TrustServerCertificate=True;"),
-    ServiceLifetime.Transient);
-
+            services.AddSingleton(_configuration);
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddNLog();
+            });
+            services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")),
+        ServiceLifetime.Transient);
             // Repositories
             services.AddTransient<ITaskRepository, TaskRepository>();
 

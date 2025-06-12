@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,24 +13,56 @@ namespace TodoList_Project.Features.Tasks.Services
     public class TaskStatisticsService : ITaskStatisticsService
     {
         private readonly ITaskRepository _repository;
-
-        public TaskStatisticsService(ITaskRepository repository)
+        private readonly ILogger<TaskService> _logger;
+        public TaskStatisticsService(ITaskRepository repository, ILogger<TaskService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
-
-        public async Task<TaskStatistics> GetStatisticsAsync(CancellationToken cancellationToken = default)
+        public async Task<Dictionary<TaskStatus, int>> GetTaskStatusCountsAsync(CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return new TaskStatistics
+            try
             {
-                InProgressCount = await _repository.GetInProgressCountAsync(cancellationToken),
-                CompletedCount = await _repository.GetCompletedCountAsync(cancellationToken),
-                CancelledCount = await _repository.GetCancelledCountAsync(cancellationToken),
-                TodayTasksCount = await _repository.GetTodayTaskCountAsync(cancellationToken),
-                YesterdayTasksCount = await _repository.GetYesterdayTaskCountAsync(cancellationToken),
-                ThisWeekTasksCount = await _repository.GetThisWeekTaskCountAsync(cancellationToken)
-            };
+                _logger.LogInformation("Fetching task status counts...");
+
+                var counts = await _repository
+                    .GetTaskStatusCountsAsync(cancellationToken)
+                    .ConfigureAwait(false);
+
+                _logger.LogInformation("Successfully fetched task status counts");
+                return counts;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch task status counts");
+                throw; // Re-throw để controller xử lý
+            }
+        }
+        public async Task<int> GetTaskCountByPeriodAsync(DateTimePeriod period, DateTime? from = null, DateTime? to = null)
+        {
+            try
+            {
+                _logger.LogInformation("Getting task count for period: {Period}", period);  
+                if (period == DateTimePeriod.Custom)
+                {
+                    if (!from.HasValue || !to.HasValue)
+                    {
+                        throw new ArgumentException("From and To dates are required for custom period");
+                    }
+
+                    if (from.Value > to.Value)
+                    {
+                        throw new ArgumentException("From date cannot be after To date");
+                    }
+                }
+
+                return await _repository.GetTaskCountByPeriodAsync(period, from, to);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while getting task count for period: {Period}", period);
+                throw; 
+            }
         }
         public async Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(CancellationToken cancellationToken = default)
         {

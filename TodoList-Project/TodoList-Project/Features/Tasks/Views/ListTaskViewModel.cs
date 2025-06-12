@@ -138,10 +138,18 @@ namespace TodoList_Project.Features.Tasks.Views
             try
             {
                 await ApplyFilters(_cancellationTokenSource.Token);
-                var stats = await _statisticsService.GetStatisticsAsync(_cancellationTokenSource.Token);
-                YesterdayTaskCount = stats.YesterdayTasksCount;
-                TodayTaskCount = stats.TodayTasksCount;
-                ThisWeekTaskCount = stats.ThisWeekTasksCount;
+
+                var yesterdayTaskCount = _statisticsService.GetTaskCountByPeriodAsync( DateTimePeriod.Yesterday);
+
+                var todayTaskCount = _statisticsService.GetTaskCountByPeriodAsync( DateTimePeriod.Today);
+
+                var thisWeekTaskCount = _statisticsService.GetTaskCountByPeriodAsync( DateTimePeriod.ThisWeek);
+
+                await Task.WhenAll(yesterdayTaskCount, todayTaskCount, thisWeekTaskCount);
+
+                YesterdayTaskCount = await yesterdayTaskCount;
+                TodayTaskCount = await todayTaskCount;
+                ThisWeekTaskCount = await thisWeekTaskCount;
             }
             catch (OperationCanceledException)
             {

@@ -19,18 +19,6 @@ namespace TodoList_Project.Features.Tasks.Services
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<TaskStatistics> GetTaskStatisticsAsync()
-        {
-            return new TaskStatistics
-            {
-                InProgressCount = await _repository.GetInProgressCountAsync(),
-                CompletedCount = await _repository.GetCompletedCountAsync(),
-                CancelledCount = await _repository.GetCancelledCountAsync(),
-                TodayTasksCount = await _repository.GetTodayTaskCountAsync(),
-                YesterdayTasksCount = await _repository.GetYesterdayTaskCountAsync(),
-                ThisWeekTasksCount = await _repository.GetThisWeekTaskCountAsync()
-            };
-        }
         public async Task AddTaskAsync(TaskModel model)
         {
             var taskEntity = _mapper.Map<TaskEntity>(model);
@@ -56,19 +44,6 @@ namespace TodoList_Project.Features.Tasks.Services
         public async Task DeleteTaskAsync(int id)
         {
             await _repository.DeleteAsync(id);
-        }
-        public List<TaskModel> GetTasksByDate(DateTime date)
-        {
-            var taskEntities = _repository.GetTasksByDate(date);
-
-            return _mapper.Map<List<TaskModel>>(taskEntities);
-        }
-
-        public async Task<IEnumerable<TaskModel>> GetTasksByDateRange(DateTime fromDate, DateTime toDate)
-        {
-            var taskEntities = await _repository.GetTasksByDateRange(fromDate, toDate);
-
-            return _mapper.Map<List<TaskModel>>(taskEntities);
         }
     }
 }

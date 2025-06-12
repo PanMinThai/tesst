@@ -150,92 +150,61 @@ namespace TodoList_Project.Core.DAL.Repositories
 
             return allDates;
         }
-        public async Task<int> GetInProgressCountAsync(CancellationToken cancellationToken = default)
+        public async Task<Dictionary<TaskStatus, int>> GetTaskStatusCountsAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Tasks
-                .CountAsync(t => t.Status == TaskStatus.InProgress,cancellationToken)
+            // Group tasks by status and count
+            var counts = await _context.Tasks
+                .GroupBy(t => t.Status)
+                .Select(g => new { Status = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.Status, x => x.Count, cancellationToken)
                 .ConfigureAwait(false);
-        }
 
-        public async Task<int> GetCompletedCountAsync(CancellationToken cancellationToken = default)
+            // Ensure all statuses are included (even if count = 0)
+            foreach (TaskStatus status in Enum.GetValues(typeof(TaskStatus)))
+            {
+                if (!counts.ContainsKey(status))
+                {
+                    counts[status] = 0;
+                }
+            }
+
+            return counts;
+        }
+        public async Task<int> GetTaskCountByPeriodAsync(DateTimePeriod period, DateTime? from = null, DateTime? to = null, CancellationToken cancellationToken = default)
         {
-            return await _context.Tasks
-                .CountAsync(t => t.Status == TaskStatus.Completed, cancellationToken)
-                .ConfigureAwait(false);
+            var query = _context.Tasks.AsQueryable();
+
+            switch (period)
+            {
+                case DateTimePeriod.Today:
+                    var todayDate = DateTime.Today; 
+                    query = query.Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == todayDate);
+                    break;
+                case DateTimePeriod.Yesterday:
+                    var yesterdayDate = DateTime.Today.AddDays(-1); 
+                    query = query.Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == yesterdayDate);
+                    break;
+                case DateTimePeriod.ThisWeek:
+                    var currentDate = DateTime.Today; 
+                    var startOfWeek = currentDate.AddDays(-(int)currentDate.DayOfWeek);
+                    var endOfWeek = startOfWeek.AddDays(6);
+                    query = query.Where(t => t.DueDate.HasValue && 
+                                        t.DueDate.Value.Date >= startOfWeek && 
+                                        t.DueDate.Value.Date <= endOfWeek);
+                    break;
+                case DateTimePeriod.Custom when from.HasValue && to.HasValue:
+                    query = query.Where(t => t.DueDate.HasValue && 
+                                        t.DueDate.Value.Date >= from.Value.Date && 
+                                        t.DueDate.Value.Date <= to.Value.Date);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid period or missing date range");
+            }
+
+            return await query.CountAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<int> GetCancelledCountAsync(CancellationToken cancellationToken = default)
-        {
-            return await _context.Tasks
-                .CountAsync(t => t.Status == TaskStatus.Cancelled, cancellationToken)
-                .ConfigureAwait(false);
-        }
-
-        public async Task<int> GetTodayTaskCountAsync(CancellationToken cancellationToken = default)
-        {
-            var today = DateTime.Today;
-            return await _context.Tasks
-                .CountAsync(t => t.DueDate.HasValue && t.DueDate.Value.Date == today, cancellationToken)
-                .ConfigureAwait(false);
-        }
-
-        public async Task<int> GetYesterdayTaskCountAsync(CancellationToken cancellationToken = default)
-        {
-            var yesterday = DateTime.Today.AddDays(-1);
-            return await _context.Tasks
-                .CountAsync(t => t.DueDate.HasValue && t.DueDate.Value.Date == yesterday, cancellationToken)
-                .ConfigureAwait(false);
-        }
-
-        public async Task<int> GetThisWeekTaskCountAsync(CancellationToken cancellationToken = default)
-        {
-            var today = DateTime.Today;
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(6);
-
-            return await _context.Tasks
-                .CountAsync(t => t.DueDate >= startOfWeek && t.DueDate <= endOfWeek, cancellationToken)
-                .ConfigureAwait(false);
-        }
-
-        public async Task<IEnumerable<TaskEntity>> GetTasksDueThisWeekAsync()
-        {
-            var today = DateTime.Today;
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(6);
-
-            return await _context.Tasks
-                .Where(t => t.DueDate >= startOfWeek && t.DueDate <= endOfWeek)
-                .AsNoTracking()
-                .ToListAsync()
-                .ConfigureAwait(false);
-        }
-        public IQueryable<TaskEntity> GetTasksByDate(DateTime date)
-        {
-            return _context.Tasks
-                .Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == date.Date);
-        }
-
-        public async Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetTasksByDateRange( DateTime from, DateTime to, int pageNumber = 1, int pageSize = 10)
-        {
-            var query = _context.Tasks
-                .Where(t => t.DueDate.HasValue &&
-                           t.DueDate.Value.Date >= from.Date &&
-                           t.DueDate.Value.Date <= to.Date);
-
-            int totalCount = await query.CountAsync();
-
-            var tasks = await query
-                .OrderBy(t => t.DueDate)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .AsNoTracking()
-                .ToListAsync();
-
-            return (tasks, totalCount);
-        }
-        public async Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetFilteredTasksAsync( TaskStatus? status = null, TaskPriority? priority = null, string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null, int pageNumber = 1,
-        int pageSize = 10)
+        public async Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetFilteredTasksAsync( TaskStatus? status = null, TaskPriority? priority = null, string keyword = null, DateTime? date = null, DateTime? fromDate = null, DateTime? toDate = null, int pageNumber = 1, int pageSize = 10)
         {
             var query = _context.Tasks.AsQueryable();
 
