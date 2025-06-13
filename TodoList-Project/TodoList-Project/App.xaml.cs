@@ -43,7 +43,7 @@ namespace TodoList_Project
                 loggingBuilder.ClearProviders();
                 loggingBuilder.AddNLog();
             });
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContextFactory<ApplicationDbContext>(options =>
         options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")),
         ServiceLifetime.Transient);
             // Repositories

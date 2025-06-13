@@ -19,14 +19,14 @@ namespace TodoList_Project.Features.Tasks.Services
             _repository = repository;
             _logger = logger;
         }
-        public async Task<Dictionary<TaskStatus, int>> GetTaskStatusCountsAsync(CancellationToken cancellationToken = default)
+        public async Task<Dictionary<TaskStatus, int>> GetTaskStatusCountsAsync()
         {
             try
             {
                 _logger.LogInformation("Fetching task status counts...");
 
                 var counts = await _repository
-                    .GetTaskStatusCountsAsync(cancellationToken)
+                    .GetTaskStatusCountsAsync()
                     .ConfigureAwait(false);
 
                 _logger.LogInformation("Successfully fetched task status counts");
@@ -64,20 +64,17 @@ namespace TodoList_Project.Features.Tasks.Services
                 throw; 
             }
         }
-        public async Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(CancellationToken cancellationToken = default)
+        public async Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(DateTimePeriod period, DateTime? customStartDate = null, DateTime? customEndDate = null)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return await _repository.GetTaskStatusDistributionAsync(cancellationToken);
+            return await _repository.GetTaskStatusDistributionAsync(period,customStartDate,customEndDate);
         }
-        public async Task<Dictionary<TaskPriority, Dictionary<TaskStatus, int>>> GetTasksByPriorityAndStatusAsync(CancellationToken cancellationToken = default)
+        public async Task<Dictionary<TaskPriority, Dictionary<TaskStatus, int>>> GetTasksByPriorityAndStatusAsync(DateTimePeriod period, DateTime? customStartDate = null, DateTime? customEndDate = null)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return await _repository.GetTasksByPriorityAndStatusAsync(cancellationToken);
+            return await _repository.GetTasksByPriorityAndStatusAsync(period, customStartDate, customEndDate);
         }
-        public async Task<Dictionary<DateTime, int>> GetTaskCountByDateAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken = default)
+        public async Task<Dictionary<DateTime, int>> GetTaskCountByDateAsync(DateTimePeriod period, DateTime? customStartDate = null, DateTime? customEndDate = null)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return await _repository.GetTaskCountByDateAsync(fromDate, toDate, cancellationToken);
+            return await _repository.GetTaskCountByDateAsync(period, customStartDate, customEndDate);
         }
     }
 }

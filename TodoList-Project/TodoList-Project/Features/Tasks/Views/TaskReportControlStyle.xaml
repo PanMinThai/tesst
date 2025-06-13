@@ -15,8 +15,80 @@
     </LinearGradientBrush>
 
     <!-- Gradient cho item 3: #A855F7 -> #EC4899 -->
-    <LinearGradientBrush x:Key="PieItem3Brush" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="#FFA855F7" Offset="0" />
-        <GradientStop Color="#FFEC4899" Offset="1" />
+    <LinearGradientBrush x:Key="PieItem3Brush"
+                         StartPoint="0,0"
+                         EndPoint="1,1">
+        <GradientStop Color="#FFA855F7"
+                      Offset="0" />
+        <GradientStop Color="#FFEC4899"
+                      Offset="1" />
     </LinearGradientBrush>
+    <!-- Style cho nút bình thường -->
+    <Style x:Key="FilterButtonStyle"
+           TargetType="Button">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="#8B8FA3" />
+        <Setter Property="BorderBrush"
+                Value="#4A4D5E" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="Padding"
+                Value="20,10" />
+        <Setter Property="MinWidth"
+                Value="100" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="FontWeight"
+                Value="Normal" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="#3A3D4D" />
+                <Setter Property="Foreground"
+                        Value="#FFFFFF" />
+                <Setter Property="BorderBrush"
+                        Value="#5A5D6E" />
+            </Trigger>
+            <!-- Trigger cho trạng thái được chọn -->
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"
+                         Value="Selected">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop Color="#6C5CE7"
+                                          Offset="0" />
+                            <GradientStop Color="#A29BFE"
+                                          Offset="1" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="FontWeight"
+                        Value="Medium" />
+                <Setter Property="BorderBrush"
+                        Value="#6C5CE7" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

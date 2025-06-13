@@ -8,8 +8,10 @@ namespace TodoList_Project.Core.DAL.Enums
 {
     public enum DateTimePeriod
     {
-        Today,
+        LastMonth,
+        LastWeek,
         Yesterday,
+        Today,
         ThisWeek,
         ThisMonth,
         Custom

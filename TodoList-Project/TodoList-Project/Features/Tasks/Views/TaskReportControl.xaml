@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TodoList_Project.Features.Tasks.Views"
              mc:Ignorable="d"
-             d:DesignHeight="588" d:DesignWidth="998"
+             d:DesignHeight="688"
+             d:DesignWidth="1018"
+             xmlns:enums="clr-namespace:TodoList_Project.Core.DAL.Enums"
              xmlns:converter="clr-namespace:TodoList_Project.Core.Utils.Converters"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf">
     <UserControl.Resources>
@@ -32,25 +34,52 @@
         <!-- ========== HEADER ========== -->
         <DockPanel Grid.Row="0"
                    Margin="0,0,0,10">
-            <TextBlock Text="Tổng quan công việc"
+            <TextBlock Text="Reports - Statistics"
                        FontSize="20"
                        Foreground="White"
                        FontWeight="Bold"
                        VerticalAlignment="Center" />
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
-                        DockPanel.Dock="Right">
-                <Button Content="🔄 Làm mới"
-                        Width="100"
-                        Height="30" Margin="10,0,10,0"/>
-                <Button Content="📤 Xuất Excel"
-                        Width="110"
-                        Height="30"
-                        Margin="10,0,10,0" />
-                <Button Content="📆 Chọn thời gian"
-                        Width="130"
-                        Height="30"
-                        Margin="10,0,10,0" />
+                        DockPanel.Dock="Right"
+                        Margin="0,0,10,0">
+                <Button Name="btnCustom"
+                        Content="Custom"
+                        Style="{StaticResource FilterButtonStyle}"
+                        Tag="Custom" />
+
+                <Button Name="btnLastMonth"
+                        Content="Last month"
+                        Style="{StaticResource FilterButtonStyle}"
+                        Tag="LastMonth"
+                        Margin="5,0,0,0"
+                        Command="{Binding ChangePeriodCommand}"
+                        CommandParameter="{x:Static enums:DateTimePeriod.LastMonth}" />
+
+                <Button Name="btnLastWeek"
+                        Content="Last week"
+                        Style="{StaticResource FilterButtonStyle}"
+                        Tag="LastWeek"
+                        Margin="5,0,0,0"
+                        Command="{Binding ChangePeriodCommand}"
+                        CommandParameter="{x:Static enums:DateTimePeriod.LastWeek}" />
+
+                <Button Name="btnThisWeek"
+                        Content="This week"
+                        Style="{StaticResource FilterButtonStyle}"
+                        Tag="ThisWeek"
+                        Margin="5,0,0,0"
+                        Command="{Binding ChangePeriodCommand}"
+                        CommandParameter="{x:Static enums:DateTimePeriod.ThisWeek}" />
+
+                <Button Name="btnThisMonth"
+                        Content="This month"
+                        Style="{StaticResource FilterButtonStyle}"
+                        Tag="ThisMonth"
+                        Margin="5,0,0,0"
+                        Command="{Binding ChangePeriodCommand}"
+                        CommandParameter="{x:Static enums:DateTimePeriod.ThisMonth}" />
+
             </StackPanel>
         </DockPanel>
 
@@ -74,7 +103,7 @@
                 <lvc:PieChart Series="{Binding PieSeriesCollection}"
                               Hoverable="True"
                               HoverPushOut="10"
-                              InnerRadius="30"
+                              InnerRadius="55"
                               LegendLocation="Bottom">
                     <lvc:PieChart.DataTooltip>
                         <lvc:DefaultTooltip SelectionMode="OnlySender"

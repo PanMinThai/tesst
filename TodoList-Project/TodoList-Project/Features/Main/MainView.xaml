@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TodoList_Project.Features.Main"
         mc:Ignorable="d"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-        Title="MainView" Height="700" Width="1300"
+        Title="MainView" Height="800" Width="1300"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" Background="Transparent"
         AllowsTransparency="True">
@@ -22,7 +22,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <!--Navigation menu-->
-                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="230" />
                 <!--Content Grid(UserControl)-->
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>

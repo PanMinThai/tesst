@@ -12,10 +12,10 @@ namespace TodoList_Project.Features.Tasks.Services
     public interface ITaskStatisticsService
     { 
 
-        Task<Dictionary<TaskPriority, Dictionary<TaskStatus, int>>> GetTasksByPriorityAndStatusAsync(CancellationToken cancellationToken = default);
-        Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(CancellationToken cancellationToken = default);
-        Task<Dictionary<DateTime, int>> GetTaskCountByDateAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken = default);
+        Task<Dictionary<TaskPriority, Dictionary<TaskStatus, int>>> GetTasksByPriorityAndStatusAsync(DateTimePeriod period, DateTime? customStartDate = null, DateTime? customEndDate = null);
+        Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(DateTimePeriod period, DateTime? customStartDate = null, DateTime? customEndDate = null);
+        Task<Dictionary<DateTime, int>> GetTaskCountByDateAsync(DateTimePeriod period, DateTime? customStartDate = null, DateTime? customEndDate = null);
         Task<int> GetTaskCountByPeriodAsync(DateTimePeriod period, DateTime? from = null, DateTime? to = null);
-        Task<Dictionary<TaskStatus, int>> GetTaskStatusCountsAsync(CancellationToken cancellationToken = default);
+        Task<Dictionary<TaskStatus, int>> GetTaskStatusCountsAsync();
     }
 }

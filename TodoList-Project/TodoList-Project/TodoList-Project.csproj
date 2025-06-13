@@ -34,7 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Categories\" />
+    <Folder Include="Features\Categories\Models\" />
+    <Folder Include="Features\Categories\Services\" />
   </ItemGroup>
 
   <ItemGroup>

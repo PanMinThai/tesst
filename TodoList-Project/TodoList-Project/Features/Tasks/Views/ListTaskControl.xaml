@@ -8,8 +8,8 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:converter="clr-namespace:TodoList_Project.Core.Utils.Converters"
              mc:Ignorable="d"
-             d:DesignHeight="588"
-             d:DesignWidth="998">
+             d:DesignHeight="688"
+             d:DesignWidth="1018">
     <UserControl.Resources>
         
         <ResourceDictionary>

@@ -37,6 +37,25 @@ namespace TodoList_Project.Features.Tasks.Views
             (Brush)Application.Current.FindResource("BarItem2Brush"), // Completed
             (Brush)Application.Current.FindResource("BarItem3Brush")  // Cancelled
         };
+        private DateTimePeriod _selectedPeriod = DateTimePeriod.LastWeek;
+        public DateTimePeriod SelectedPeriod
+        {
+            get => _selectedPeriod;
+            set => SetProperty(ref _selectedPeriod, value);
+        }
+        private DateTime? _customStartDate;
+        public DateTime? CustomStartDate
+        {
+            get => _customStartDate;
+            set => SetProperty(ref _customStartDate, value);
+        }
+        private DateTime? _customEndDate;
+        public DateTime? CustomEndDate
+        {
+            get => _customEndDate;
+            set => SetProperty(ref _customEndDate, value);
+        }
+
         [ObservableProperty]
         private SeriesCollection _pieSeriesCollection;
         [ObservableProperty]
@@ -45,28 +64,39 @@ namespace TodoList_Project.Features.Tasks.Views
         private string[] _barLabels = { "Low Priority", "Medium Priority", "High Priority" };
         [ObservableProperty]
         private SeriesCollection _lineSeriesCollection;
-
         [ObservableProperty]
         private string[] _lineLabels;
+
+        public ICommand ChangePeriodCommand { get; }
+        public ICommand LoadDataCommand { get; } 
+
         public TaskReportViewModel(ITaskStatisticsService statisticsService)
         {
             _statisticsService = statisticsService;
             PieSeriesCollection = new SeriesCollection();
             BarSeriesCollection = new SeriesCollection();
             LineSeriesCollection = new SeriesCollection();
-            LoadDataAsync();
+
+            ChangePeriodCommand = new RelayCommand<DateTimePeriod>(async (period) =>
+            {
+                SelectedPeriod = period;
+                await LoadDataAsync();
+            });
+
+            LoadDataCommand = new RelayCommand(async () => await LoadDataAsync());
+            _ = LoadDataAsync();
         }
 
-        public async Task LoadDataAsync(CancellationToken cancellationToken = default)
+        public async Task LoadDataAsync()
         {
-             await LoadPieChartDataAsync(cancellationToken);
-             await LoadBarChartDataAsync(cancellationToken);
-             await LoadLineChartDataAsync(cancellationToken);
+             await LoadPieChartDataAsync();
+             await LoadBarChartDataAsync();
+             await LoadLineChartDataAsync();
         }
-        private async Task LoadPieChartDataAsync(CancellationToken cancellationToken = default)
+        private async Task LoadPieChartDataAsync()
         {
             var borderBrush = (Brush)Application.Current.FindResource("panelColor");
-            var distribution = await _statisticsService.GetTaskStatusDistributionAsync(cancellationToken);
+            var distribution = await _statisticsService.GetTaskStatusDistributionAsync(SelectedPeriod, CustomStartDate, CustomEndDate);
 
             var collection = new SeriesCollection();
             int index = 0;
@@ -87,10 +117,10 @@ namespace TodoList_Project.Features.Tasks.Views
             }
             PieSeriesCollection = collection;
         }
-        private async Task LoadBarChartDataAsync(CancellationToken cancellationToken = default)
+        private async Task LoadBarChartDataAsync()
         {
             var borderBrush = (Brush)Application.Current.FindResource("panelColor");
-            var priorityStatusData = await _statisticsService.GetTasksByPriorityAndStatusAsync(cancellationToken);
+            var priorityStatusData = await _statisticsService.GetTasksByPriorityAndStatusAsync(SelectedPeriod, CustomStartDate, CustomEndDate);
             var barCollection = new SeriesCollection();
 
             var statuses = new[] { TaskStatus.InProgress, TaskStatus.Completed, TaskStatus.Cancelled };
@@ -116,12 +146,11 @@ namespace TodoList_Project.Features.Tasks.Views
             }
             BarSeriesCollection = barCollection;
         }
-        private async Task LoadLineChartDataAsync(CancellationToken cancellationToken = default)
+        private async Task LoadLineChartDataAsync()
         {
             var borderBrush = (Brush)Application.Current.FindResource("panelColor");
-            var fromDate = DateTime.Today.AddDays(-6); // 7 dáy ago  
-            var toDate = DateTime.Today;
-            var taskCountByDate = await _statisticsService.GetTaskCountByDateAsync(fromDate, toDate, cancellationToken);
+
+            var taskCountByDate = await _statisticsService.GetTaskCountByDateAsync(SelectedPeriod, CustomStartDate, CustomEndDate);
 
             var lineCollection = new SeriesCollection();
             var values = new ChartValues<int>(taskCountByDate.Values);
