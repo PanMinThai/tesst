@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:TodoList_Project"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:main="clr-namespace:TodoList_Project.Features.Main"
-             xmlns:task="clr-namespace:TodoList_Project.Features.Tasks.Views">
+             xmlns:task="clr-namespace:TodoList_Project.Features.Tasks.Views"
+             xmlns:category="clr-namespace:TodoList_Project.Features.Categories.Views">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -37,6 +38,9 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type task:TaskReportViewModel}">
                 <task:TaskReportControl />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type category:CategoryManagementViewModel}">
+                <category:CategoryManagement />
             </DataTemplate>
 
         </ResourceDictionary>

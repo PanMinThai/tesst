@@ -101,12 +101,22 @@
                     </Border.Background>
                     <StackPanel>
                         <Grid>
-                            <StackPanel>
-                                <TextBlock Text="Your income" Foreground="White" FontSize="12" Opacity="0.8" Margin="0,10,0,0"/>
-                                <TextBlock Text="$1,780" Foreground="White" FontSize="28" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="RectangleXmark"
+                                              Foreground="White"
+                                              Width="30"
+                                              Height="30"
+                                              Margin="0,0,10,0" />
+                                <StackPanel>
+                                    <TextBlock Text="OverDue"
+                                               Foreground="White"
+                                               FontSize="28"
+                                               FontWeight="Bold" />
+                                    <TextBlock Text="{Binding CancelledCount, StringFormat={}{0} Tasks}"
+                                               Foreground="White"
+                                               FontSize="18" />
+                                </StackPanel>
                             </StackPanel>
-                            <Rectangle Fill="White" Width="50" Height="30" RadiusX="5" RadiusY="5" 
-                         HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.2"/>
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -115,7 +125,7 @@
             <!-- Middle Row -->
             <Grid Grid.Row="1" Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
@@ -123,6 +133,12 @@
                 <Border Grid.Column="0" Style="{StaticResource TodayTaskStyle}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding Tasks}" VerticalAlignment="Stretch">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2"
+                                                 HorizontalAlignment="Stretch" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <local:TaskItemControl Margin="0,5"/>

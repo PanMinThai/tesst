@@ -12,7 +12,7 @@ using TodoList_Project.Core.DAL.DBContext;
 namespace TodoList_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250613023801_init")]
+    [Migration("20250614110056_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -33,8 +33,16 @@ namespace TodoList_Project.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

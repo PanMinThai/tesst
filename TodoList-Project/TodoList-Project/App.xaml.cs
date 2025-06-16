@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using TodoList_Project.Core.DAL.DBContext;
 using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Core.Utils.Mapper;
+using TodoList_Project.Features.Categories.Services;
+using TodoList_Project.Features.Categories.Views;
 using TodoList_Project.Features.Main;
 using TodoList_Project.Features.Tasks.Services;
 using TodoList_Project.Features.Tasks.Views;
@@ -48,11 +50,13 @@ namespace TodoList_Project
         ServiceLifetime.Transient);
             // Repositories
             services.AddTransient<ITaskRepository, TaskRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
 
             //Services
             services.AddTransient<ITaskService, TaskService>();
             services.AddTransient<ITaskFilterService, TaskFilterService>();
             services.AddTransient<ITaskStatisticsService, TaskStatisticsService>();
+            services.AddTransient<ICategoryService, CategoryService>();
             //Mapper
             services.AddAutoMapper(typeof(TaskMappingProfile));
 
@@ -63,6 +67,8 @@ namespace TodoList_Project
             services.AddTransient<TaskItemViewModel>();
             services.AddTransient<ListTaskViewModel>();
             services.AddTransient<TaskReportViewModel>();
+            services.AddTransient<CategoryCardViewModel>();
+            services.AddTransient<CategoryManagementViewModel>();
             //services.AddTransient<TaskViewModel>();
             // Views
             services.AddSingleton<MainWindow>();

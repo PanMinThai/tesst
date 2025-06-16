@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Input;
 using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Core.MVVM;
+using TodoList_Project.Features.Categories.Services;
+using TodoList_Project.Features.Categories.Views;
 using TodoList_Project.Features.Tasks.Services;
 using TodoList_Project.Features.Tasks.Views;
 
@@ -21,6 +23,7 @@ namespace TodoList_Project.Features.Main
         private readonly ITaskService _taskService;
         private readonly ITaskFilterService _taskFilterService;
         private readonly ITaskStatisticsService _taskStatisticsService;
+        private readonly ICategoryService _categoryService;
 
         [ObservableProperty]
         private ObservableObject currentChildView;
@@ -35,13 +38,14 @@ namespace TodoList_Project.Features.Main
             ITaskRepository taskRepository,
             ITaskService taskService,
             ITaskStatisticsService taskStatisticsService,
-            ITaskFilterService taskFilterService)
+            ITaskFilterService taskFilterService,
+            ICategoryService categoryService)
         {
             _taskRepository = taskRepository;
             _taskService = taskService;
             _taskStatisticsService = taskStatisticsService;
             _taskFilterService = taskFilterService;
-
+            _categoryService = categoryService;
             ShowHomeView();
             CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService);
         }
@@ -54,11 +58,11 @@ namespace TodoList_Project.Features.Main
         }
 
         [RelayCommand]
-        private void ShowAddNewTaskView()
+        private void ShowCategoryManagementView()
         {
-            //CurrentChildView = new AddNewTaskViewModel();
-            Caption = "AddTaskModel";
-            Icon = IconChar.UserGroup;
+            CurrentChildView = new CategoryManagementViewModel(_categoryService);
+            Caption = "CategoryManagementModel";
+            Icon = IconChar.Icons;
         }
 
         [RelayCommand]

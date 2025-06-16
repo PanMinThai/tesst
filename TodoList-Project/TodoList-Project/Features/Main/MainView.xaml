@@ -40,8 +40,7 @@
                     <StackPanel Orientation="Horizontal"
                                 Height="35"
                                 Margin="15,25,0,40">
-                        <Image Source="/Features/Main/shin_picture.jpg"
-                               Height="30" />
+                        <Image Source="/Features/Main/shin_picture.jpg"/>
                         <TextBlock Text="PanMinTa"
                                    Foreground="{StaticResource titleColor2}"
                                    FontSize="20"
@@ -76,7 +75,7 @@
                     </RadioButton>
                     <RadioButton Style="{DynamicResource menuButton}"
                                  Tag="{DynamicResource color3}"
-                                 Command="{Binding ShowListTaskViewCommand}">
+                                 Command="{Binding ShowCategoryManagementViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Icons" Style="{DynamicResource menuButtonIcon}" />
                             <TextBlock Text="Categories" Style="{DynamicResource menuButtonText}" />

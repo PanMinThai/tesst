@@ -1,12 +1,114 @@
 ﻿<UserControl x:Class="TodoList_Project.Features.Categories.Views.CategoryManagement"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TodoList_Project.Features.Categories.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="688" d:DesignWidth="1018">
-    <Grid>
-            
-    </Grid>
+             mc:Ignorable="d"
+             d:DesignHeight="688"
+             d:DesignWidth="1018"
+             UseLayoutRounding="True"
+             SnapsToDevicePixels="True">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CategoryManagementStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Background="#2a156f"
+            CornerRadius="12">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Header Section -->
+            <Grid Grid.Row="0"
+                  Margin="40,20,40,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Title and Subtitle -->
+                <StackPanel Grid.Column="0"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="Categories"
+                               FontSize="36"
+                               FontWeight="Bold"
+                               Foreground="White"
+                               Margin="0,0,0,5" />
+                </StackPanel>
+
+                <!-- Period Selection Buttons -->
+                <Border Grid.Column="1"
+                        Background="Transparent"
+                        CornerRadius="8"
+                        Padding="2">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Today"
+                                Style="{StaticResource PeriodButtonStyle}"
+                                BorderBrush="{StaticResource color8}"
+                                Command="{Binding SelectPeriodCommand}"
+                                CommandParameter="Today"
+                                Tag="{Binding IsToday}" />
+                        <Button Content="Yesterday"
+                                Style="{StaticResource PeriodButtonStyle}"
+                                BorderBrush="{StaticResource color9}"
+                                Command="{Binding SelectPeriodCommand}"
+                                CommandParameter="Yesterday"
+                                Tag="{Binding IsYesterday}" />
+                        <Button Content="This Week"
+                                Style="{StaticResource PeriodButtonStyle}"
+                                BorderBrush="{StaticResource color6}"
+                                Command="{Binding SelectPeriodCommand}"
+                                CommandParameter="ThisWeek"
+                                Tag="{Binding IsThisWeek}" />
+                        <Button Content="Last Week"
+                                Style="{StaticResource PeriodButtonStyle}"
+                                BorderBrush="{StaticResource color10}"
+                                Command="{Binding SelectPeriodCommand}"
+                                CommandParameter="LastWeek"
+                                Tag="{Binding IsLastWeek}" />
+                        <Button Content="This Month"
+                                Style="{StaticResource PeriodButtonStyle}"
+                                BorderBrush="{StaticResource color1}"
+                                Command="{Binding SelectPeriodCommand}"
+                                CommandParameter="ThisMonth"
+                                Tag="{Binding IsThisMonth}" />
+                        <Button Content="Last Month"
+                                Style="{StaticResource PeriodButtonStyle}"
+                                BorderBrush="{StaticResource color4}"
+                                Command="{Binding SelectPeriodCommand}"
+                                CommandParameter="LastMonth"
+                                Tag="{Binding IsLastMonth}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Categories Grid -->
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Margin="30,0,30,30">
+                <ItemsControl ItemsSource="{Binding Categories}">
+                    <!-- Panel dùng UniformGrid để xếp 4 cột -->
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4"
+                                         HorizontalAlignment="Stretch" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:CategoryCardControl  Margin="10"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+
 </UserControl>

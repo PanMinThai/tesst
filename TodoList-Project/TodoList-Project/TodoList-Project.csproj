@@ -10,6 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Features\Main\shin_picture.jpg" />
+    <None Remove="UI\Images\1.ico" />
+    <None Remove="UI\Images\2.ico" />
+    <None Remove="UI\Images\anya1.png" />
+    <None Remove="UI\Images\anya2.png" />
+    <None Remove="UI\Images\anya3.png" />
+    <None Remove="UI\Images\anya4.png" />
+    <None Remove="UI\Images\anya5.png" />
+    <None Remove="UI\Images\anya6.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
@@ -36,6 +48,34 @@
   <ItemGroup>
     <Folder Include="Features\Categories\Models\" />
     <Folder Include="Features\Categories\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Features\Main\shin_picture.jpg" />
+    <Resource Include="UI\Images\1.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\2.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\anya1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\anya2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\anya3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\anya4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\anya5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\anya6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

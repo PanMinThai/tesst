@@ -11,7 +11,7 @@
              d:DesignHeight="688"
              d:DesignWidth="1018">
     <UserControl.Resources>
-        
+
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ListTaskControlStyle.xaml" />
@@ -25,8 +25,8 @@
             Background="#2a156f">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*" />
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -307,7 +307,7 @@
                                                     Header="Priority" />
                             </DataGrid.Columns>
                         </DataGrid>
-                        
+
                     </Border>
                     <Grid Grid.Row="1"
                           VerticalAlignment="Bottom"
@@ -491,13 +491,13 @@
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
 
                 </Grid>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="0">
                     <Calendar Margin="15,5,15,0"
                               SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
                               materialDesign:CalendarAssist.HeaderBackground="#fb5b9d"
@@ -507,7 +507,36 @@
                               CalendarDayButtonStyle="{StaticResource CustomCalendarDayButton}"
                               Foreground="White" />
                 </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
+                    <Grid Grid.Row="0">
+                        <Border BorderThickness="2"
+                                BorderBrush="White"
+                                CornerRadius="20"
+                                Margin="10,30,10,0"
+                                MinHeight="60"
+                                VerticalAlignment="Top"
+                                Visibility="{Binding IsNotificationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="{Binding NotificationMessage}"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#FFFFFF"
+                                       Margin="10,0,0,10" />
+                        </Border>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Image Source="/UI/Images/1.ico"
+                               Width="150"
+                               Height="150"
+                               VerticalAlignment="Bottom"
+                               HorizontalAlignment="Right" />
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </Border>

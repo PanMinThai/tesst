@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TodoList_Project.Features.Categories.Views"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d"
-             d:DesignHeight="200"
+             d:DesignHeight="150"
              d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -16,8 +17,8 @@
 
     </UserControl.Resources>
 
-    <Border Background="{Binding CardBackgroundBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
-            BorderBrush="{Binding CardBorderBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
+    <Border Background="{Binding CardBackgroundBrush}"
+            BorderBrush="{Binding CardBorderBrush}"
             BorderThickness="1"
             CornerRadius="12"
             Padding="16"
@@ -25,9 +26,10 @@
 
         <Border.Effect>
             <DropShadowEffect Color="#000000"
-                              Opacity="0.1"
-                              BlurRadius="15"
-                              ShadowDepth="2" />
+                              Opacity="0.12"
+                              BlurRadius="12"
+                              ShadowDepth="1"
+                              Direction="270" />
         </Border.Effect>
 
         <Grid>
@@ -46,25 +48,26 @@
 
                 <!-- Icon Container -->
                 <Border Grid.Column="0"
-                        Background="{Binding IconBackgroundBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Background="{Binding IconBackgroundBrush}"
                         CornerRadius="8"
                         Width="40"
                         Height="40"
                         VerticalAlignment="Center">
-                    <TextBlock Text="{Binding IconText, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                               FontFamily="Segoe MDL2 Assets"
-                               FontSize="16"
-                               Foreground="{Binding CategoryBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    <fa:IconImage Icon="{Binding IconName}"
+                                  Height="16"
+                                  Width="16"
+                                  Foreground="{Binding CategoryBrush}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                 </Border>
 
                 <!-- Category Title -->
                 <TextBlock Grid.Column="1"
-                           Text="{Binding CategoryName, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                           Text="{Binding CategoryName}"
                            FontSize="16"
+                           FontFamily="Segoe UI"
                            FontWeight="SemiBold"
-                           Foreground="{Binding CategoryTextBrush, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                           Foreground="{Binding CategoryTextBrush}"
                            VerticalAlignment="Center"
                            Margin="12,0,0,0" />
             </Grid>
@@ -81,13 +84,15 @@
                     <TextBlock Grid.Column="0"
                                Text="Total Tasks:"
                                FontSize="12"
-                               Foreground="{Binding CategoryLightTextBrush, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                               FontFamily="Segoe UI"
+                               Foreground="{Binding CategoryTextBrush}" />
 
                     <TextBlock Grid.Column="1"
-                               Text="{Binding TotalTasks, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               Text="{Binding TotalTasks}"
                                FontSize="12"
+                               FontFamily="Segoe UI"
                                FontWeight="Medium"
-                               Foreground="{Binding CategoryTextBrush, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                               Foreground="{Binding CategoryTextBrush}" />
                 </Grid>
 
                 <!-- Completed Tasks -->
@@ -99,19 +104,22 @@
 
                     <TextBlock Grid.Column="0"
                                Text="Completed:"
+                               FontFamily="Segoe UI"
                                FontSize="12"
-                               Foreground="{Binding CategoryLightTextBrush, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                               Foreground="{Binding CategoryTextBrush}" />
 
                     <TextBlock Grid.Column="1"
-                               Text="{Binding CompletedTasks, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               Text="{Binding CompletedTasks}"
                                FontSize="12"
+                               FontFamily="Segoe UI"
                                FontWeight="Medium"
                                Foreground="#10B981" />
                 </Grid>
 
                 <!-- Progress Bar -->
-                <ProgressBar Value="{Binding ProgressPercentage, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                <ProgressBar Value="{Binding ProgressPercentage}"
                              Maximum="100"
+                             Loaded="ProgressBar_Loaded"
                              Style="{StaticResource CategoryProgressBar}"
                              Margin="0,6,0,0" />
             </StackPanel>

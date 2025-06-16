@@ -13,6 +13,8 @@ namespace TodoList_Project.Core.DAL.Entities.SQL
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
+        public string Icon { get; set; }
+        public string Color { get; set; }
 
         public ICollection<TaskCategoryEntity> TaskCategories { get; set; } = new List<TaskCategoryEntity>();
     }

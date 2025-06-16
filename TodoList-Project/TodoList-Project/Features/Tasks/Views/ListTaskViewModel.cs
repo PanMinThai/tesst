@@ -21,7 +21,6 @@ namespace TodoList_Project.Features.Tasks.Views
 {
     public partial class ListTaskViewModel : ObservableObject
     {
-        private CancellationTokenSource _cancellationTokenSource;
         private readonly object _tasksLock = new object();
 
         #region Services
@@ -114,6 +113,12 @@ namespace TodoList_Project.Features.Tasks.Views
 
         [ObservableProperty]
         private int _thisWeekTaskCount;
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsNotificationVisible))] 
+        private string _notificationMessage;
+
+        [ObservableProperty]
+        private bool _isNotificationVisible;
         #endregion
 
         #region Commands
@@ -132,12 +137,7 @@ namespace TodoList_Project.Features.Tasks.Views
         [RelayCommand]
         private async Task LoadTasksAsync()
         {
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            try
-            {
-                await ApplyFilters(_cancellationTokenSource.Token);
+                await ApplyFilters();
 
                 var yesterdayTaskCount = _statisticsService.GetTaskCountByPeriodAsync( DateTimePeriod.Yesterday);
 
@@ -150,10 +150,6 @@ namespace TodoList_Project.Features.Tasks.Views
                 YesterdayTaskCount = await yesterdayTaskCount;
                 TodayTaskCount = await todayTaskCount;
                 ThisWeekTaskCount = await thisWeekTaskCount;
-            }
-            catch (OperationCanceledException)
-            {
-            }
         }
 
         [RelayCommand]
@@ -307,6 +303,7 @@ namespace TodoList_Project.Features.Tasks.Views
             WeakReferenceMessenger.Default.Register<TaskAddedMessage>(this, (r, message) =>
             {
                 Tasks.Add(message.Value);
+                ShowNotificationAsync("Waooo thêm 1 task rùi!");
             });
             LoadTasksCommand.Execute(null);
         }
@@ -482,6 +479,14 @@ namespace TodoList_Project.Features.Tasks.Views
             {
                 LoadTasksCommand.Execute(null);
             }
+        }
+        public async Task ShowNotificationAsync(string message)
+        {
+            NotificationMessage = message;
+            IsNotificationVisible = true;
+
+            await Task.Delay(6000);
+            IsNotificationVisible = false;
         }
         #endregion
     }

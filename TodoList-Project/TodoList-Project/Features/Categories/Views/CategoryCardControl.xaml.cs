@@ -24,5 +24,18 @@ namespace TodoList_Project.Features.Categories.Views
         {
             InitializeComponent();
         }
+        private void ProgressBar_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is ProgressBar progressBar && progressBar.Template != null)
+            {
+                var indicator = progressBar.Template.FindName("PART_Indicator", progressBar) as FrameworkElement;
+                if (indicator != null)
+                {
+                    double progressWidth = progressBar.ActualWidth * (progressBar.Value / progressBar.Maximum);
+                    indicator.Width = progressWidth;
+                }
+            }
+        }
+
     }
 }
