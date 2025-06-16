@@ -47,7 +47,7 @@ namespace TodoList_Project.Features.Main
             _taskFilterService = taskFilterService;
             _categoryService = categoryService;
             ShowHomeView();
-            CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService);
+            CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService, _taskFilterService);
         }
 
         [RelayCommand]
@@ -68,7 +68,7 @@ namespace TodoList_Project.Features.Main
         [RelayCommand]
         private void ShowStartView()
         {
-            CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService);
+            CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService,_taskFilterService);
             Caption = "Dashboard";
             Icon = IconChar.Calendar;
         }

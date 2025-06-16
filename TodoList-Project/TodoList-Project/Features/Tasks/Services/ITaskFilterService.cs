@@ -11,7 +11,7 @@ namespace TodoList_Project.Features.Tasks.Services
 {
     public interface ITaskFilterService
     {
-        Task<(IEnumerable<TaskModel> Tasks, int TotalCount)> ApplyFilters( TaskStatus? status, TaskPriority? priority, DateTime? date, int pageNumber = 1, int pageSize = 10);
+        Task<(IEnumerable<TaskModel> Tasks, int TotalCount)> ApplyFilters( TaskStatus? status =null, TaskPriority? priority=null, DateTime? date = null, int pageNumber = 1, int pageSize = 10);
 
         Task<(IEnumerable<TaskModel> Tasks, int TotalCount)> SearchTasks( string keyword, TaskStatus? status, TaskPriority? priority, int pageNumber = 1, int pageSize = 10);
 

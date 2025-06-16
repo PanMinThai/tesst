@@ -18,9 +18,9 @@ namespace TodoList_Project.Features.Main
     {
         private readonly ITaskService _taskService;
         private readonly ITaskStatisticsService _taskStatisticsService;
-
+        private readonly ITaskFilterService _taskFilterService;
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(TotalTasks))] // Tự động notify khi thay đổi
+        [NotifyPropertyChangedFor(nameof(TotalTasks))] 
         private int _inProgressCount;
 
         [ObservableProperty]
@@ -34,12 +34,24 @@ namespace TodoList_Project.Features.Main
         public int TotalTasks => InProgressCount + CompletedCount + CancelledCount;
 
         [ObservableProperty]
+        private DateTimePeriod _currentFilter = DateTimePeriod.All;
+
+        [ObservableProperty]
         private ObservableCollection<TaskItemViewModel> _tasks = new();
 
-        public StartViewModel(ITaskService taskService, ITaskStatisticsService taskStatisticsService)
+        [ObservableProperty]
+        private int _currentPage = 1;
+
+        [ObservableProperty]
+        private int _totalPages;
+
+        [ObservableProperty]
+        private int _itemsPerPage = 4; // 2x2 grid
+        public StartViewModel(ITaskService taskService, ITaskStatisticsService taskStatisticsService,ITaskFilterService taskFilterService)
         {
             _taskService = taskService;
             _taskStatisticsService = taskStatisticsService;
+            _taskFilterService = taskFilterService;
             LoadDataCommand.Execute(null);
         }
 
@@ -66,31 +78,59 @@ namespace TodoList_Project.Features.Main
             }
         }
 
-        private async Task LoadTasksAsync()
+        [RelayCommand]
+        private async Task NextPage()
         {
-            var taskModels = await _taskService.GetAllTasksAsync();
-
-            Tasks.Clear();
-
-            foreach (var task in taskModels)
+            if (CurrentPage < TotalPages)
             {
-                Tasks.Add(new TaskItemViewModel
-                {
-                    Title = task.Title,
-                    DueDate = task.DueDate?.ToString("MMMM dd, yyyy") ?? "No due date",
-                    DaysAgo = CalculateTimeDifference(task.DueDate),
-                    Priority = task.Priority,
-                    Status = task.Status,
-                    Background = task.Status switch
-                    {
-                        TaskStatus.Completed => "#75a7fb",
-                        TaskStatus.InProgress => "#7955fd",
-                        TaskStatus.Cancelled => "#fb5a9d",
-                        _ => "#dcdcdc"
-                    }
-                });
+                CurrentPage++;
+                await LoadTasksAsync();
             }
         }
+
+        [RelayCommand]
+        private async Task PreviousPage()
+        {
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+                await LoadTasksAsync();
+            }
+        }
+
+        private async Task LoadTasksAsync()
+        {
+            try
+            {
+                var (tasks, totalCount) = await _taskFilterService.ApplyFilters(
+                    status: TaskStatus.InProgress,
+                    priority: null,
+                    date: null,
+                    pageNumber: CurrentPage,
+                    pageSize: ItemsPerPage);
+
+                TotalPages = (int)Math.Ceiling((double)totalCount / ItemsPerPage);
+
+                Tasks.Clear();
+                foreach (var task in tasks)
+                {
+                    Tasks.Add(new TaskItemViewModel
+                    {
+                        Title = task.Title,
+                        DueDate = task.DueDate?.ToString("MM/dd/yyyy") ?? "No due date",
+                        DaysAgo = CalculateTimeDifference(task.DueDate),
+                        Priority = task.Priority,
+                        Status = task.Status,
+                        IsOverdue = task.DueDate.HasValue && task.DueDate.Value.Date < DateTime.Today
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading tasks: {ex.Message}");
+            }
+        }
+
 
         private static string CalculateTimeDifference(DateTime? dueDate)
         {
@@ -107,6 +147,29 @@ namespace TodoList_Project.Features.Main
                 -1 => "Yesterday",
                 < -1 => $"{Math.Abs(days)} days ago"
             };
+        }
+        [RelayCommand]
+        private async Task ShowTodayTasksAsync()
+        {
+            CurrentFilter = DateTimePeriod.Today;
+            CurrentPage = 1;
+            await LoadTasksAsync();
+        }
+
+        [RelayCommand]
+        private async Task ShowThisWeekTasksAsync()
+        {
+            CurrentFilter = DateTimePeriod.ThisWeek;
+            CurrentPage = 1;
+            await LoadTasksAsync();
+        }
+
+        [RelayCommand]
+        private async Task ShowAllTasksAsync()
+        {
+            CurrentFilter = DateTimePeriod.All;
+            CurrentPage = 1;
+            await LoadTasksAsync();
         }
     }
 }

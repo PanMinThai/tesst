@@ -14,6 +14,7 @@ namespace TodoList_Project.Core.DAL.Enums
         Today,
         ThisWeek,
         ThisMonth,
+        All,
         Custom
     }
 }
