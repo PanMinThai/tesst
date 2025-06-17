@@ -65,6 +65,7 @@ namespace TodoList_Project
             services.AddTransient<MainViewModel>();
             services.AddTransient<StartViewModel>();
             services.AddTransient<TaskItemViewModel>();
+            services.AddTransient<UndoableTaskItemViewModel>();
             services.AddTransient<ListTaskViewModel>();
             services.AddTransient<TaskReportViewModel>();
             services.AddTransient<CategoryCardViewModel>();

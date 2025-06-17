@@ -11,35 +11,29 @@ using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
 namespace TodoList_Project.Features.Main
 {
-    public partial class TaskItemViewModel : ObservableObject
+    public partial class UndoableTaskItemViewModel : ObservableObject
     {
+        #region Properties
         [ObservableProperty]
         private string _title;
-
         [ObservableProperty]
         private string _dueDate;
-
         [ObservableProperty]
         private string _daysAgo;
-
         [ObservableProperty]
         private TaskPriority _priority;
-
         [ObservableProperty]
         private TaskStatus _status;
-
         [ObservableProperty]
         private bool _isOverdue;
-
-        // Colors
+        #endregion
+        #region Colors
         public SolidColorBrush BackgroundColor => IsOverdue
             ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#fef2f2"))
             : new SolidColorBrush(Colors.White);
-
         public SolidColorBrush BorderColor => IsOverdue
             ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#f87373"))
             : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e5e7eb"));
-
         public SolidColorBrush TimeTextColor => DaysAgo switch
         {
             "Today" => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981")),
@@ -47,7 +41,6 @@ namespace TodoList_Project.Features.Main
             "Yesterday" => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EF4444")),
             _ => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6B7280"))
         };
-
         public SolidColorBrush PriorityBackground => Priority switch
         {
             TaskPriority.High => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FEE2E2")),
@@ -55,7 +48,6 @@ namespace TodoList_Project.Features.Main
             TaskPriority.Low => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DCFCE7")),
             _ => new SolidColorBrush(Colors.Transparent)
         };
-
         public SolidColorBrush PriorityTextColor => Priority switch
         {
             TaskPriority.High => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DC2626")),
@@ -63,11 +55,28 @@ namespace TodoList_Project.Features.Main
             TaskPriority.Low => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#166534")),
             _ => new SolidColorBrush(Colors.Black)
         };
-
-        [RelayCommand]
-        private void Delete()
+        #endregion
+        public bool IsCompleted
         {
-            
+            get => Status == TaskStatus.Completed;
+            set
+            {
+                if (IsCompleted != value)
+                {
+                    Status = value ? TaskStatus.Completed : TaskStatus.InProgress;
+                    OnPropertyChanged(nameof(IsCompleted));
+                }
+            }
+        }
+
+        partial void OnStatusChanged(TaskStatus value)
+        {
+            OnPropertyChanged(nameof(IsCompleted));
+        }
+        [RelayCommand]
+        private void UndoTask()
+        {
+            // Handle delete logic
         }
     }
 }

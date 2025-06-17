@@ -38,15 +38,24 @@ namespace TodoList_Project.Features.Main
 
         [ObservableProperty]
         private ObservableCollection<TaskItemViewModel> _tasks = new();
+        [ObservableProperty]
+        private ObservableCollection<UndoableTaskItemViewModel> _undoableTasks = new();
+        [ObservableProperty]
+        private int _inProgressCurrentPage = 1;
 
         [ObservableProperty]
-        private int _currentPage = 1;
+        private int _inProgressTotalPages;
 
         [ObservableProperty]
-        private int _totalPages;
+        private int _inProgressItemsPerPage = 6; // 2x3 grid
+        [ObservableProperty]
+        private int _undoableTasksCurrentPage = 1;
 
         [ObservableProperty]
-        private int _itemsPerPage = 4; // 2x2 grid
+        private int _undoableTaskTotalPages;
+
+        [ObservableProperty]
+        private int _undoableTaskItemsPerPage = 3; // 3x1 grid
         public StartViewModel(ITaskService taskService, ITaskStatisticsService taskStatisticsService,ITaskFilterService taskFilterService)
         {
             _taskService = taskService;
@@ -59,7 +68,8 @@ namespace TodoList_Project.Features.Main
         private async Task LoadDataAsync()
         {
             await LoadTaskCountsAsync();
-            await LoadTasksAsync();
+            await LoadInProgressTasksAsync();
+            await LoadUndoableTasksAsync();
         }
 
         private async Task LoadTaskCountsAsync()
@@ -79,26 +89,44 @@ namespace TodoList_Project.Features.Main
         }
 
         [RelayCommand]
-        private async Task NextPage()
+        private async Task InProgressNextPage()
         {
-            if (CurrentPage < TotalPages)
+            if (InProgressCurrentPage < InProgressTotalPages)
             {
-                CurrentPage++;
-                await LoadTasksAsync();
+                InProgressCurrentPage++;
+                await LoadInProgressTasksAsync();
             }
         }
 
         [RelayCommand]
-        private async Task PreviousPage()
+        private async Task InProgressPreviousPage()
         {
-            if (CurrentPage > 1)
+            if (InProgressCurrentPage > 1)
             {
-                CurrentPage--;
-                await LoadTasksAsync();
+                InProgressCurrentPage--;
+                await LoadInProgressTasksAsync();
+            }
+        }
+        [RelayCommand]
+        private async Task UndoableTasksNextPage()
+        {
+            if (UndoableTasksCurrentPage < UndoableTaskTotalPages)
+            {
+                UndoableTasksCurrentPage++;
+                await LoadUndoableTasksAsync();
             }
         }
 
-        private async Task LoadTasksAsync()
+        [RelayCommand]
+        private async Task UndoableTasksPreviousPage()
+        {
+            if (UndoableTasksCurrentPage > 1)
+            {
+                UndoableTasksCurrentPage--;
+                await LoadUndoableTasksAsync();
+            }
+        }
+        private async Task LoadInProgressTasksAsync()
         {
             try
             {
@@ -106,10 +134,10 @@ namespace TodoList_Project.Features.Main
                     status: TaskStatus.InProgress,
                     priority: null,
                     date: null,
-                    pageNumber: CurrentPage,
-                    pageSize: ItemsPerPage);
+                    pageNumber: InProgressCurrentPage,
+                    pageSize: InProgressItemsPerPage);
 
-                TotalPages = (int)Math.Ceiling((double)totalCount / ItemsPerPage);
+                InProgressTotalPages = (int)Math.Ceiling((double)totalCount / InProgressItemsPerPage);
 
                 Tasks.Clear();
                 foreach (var task in tasks)
@@ -130,7 +158,35 @@ namespace TodoList_Project.Features.Main
                 Debug.WriteLine($"Error loading tasks: {ex.Message}");
             }
         }
+        private async Task LoadUndoableTasksAsync()
+        {
+            try
+            {
+                var (tasks, totalCount) = await _taskFilterService.GetTodayUpdatedCompletedAndCancelledTasks(
+                    pageNumber: UndoableTasksCurrentPage,
+                    pageSize: UndoableTaskItemsPerPage);
 
+                UndoableTaskTotalPages = (int)Math.Ceiling((double)totalCount / UndoableTaskItemsPerPage);
+
+                UndoableTasks.Clear();
+                foreach (var task in tasks)
+                {
+                    UndoableTasks.Add(new UndoableTaskItemViewModel
+                    {
+                        Title = task.Title,
+                        DueDate = task.DueDate?.ToString("MM/dd/yyyy") ?? "No due date",
+                        DaysAgo = CalculateTimeDifference(task.DueDate),
+                        Priority = task.Priority,
+                        Status = task.Status,
+                        IsOverdue = task.DueDate.HasValue && task.DueDate.Value.Date < DateTime.Today
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading tasks: {ex.Message}");
+            }
+        }
 
         private static string CalculateTimeDifference(DateTime? dueDate)
         {
@@ -152,24 +208,24 @@ namespace TodoList_Project.Features.Main
         private async Task ShowTodayTasksAsync()
         {
             CurrentFilter = DateTimePeriod.Today;
-            CurrentPage = 1;
-            await LoadTasksAsync();
+            InProgressCurrentPage = 1;
+            await LoadInProgressTasksAsync();
         }
 
         [RelayCommand]
         private async Task ShowThisWeekTasksAsync()
         {
             CurrentFilter = DateTimePeriod.ThisWeek;
-            CurrentPage = 1;
-            await LoadTasksAsync();
+            InProgressCurrentPage = 1;
+            await LoadInProgressTasksAsync();
         }
 
         [RelayCommand]
         private async Task ShowAllTasksAsync()
         {
             CurrentFilter = DateTimePeriod.All;
-            CurrentPage = 1;
-            await LoadTasksAsync();
+            InProgressCurrentPage = 1;
+            await LoadInProgressTasksAsync();
         }
     }
 }

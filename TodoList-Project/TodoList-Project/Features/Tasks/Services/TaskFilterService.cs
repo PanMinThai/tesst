@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TodoList_Project.Core.DAL.Entities.SQL;
 using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Features.Tasks.Models;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
 namespace TodoList_Project.Features.Tasks.Services
@@ -46,6 +48,12 @@ namespace TodoList_Project.Features.Tasks.Services
 
             return (_mapper.Map<IEnumerable<TaskModel>>(taskEntities), totalCount);
         }
-
+        public async Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetTodayUpdatedCompletedAndCancelledTasks(int pageNumber = 1, int pageSize = 10)
+        {
+            var (taskEntities, totalCount) = await _taskRepository.GetFilteredTasksAsync(
+                pageNumber: pageNumber,
+                pageSize: pageSize);
+            return (_mapper.Map<IEnumerable<TaskEntity>>(taskEntities), totalCount);
+        }
     }
 }

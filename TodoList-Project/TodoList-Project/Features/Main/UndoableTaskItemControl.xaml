@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TodoList_Project.Features.Main"
              mc:Ignorable="d"
-             d:DesignHeight="100"
-             d:DesignWidth="300"
+             d:DesignHeight="120"
+             d:DesignWidth="200"
+             MaxHeight="120"
+             MinWidth="200"
              Background="Transparent">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -27,7 +29,6 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Row 0: Title and Delete Button -->
@@ -40,35 +41,56 @@
                 <!-- Title -->
                 <TextBlock Grid.Column="0"
                            Text="{Binding Title}"
-                           FontSize="16"
+                           FontSize="13"
                            FontWeight="SemiBold"
                            Foreground="#111827"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextDecorations"
+                                    Value="{x:Null}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsCompleted}"
+                                             Value="False">
+                                    <Setter Property="TextDecorations"
+                                            Value="Strikethrough" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
 
-                <!-- Delete Button -->
+                <!-- Undo Button -->
                 <Button Grid.Column="1"
                         Style="{StaticResource UndoTaskButtonStyle}"
-                        Command="{Binding DeleteCommand}"
+                        Command="{Binding UndoTaskCommand}"
                         VerticalAlignment="Center" />
             </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <!-- Row 2: Due Date -->
+                <TextBlock Grid.Column="0"
+                           Text="{Binding DueDate, StringFormat='Due: {0}'}"
+                           FontSize="12"
+                           Foreground="#6B7280"
+                           Margin="0,6,0,0" />
+                <!-- DaysAgo -->
+                <TextBlock Grid.Column="1"
+                           Text="{Binding DaysAgo}"
+                           FontSize="12"
+                           FontWeight="Medium"
+                           Foreground="{Binding TimeTextColor}"
+                           Margin="0,6,0,0" />
+            </Grid>
+            
 
-            <!-- Row 1: DaysAgo -->
-            <TextBlock Grid.Row="1"
-                       Text="{Binding DaysAgo}"
-                       FontSize="14"
-                       FontWeight="Medium"
-                       Foreground="{Binding TimeTextColor}"
-                       Margin="0,6,0,0" />
-
-            <!-- Row 2: Due Date -->
-            <TextBlock Grid.Row="2"
-                       Text="{Binding DueDate, StringFormat='Due: {0}'}"
-                       FontSize="14"
-                       Foreground="#6B7280"
-                       Margin="0,6,0,0" />
+            
 
             <!-- Row 3: Priority and Checkbox -->
-            <Grid Grid.Row="3"
+            <Grid Grid.Row="2"
                   Margin="0,8,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -92,7 +114,9 @@
                 <!-- Checkbox -->
                 <CheckBox Grid.Column="2"
                           Style="{StaticResource TaskCheckBoxStyle}"
+                          IsChecked="{Binding IsCompleted, Mode=TwoWay}"
                           VerticalAlignment="Center"
+                          IsHitTestVisible="False"
                           HorizontalAlignment="Right" />
             </Grid>
         </Grid>

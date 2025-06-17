@@ -105,7 +105,8 @@
                     <Border Background="Transparent"
                             CornerRadius="3"
                             Padding="2">
-                        <fa:IconImage Icon="ArrowRotateLeft"/>
+                        <fa:IconImage Icon="ArrowRotateLeft"
+                                      Foreground="#166534"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"

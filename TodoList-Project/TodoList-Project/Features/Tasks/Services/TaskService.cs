@@ -32,14 +32,11 @@ namespace TodoList_Project.Features.Tasks.Services
         }
         public async Task UpdateTaskAsync(TaskModel model)
         {
-            var existingEntity = await _repository.GetByIdAsync(model.Id);
-            if (existingEntity == null)
-                throw new KeyNotFoundException($"Task with ID {model.Id} not found");
+            var taskEntity = await _repository.GetByIdAsync(model.Id);
+            _mapper.Map(model, taskEntity);
+            await _repository.UpdateAsync(taskEntity);
 
-            _mapper.Map(model, existingEntity);
-            await _repository.UpdateAsync(existingEntity);
-
-            model.UpdatedAt = existingEntity.UpdatedAt;
+            model.UpdatedAt = taskEntity.UpdatedAt;
         }
         public async Task DeleteTaskAsync(int id)
         {

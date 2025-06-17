@@ -5,17 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TodoList_Project.Features.Main"
              mc:Ignorable="d"
-             d:DesignHeight="160" 
+             d:DesignHeight="120" 
              d:DesignWidth="280"
-             MinHeight="140"
+             MaxHeight="120"
              MinWidth="260"
              Background="Transparent">
 
     <Border BorderBrush="{Binding BorderColor}"
             BorderThickness="1"
             CornerRadius="8"
-            Margin="5"     
-        Padding="10"
+            Margin="5" Padding="10"
         Background="{Binding BackgroundColor}">
         <Grid>
             <Grid.RowDefinitions>
@@ -35,7 +34,7 @@
                 <!-- Title -->
                 <TextBlock Grid.Column="0"
                            Text="{Binding Title}"
-                           FontSize="14"   
+                           FontSize="13"   
                            FontWeight="SemiBold"
                            Foreground="#111827"
                            VerticalAlignment="Center" 
@@ -46,8 +45,8 @@
                         Style="{StaticResource DeleteTaskButtonStyle}"
                         Command="{Binding DeleteCommand}"
                         VerticalAlignment="Center"
-                        Width="24"
-                        Height="24" /> 
+                        Width="20"
+                        Height="20" /> 
             </Grid>
 
             <!-- Row 1: DaysAgo -->
@@ -82,7 +81,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center">
                     <TextBlock Text="{Binding Priority}"
-                               FontSize="11" 
+                               FontSize="12" 
                                FontWeight="Medium"
                                Foreground="{Binding PriorityTextColor}" />
                 </Border>

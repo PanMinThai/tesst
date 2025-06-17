@@ -33,6 +33,9 @@
             <DataTemplate DataType="{x:Type main:TaskItemViewModel}">
                 <main:TaskItemControl />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type main:UndoableTaskItemViewModel}">
+                <main:UndoableTaskItemControl />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type task:ListTaskViewModel}">
                 <task:ListTaskControl />
             </DataTemplate>

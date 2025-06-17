@@ -269,7 +269,29 @@ namespace TodoList_Project.Core.DAL.Repositories
 
             return (tasks, totalCount);
         }
+        public async Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetTodayUpdatedCompletedAndCancelledTasks(int pageNumber = 1, int pageSize = 10)
+        {
+            using var context = _context.CreateDbContext();
+            var today = DateTime.Today;
+            var tomorrow = today.AddDays(1);
 
+            var query = context.Tasks
+                .Where(t =>
+                    (t.Status == TaskStatus.Completed || t.Status == TaskStatus.Cancelled) &&
+                    t.UpdatedAt >= today && t.UpdatedAt < tomorrow);
+
+            int totalCount = await query.CountAsync().ConfigureAwait(false);
+
+            var tasks = await query
+                .OrderBy(t => t.DueDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return (tasks, totalCount);
+        }
 
 
         #endregion
