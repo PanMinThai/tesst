@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using NLog.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using TodoList_Project.Core.DAL.Enums;
+using TodoList_Project.Core.Utils.Messages;
+using TodoList_Project.Features.Tasks.Models;
+using TodoList_Project.Features.Tasks.Services;
+using static System.Net.Mime.MediaTypeNames;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
 namespace TodoList_Project.Features.Main
 {
     public partial class TaskItemViewModel : ObservableObject
     {
+        private readonly ITaskService _taskService;
+        [ObservableProperty]
+        private int _id;
         [ObservableProperty]
         private string _title;
 
@@ -30,6 +39,8 @@ namespace TodoList_Project.Features.Main
 
         [ObservableProperty]
         private bool _isOverdue;
+        [ObservableProperty]
+        private bool _isCompleted;
 
         // Colors
         public SolidColorBrush BackgroundColor => IsOverdue
@@ -63,11 +74,48 @@ namespace TodoList_Project.Features.Main
             TaskPriority.Low => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#166534")),
             _ => new SolidColorBrush(Colors.Black)
         };
-
-        [RelayCommand]
-        private void Delete()
+        public TaskItemViewModel(ITaskService taskService)
         {
-            
+            _taskService = taskService;
+        }
+        [RelayCommand]
+        private async Task CancelTaskAsync()
+        {
+            var taskModel = new TaskModel
+            {
+                Id = this.Id,
+                Title = this.Title,
+                DueDate = DateTime.Parse(this.DueDate),
+                Priority = this.Priority,
+                Status = TaskStatus.Cancelled,
+            };
+
+            await _taskService.UpdateTaskAsync(taskModel);
+            WeakReferenceMessenger.Default.Send(new TaskUpdatedMessage(taskModel));
+            WeakReferenceMessenger.Default.Send(
+                new ShowCharacterMessage("Anya khinh bỉ những đứa hủy task. Hèn quá")
+            );
+        }
+        partial void OnIsCompletedChanged(bool value)
+        {
+            if (value)
+            {
+                _ = MarkTaskAsCompletedAsync();
+            }
+        }
+        private async Task MarkTaskAsCompletedAsync()
+        {
+            var taskModel = new TaskModel
+            {
+                Id = this.Id,
+                Title = this.Title,
+                DueDate = DateTime.Parse(this.DueDate),
+                Priority = this.Priority,
+                Status = TaskStatus.Completed,
+            };
+
+            await _taskService.UpdateTaskAsync(taskModel);
+            WeakReferenceMessenger.Default.Send(new TaskUpdatedMessage(taskModel));
         }
     }
 }

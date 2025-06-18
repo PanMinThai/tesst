@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Core.Utils.Mapper;
 using TodoList_Project.Features.Categories.Services;
 using TodoList_Project.Features.Categories.Views;
+using TodoList_Project.Features.CharacterDialogs;
 using TodoList_Project.Features.Main;
 using TodoList_Project.Features.Tasks.Services;
 using TodoList_Project.Features.Tasks.Views;
@@ -74,6 +76,8 @@ namespace TodoList_Project
             // Views
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainView>();
+            services.AddTransient<CharacterDialogWindow>();
+            services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
         }
 
         protected override void OnStartup(StartupEventArgs e)

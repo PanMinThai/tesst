@@ -56,7 +56,7 @@
     </Style>
 
     <!-- Delete Task Button Style - Red X -->
-    <Style x:Key="DeleteTaskButtonStyle"
+    <Style x:Key="CancelTaskButtonStyle"
            TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>

@@ -28,42 +28,26 @@ namespace TodoList_Project.Features.Tasks.Views
         private readonly ITaskFilterService _filterService;
         private readonly ITaskStatisticsService _statisticsService;
         #endregion
-
         #region Pagination Properties
         [ObservableProperty]
         private int _currentPage = 1;
-
         [ObservableProperty]
         private int _pageSize = 10;
-
         [ObservableProperty]
         private int _totalItems;
-
         [ObservableProperty]
         private int _totalPages;
-
         [ObservableProperty]
         private bool _canGoToPreviousPage;
-
         [ObservableProperty]
         private bool _canGoToNextPage;
-
         [ObservableProperty]
         private int _currentPageStartItem;
-
         [ObservableProperty]
         private int _currentPageEndItem;
-
         public ObservableCollection<int> PageNumbers { get; } = new();
         public ObservableCollection<int> PageSizeOptions { get; } = new() { 5, 10, 20, 50 };
         #endregion
-
-        #region Collections
-        public ObservableCollection<TaskModel> Tasks { get; } = new();
-        public ObservableCollection<FilterOption<TaskStatus>> StatusFilters { get; }
-        public ObservableCollection<FilterOption<TaskPriority>> PriorityFilters { get; }
-        #endregion
-
         #region Filter Properties
         [ObservableProperty]
         private FilterOption<TaskStatus> _selectedStatusFilter;
@@ -96,8 +80,7 @@ namespace TodoList_Project.Features.Tasks.Views
         {
             SearchTaskCommand.Execute(null);
         }
-        #endregion
-
+        #endregion        
         #region State Properties
         [ObservableProperty]
         private TaskModel _selectedTask;
@@ -120,7 +103,11 @@ namespace TodoList_Project.Features.Tasks.Views
         [ObservableProperty]
         private bool _isNotificationVisible;
         #endregion
-
+        #region Collections
+        public ObservableCollection<TaskModel> Tasks { get; } = new();
+        public ObservableCollection<FilterOption<TaskStatus>> StatusFilters { get; }
+        public ObservableCollection<FilterOption<TaskPriority>> PriorityFilters { get; }
+        #endregion
         #region Commands
         public ICommand FilterTodayCommand => new RelayCommand(FilterByToday);
         public ICommand FilterYesterdayCommand => new RelayCommand(FilterByYesterday);
@@ -150,47 +137,6 @@ namespace TodoList_Project.Features.Tasks.Views
                 YesterdayTaskCount = await yesterdayTaskCount;
                 TodayTaskCount = await todayTaskCount;
                 ThisWeekTaskCount = await thisWeekTaskCount;
-        }
-
-        [RelayCommand]
-        private async Task AddTaskAsync()
-        {
-            if (string.IsNullOrWhiteSpace(CurrentTask.Title))
-            {
-                MessageBox.Show("Please enter a task title");
-                return;
-            }
-
-            await _taskService.AddTaskAsync(CurrentTask);
-            await LoadTasksAsync();
-            ClearTaskFields();
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteSelectedTask))]
-        private async Task UpdateTaskAsync()
-        {
-            CurrentTask.UpdatedAt = DateTime.Now;
-            await _taskService.UpdateTaskAsync(CurrentTask);
-            await LoadTasksAsync();
-            ClearTaskFields();
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteSelectedTask))]
-        private async Task DeleteTaskAsync()
-        {
-            await _taskService.DeleteTaskAsync(SelectedTask.Id);
-            await LoadTasksAsync();
-            ClearTaskFields();
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteSelectedTask))]
-        private async Task MarkCompleteAsync()
-        {
-            SelectedTask.Status = TaskStatus.Completed;
-            SelectedTask.UpdatedAt = DateTime.Now;
-            await _taskService.UpdateTaskAsync(SelectedTask);
-            await LoadTasksAsync();
-            ClearTaskFields();
         }
 
         [RelayCommand]
@@ -289,7 +235,6 @@ namespace TodoList_Project.Features.Tasks.Views
                 new() { Value = TaskStatus.Completed, DisplayName = "Completed" },
                 new() { Value = TaskStatus.Cancelled, DisplayName = "Cancelled" },
             };
-
             PriorityFilters = new ObservableCollection<FilterOption<TaskPriority>>
             {
                 new() { Value = null, DisplayName = "All" },
@@ -297,9 +242,9 @@ namespace TodoList_Project.Features.Tasks.Views
                 new() { Value = TaskPriority.Medium, DisplayName = "Medium" },
                 new() { Value = TaskPriority.Low, DisplayName = "Low" },
             };
-
             SelectedStatusFilter = StatusFilters[0];
             SelectedPriorityFilter = PriorityFilters[0];
+
             WeakReferenceMessenger.Default.Register<TaskAddedMessage>(this, (r, message) =>
             {
                 Tasks.Add(message.Value);

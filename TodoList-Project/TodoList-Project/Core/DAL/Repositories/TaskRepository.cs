@@ -283,7 +283,7 @@ namespace TodoList_Project.Core.DAL.Repositories
             int totalCount = await query.CountAsync().ConfigureAwait(false);
 
             var tasks = await query
-                .OrderBy(t => t.DueDate)
+                .OrderByDescending(t => t.UpdatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()

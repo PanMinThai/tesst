@@ -50,7 +50,7 @@ namespace TodoList_Project.Features.Tasks.Services
         }
         public async Task<(IEnumerable<TaskEntity> Tasks, int TotalCount)> GetTodayUpdatedCompletedAndCancelledTasks(int pageNumber = 1, int pageSize = 10)
         {
-            var (taskEntities, totalCount) = await _taskRepository.GetFilteredTasksAsync(
+            var (taskEntities, totalCount) = await _taskRepository.GetTodayUpdatedCompletedAndCancelledTasks(
                 pageNumber: pageNumber,
                 pageSize: pageSize);
             return (_mapper.Map<IEnumerable<TaskEntity>>(taskEntities), totalCount);

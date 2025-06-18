@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TodoList_Project.Core.Utils.Messages;
+using TodoList_Project.Features.CharacterDialogs;
 
 namespace TodoList_Project.Features.Main
 {
@@ -22,8 +25,7 @@ namespace TodoList_Project.Features.Main
         public MainView()
         {
             InitializeComponent();
-            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;       
         }
         private void nnlControlBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

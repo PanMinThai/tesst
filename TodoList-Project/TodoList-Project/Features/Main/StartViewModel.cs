@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using TodoList_Project.Core.DAL.Enums;
+using TodoList_Project.Core.Utils.Messages;
 using TodoList_Project.Features.Tasks.Services;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
@@ -61,9 +63,12 @@ namespace TodoList_Project.Features.Main
             _taskService = taskService;
             _taskStatisticsService = taskStatisticsService;
             _taskFilterService = taskFilterService;
+            WeakReferenceMessenger.Default.Register<TaskUpdatedMessage>(this, async (r, m) =>
+            { 
+                await LoadDataAsync();
+            });
             LoadDataCommand.Execute(null);
         }
-
         [RelayCommand]
         private async Task LoadDataAsync()
         {
@@ -71,23 +76,13 @@ namespace TodoList_Project.Features.Main
             await LoadInProgressTasksAsync();
             await LoadUndoableTasksAsync();
         }
-
         private async Task LoadTaskCountsAsync()
         {
-            try
-            {
-                var statusCounts = await _taskStatisticsService.GetTaskStatusCountsAsync();
-
-                InProgressCount = statusCounts[TaskStatus.InProgress];
-                CompletedCount = statusCounts[TaskStatus.Completed];
-                CancelledCount = statusCounts[TaskStatus.Cancelled];
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error loading task counts: {ex.Message}");
-            }
+            var statusCounts = await _taskStatisticsService.GetTaskStatusCountsAsync();
+            InProgressCount = statusCounts[TaskStatus.InProgress];
+            CompletedCount = statusCounts[TaskStatus.Completed];
+            CancelledCount = statusCounts[TaskStatus.Cancelled];
         }
-
         [RelayCommand]
         private async Task InProgressNextPage()
         {
@@ -97,7 +92,6 @@ namespace TodoList_Project.Features.Main
                 await LoadInProgressTasksAsync();
             }
         }
-
         [RelayCommand]
         private async Task InProgressPreviousPage()
         {
@@ -116,7 +110,6 @@ namespace TodoList_Project.Features.Main
                 await LoadUndoableTasksAsync();
             }
         }
-
         [RelayCommand]
         private async Task UndoableTasksPreviousPage()
         {
@@ -142,8 +135,9 @@ namespace TodoList_Project.Features.Main
                 Tasks.Clear();
                 foreach (var task in tasks)
                 {
-                    Tasks.Add(new TaskItemViewModel
+                    Tasks.Add(new TaskItemViewModel(_taskService)
                     {
+                        Id = task.Id,
                         Title = task.Title,
                         DueDate = task.DueDate?.ToString("MM/dd/yyyy") ?? "No due date",
                         DaysAgo = CalculateTimeDifference(task.DueDate),
@@ -171,8 +165,9 @@ namespace TodoList_Project.Features.Main
                 UndoableTasks.Clear();
                 foreach (var task in tasks)
                 {
-                    UndoableTasks.Add(new UndoableTaskItemViewModel
+                    UndoableTasks.Add(new UndoableTaskItemViewModel(_taskService)
                     {
+                        Id = task.Id,
                         Title = task.Title,
                         DueDate = task.DueDate?.ToString("MM/dd/yyyy") ?? "No due date",
                         DaysAgo = CalculateTimeDifference(task.DueDate),

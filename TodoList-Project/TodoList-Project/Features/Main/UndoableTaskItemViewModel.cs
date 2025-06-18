@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using TodoList_Project.Core.DAL.Enums;
+using TodoList_Project.Core.Utils.Messages;
+using TodoList_Project.Features.Tasks.Models;
+using TodoList_Project.Features.Tasks.Services;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
 namespace TodoList_Project.Features.Main
 {
     public partial class UndoableTaskItemViewModel : ObservableObject
     {
+        private readonly ITaskService _taskService;
         #region Properties
+        [ObservableProperty]
+        private int _id;
         [ObservableProperty]
         private string _title;
         [ObservableProperty]
@@ -56,6 +63,10 @@ namespace TodoList_Project.Features.Main
             _ => new SolidColorBrush(Colors.Black)
         };
         #endregion
+        public UndoableTaskItemViewModel(ITaskService taskService)
+        {
+            _taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
+        }
         public bool IsCompleted
         {
             get => Status == TaskStatus.Completed;
@@ -74,9 +85,19 @@ namespace TodoList_Project.Features.Main
             OnPropertyChanged(nameof(IsCompleted));
         }
         [RelayCommand]
-        private void UndoTask()
+        public async Task UndoTaskAsync()
         {
-            // Handle delete logic
+            var taskModel = new TaskModel
+            {
+                Id = this.Id,
+                Title = this.Title,
+                DueDate = DateTime.Parse(this.DueDate),
+                Priority = this.Priority,
+                Status = TaskStatus.InProgress,
+            };
+
+            await _taskService.UpdateTaskAsync(taskModel);
+            WeakReferenceMessenger.Default.Send(new TaskUpdatedMessage(taskModel));
         }
     }
 }

@@ -42,8 +42,8 @@
 
                 <!-- Delete Button -->
                 <Button Grid.Column="1"
-                        Style="{StaticResource DeleteTaskButtonStyle}"
-                        Command="{Binding DeleteCommand}"
+                        Style="{StaticResource CancelTaskButtonStyle}"
+                        Command="{Binding CancelTaskCommand}"
                         VerticalAlignment="Center"
                         Width="20"
                         Height="20" /> 
@@ -91,6 +91,7 @@
                           Style="{StaticResource TaskCheckBoxStyle}"
                           VerticalAlignment="Center"
                           HorizontalAlignment="Right"
+                          IsChecked="{Binding IsCompleted, Mode=TwoWay}"
                           Width="20"
                           Height="20" /> 
             </Grid>

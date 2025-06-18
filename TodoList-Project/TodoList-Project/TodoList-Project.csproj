@@ -19,6 +19,8 @@
     <None Remove="UI\Images\anya4.png" />
     <None Remove="UI\Images\anya5.png" />
     <None Remove="UI\Images\anya6.png" />
+    <None Remove="UI\Images\ComicBubble1.png" />
+    <None Remove="UI\Images\ComicBubble2.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +76,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\anya6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\ComicBubble1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\ComicBubble2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
