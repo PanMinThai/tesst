@@ -53,6 +53,9 @@ namespace TodoList_Project
             // Repositories
             services.AddTransient<ITaskRepository, TaskRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IMessageTemplateRepository, MessageTemplateRepository>();
+            services.AddTransient<ICharacterIconRepository, CharacterIconRepository>();
+            services.AddTransient<IFeedbackRepository, FeedbackRepository>();
 
             //Services
             services.AddTransient<ITaskService, TaskService>();

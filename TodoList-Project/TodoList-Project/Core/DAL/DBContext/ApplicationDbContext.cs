@@ -19,6 +19,10 @@ namespace TodoList_Project.Core.DAL.DBContext
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<TaskCategoryEntity> TaskCategories { get; set; }
 
+        public DbSet<MessageTemplateEntity> MessageTemplates { get; set; }
+        public DbSet<CharacterIconEntity> CharacterIcons { get; set; }
+        public DbSet<UserFeedbackEntity> UserFeedbacks { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -44,6 +48,18 @@ namespace TodoList_Project.Core.DAL.DBContext
 
             modelBuilder.Entity<TaskEntity>()
                 .Property(t => t.Priority)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<MessageTemplateEntity>()
+                .Property(m => m.Tone)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<CharacterIconEntity>()
+                .Property(i => i.Tone)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<UserFeedbackEntity>()
+                .Property(f => f.Tone)
                 .HasConversion<string>();
         }
     }

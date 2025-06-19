@@ -15,5 +15,6 @@ namespace TodoList_Project.Core.DAL.Repositories
         Task<Dictionary<TaskStatus, int>> GetTaskStatusDistributionAsync(DateTimePeriod period, DateTime? customStartDate = null, DateTime? customEndDate = null);
         Task<int> GetTaskCountByPeriodAsync(DateTimePeriod period, DateTime? from = null, DateTime? to = null);
         Task<Dictionary<TaskStatus, int>> GetTaskStatusCountsAsync();
+        Task<int> CountByStatusTodayAsync(TaskStatus status);
     }
 }

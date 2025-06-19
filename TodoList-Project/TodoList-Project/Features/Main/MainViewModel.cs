@@ -55,6 +55,7 @@ namespace TodoList_Project.Features.Main
             ShowHomeView();
             CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService, _taskFilterService);
            _messenger = messenger;
+            RegisterMessages();
         }
 
         [RelayCommand]
@@ -104,10 +105,14 @@ namespace TodoList_Project.Features.Main
                     var window = new CharacterDialogWindow
                     {
                         DataContext = new CharacterDialogViewModel(m.Value),
-                        Owner = Application.Current.MainWindow
+                        Owner = Application.Current.MainWindow,
+                        Height = 280,
+                        Width = 200
+
                     };
 
                     PositionWindow(window);
+                    
                     window.Show();
 
                     StartAutoCloseTimer(window);
@@ -120,7 +125,8 @@ namespace TodoList_Project.Features.Main
             var mainWindow = Application.Current.MainWindow;
             var mainWindowLocation = mainWindow.PointToScreen(new Point(0, 0));
 
-            window.Left = mainWindowLocation.X + mainWindow.Width - window.Width - 20;
+            // Thay đổi từ phải sang trái
+            window.Left = mainWindowLocation.X + 20; // 20 là khoảng cách từ lề trái
             window.Top = mainWindowLocation.Y + mainWindow.Height - window.Height - 20;
         }
 

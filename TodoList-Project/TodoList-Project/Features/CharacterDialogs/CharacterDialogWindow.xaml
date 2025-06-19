@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         d:DesignHeight="280"
         d:DesignWidth="200"
+        d:MaxHeight="280"
+        d:MaxWidth="200"
         WindowStyle="None"
+        Background="Transparent"
         AllowsTransparency="True"
         ShowInTaskbar="False"
         Topmost="True">
@@ -30,7 +33,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        TextWrapping="Wrap"
-                       FontSize="26"
+                       FontSize="14"
                        Grid.Row="0"
                        Margin="30,0,30,0" />
         </Grid>

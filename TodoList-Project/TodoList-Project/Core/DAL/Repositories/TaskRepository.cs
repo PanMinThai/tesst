@@ -292,6 +292,19 @@ namespace TodoList_Project.Core.DAL.Repositories
 
             return (tasks, totalCount);
         }
+        public async Task<int> CountByStatusTodayAsync(TaskStatus status)
+        {
+            using var context = _context.CreateDbContext();
+            var today = DateTime.Today;
+            var tomorrow = today.AddDays(1);
+
+            return await context.Tasks
+                .CountAsync(t =>
+                    t.Status == status &&
+                    t.UpdatedAt >= today &&
+                    t.UpdatedAt < tomorrow)
+                .ConfigureAwait(false);
+        }
 
 
         #endregion
