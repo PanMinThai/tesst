@@ -80,7 +80,7 @@ namespace TodoList_Project.Features.Main.Services
             {
                 ActionType.Cancelled => await _taskRepo.CountByStatusTodayAsync(TaskStatus.Cancelled),
                 ActionType.Completed => await _taskRepo.CountByStatusTodayAsync(TaskStatus.Completed),
-                // Có thể mở rộng thêm nếu cần
+                // Can be extended for other action types in the future
                 _ => 0
             };
         }
@@ -108,7 +108,7 @@ namespace TodoList_Project.Features.Main.Services
                 // For other actions, Will configure in the near future, I think that :))
                 ActionType.Completed => Tone.Encouraging,
                 ActionType.Create => Tone.Encouraging,
-                ActionType.Update => Tone.Neutral,
+                ActionType.Update => Tone.Encouraging,
                 ActionType.Delete => Tone.Critical,
                 ActionType.Notification => Tone.Neutral,
                 ActionType.UndoCancelled => Tone.Encouraging,

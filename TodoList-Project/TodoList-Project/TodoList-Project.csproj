@@ -21,6 +21,8 @@
     <None Remove="UI\Images\anya6.png" />
     <None Remove="UI\Images\ComicBubble1.png" />
     <None Remove="UI\Images\ComicBubble2.png" />
+    <None Remove="UI\Images\sarcastic4.png" />
+    <None Remove="UI\Images\sarcastic5.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,28 +62,16 @@
     <Resource Include="UI\Images\2.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UI\Images\anya1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="UI\Images\anya2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="UI\Images\anya3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="UI\Images\anya4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="UI\Images\anya5.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="UI\Images\anya6.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\ComicBubble1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\ComicBubble2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\sarcastic5.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
@@ -92,6 +82,9 @@
     </None>
     <None Update="Properties\nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UI\Images\sarcastic4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

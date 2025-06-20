@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Core.Utils.Messages;
+using TodoList_Project.Features.Main.Services;
 using TodoList_Project.Features.Tasks.Services;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
@@ -21,6 +22,7 @@ namespace TodoList_Project.Features.Main
         private readonly ITaskService _taskService;
         private readonly ITaskStatisticsService _taskStatisticsService;
         private readonly ITaskFilterService _taskFilterService;
+        private readonly IFeedbackService _feedbackService;
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(TotalTasks))] 
         private int _inProgressCount;
@@ -58,8 +60,9 @@ namespace TodoList_Project.Features.Main
 
         [ObservableProperty]
         private int _undoableTaskItemsPerPage = 3; // 3x1 grid
-        public StartViewModel(ITaskService taskService, ITaskStatisticsService taskStatisticsService,ITaskFilterService taskFilterService)
+        public StartViewModel(ITaskService taskService, ITaskStatisticsService taskStatisticsService,ITaskFilterService taskFilterService, IFeedbackService feedbackService)
         {
+            _feedbackService = feedbackService;
             _taskService = taskService;
             _taskStatisticsService = taskStatisticsService;
             _taskFilterService = taskFilterService;
@@ -135,7 +138,7 @@ namespace TodoList_Project.Features.Main
                 Tasks.Clear();
                 foreach (var task in tasks)
                 {
-                    Tasks.Add(new TaskItemViewModel(_taskService)
+                    Tasks.Add(new TaskItemViewModel(_taskService, _feedbackService)
                     {
                         Id = task.Id,
                         Title = task.Title,

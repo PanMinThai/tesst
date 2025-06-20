@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace TodoList_Project.Core.Utils.Messages
 {
-    public class ShowCharacterMessage : ValueChangedMessage<string>
+    public class ShowCharacterMessage : ValueChangedMessage<CharacterFeedbackDto>
     {
-        public ShowCharacterMessage(string message) : base(message)
+        public ShowCharacterMessage(CharacterFeedbackDto feedback) : base(feedback)
         {
         }
     }
+
 }

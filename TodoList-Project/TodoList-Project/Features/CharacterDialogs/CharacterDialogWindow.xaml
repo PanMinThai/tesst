@@ -39,7 +39,7 @@
         </Grid>
         <Grid Grid.Row="1">
             <Grid.Background>
-                <ImageBrush ImageSource="/UI/Images/Anya3.png"
+                <ImageBrush ImageSource="/UI/Images/sarcastic5.png"
                             Stretch="Uniform" />
             </Grid.Background>
         </Grid>

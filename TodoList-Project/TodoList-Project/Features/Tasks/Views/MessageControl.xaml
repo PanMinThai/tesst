@@ -31,7 +31,7 @@
         </Grid>
         <Grid Grid.Row="1">
             <Grid.Background>
-                <ImageBrush ImageSource="/UI/Images/Anya3.png"
+                <ImageBrush ImageSource="{Binding PathImage}"
                             Stretch="Uniform" />
             </Grid.Background>
         </Grid>
