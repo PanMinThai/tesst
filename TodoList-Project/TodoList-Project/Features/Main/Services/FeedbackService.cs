@@ -105,15 +105,44 @@ namespace TodoList_Project.Features.Main.Services
                     <= 6 => Tone.Critical,
                     _ => Tone.Furious
                 },
-                // For other actions, Will configure in the near future, I think that :))
-                ActionType.Completed => Tone.Encouraging,
-                ActionType.Create => Tone.Encouraging,
-                ActionType.Update => Tone.Encouraging,
-                ActionType.Delete => Tone.Critical,
-                ActionType.Notification => Tone.Neutral,
-                ActionType.UndoCancelled => Tone.Encouraging,
-                ActionType.UndoCompleted => Tone.Neutral,
-                _ => Tone.Neutral
+                
+                ActionType.Completed => count switch
+                {
+                    <= 3 => Tone.Praising,
+                    <= 6 => Tone.Appreciative,
+                    _ => Tone.Triumphant
+                },
+                ActionType.Create => count switch
+                {
+                    <= 3 => Tone.Encouraging,
+                    <= 6 => Tone.Inspiring,
+                    _ => Tone.Triumphant
+                },
+                ActionType.Update => count switch
+                {
+                    <= 3 => Tone.Formal,
+                    _ => Tone.Cautious
+                },
+                ActionType.Delete => count switch
+                {
+                    <= 3 => Tone.Stern,
+                    _ => Tone.Condemning
+                },
+                ActionType.Notification => count switch
+                {
+                    <= 3 => Tone.Neutral,
+                    _ => Tone.Alert
+                },
+                ActionType.UndoCancelled => count switch
+                {
+                    <= 3 => Tone.Approving,
+                    _ => Tone.Redeeming
+                },
+                ActionType.UndoCompleted => count switch
+                {
+                    <= 3 => Tone.Annoyed,
+                    _ => Tone.Bitter
+                },
             };
         }
     }

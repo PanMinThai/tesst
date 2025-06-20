@@ -120,6 +120,10 @@ namespace TodoList_Project.Features.Main
 
             await _taskService.UpdateTaskAsync(taskModel);
             WeakReferenceMessenger.Default.Send(new TaskUpdatedMessage(taskModel));
+            // Send feedback to the user by showing a character message
+            var feedback = await _feedbackService.GetFeedbackForActionAsync(ActionType.Completed);
+            var characterFeedback = new CharacterFeedbackDto(feedback.Message, feedback.ImagePath);
+            WeakReferenceMessenger.Default.Send(new ShowCharacterMessage(characterFeedback));
         }
     }
 }

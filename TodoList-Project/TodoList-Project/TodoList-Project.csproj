@@ -25,16 +25,11 @@
     <None Remove="UI\Images\critical2.png" />
     <None Remove="UI\Images\critical3.png" />
     <None Remove="UI\Images\critical4.png" />
-    <None Remove="UI\Images\encouraging1.png" />
-    <None Remove="UI\Images\encouraging2.png" />
-    <None Remove="UI\Images\encouraging3.png" />
-    <None Remove="UI\Images\encouraging4.png" />
     <None Remove="UI\Images\furious1.png" />
     <None Remove="UI\Images\furious2.png" />
     <None Remove="UI\Images\neutral1.png" />
     <None Remove="UI\Images\neutral2.png" />
     <None Remove="UI\Images\neutral3.png" />
-    <None Remove="UI\Images\neutral4.png" />
     <None Remove="UI\Images\sarcastic1.png" />
     <None Remove="UI\Images\sarcastic2.png" />
     <None Remove="UI\Images\sarcastic3.png" />
@@ -100,16 +95,16 @@
     <Resource Include="UI\Images\critical4.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UI\Images\encouraging1.png">
+    <Resource Include="UI\Images\praising1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UI\Images\encouraging2.png">
+    <Resource Include="UI\Images\triumphant1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UI\Images\encouraging3.png">
+    <Resource Include="UI\Images\appreciative1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UI\Images\encouraging4.png">
+    <Resource Include="UI\Images\triumphant2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\furious1.png">
@@ -124,7 +119,7 @@
     <Resource Include="UI\Images\neutral3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="UI\Images\neutral4.png">
+    <Resource Include="UI\Images\alert1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Images\sarcastic1.png">
