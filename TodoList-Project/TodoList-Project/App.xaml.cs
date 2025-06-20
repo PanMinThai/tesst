@@ -15,6 +15,7 @@ using TodoList_Project.Features.Categories.Services;
 using TodoList_Project.Features.Categories.Views;
 using TodoList_Project.Features.CharacterDialogs;
 using TodoList_Project.Features.Main;
+using TodoList_Project.Features.Main.Services;
 using TodoList_Project.Features.Tasks.Services;
 using TodoList_Project.Features.Tasks.Views;
 using Application = System.Windows.Application;
@@ -62,6 +63,7 @@ namespace TodoList_Project
             services.AddTransient<ITaskFilterService, TaskFilterService>();
             services.AddTransient<ITaskStatisticsService, TaskStatisticsService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IFeedbackService, FeedbackService>();
             //Mapper
             services.AddAutoMapper(typeof(TaskMappingProfile));
 

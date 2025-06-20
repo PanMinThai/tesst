@@ -16,6 +16,7 @@ using TodoList_Project.Core.Utils.Messages;
 using TodoList_Project.Features.Categories.Services;
 using TodoList_Project.Features.Categories.Views;
 using TodoList_Project.Features.CharacterDialogs;
+using TodoList_Project.Features.Main.Services;
 using TodoList_Project.Features.Tasks.Services;
 using TodoList_Project.Features.Tasks.Views;
 using Application = System.Windows.Application;
@@ -29,6 +30,7 @@ namespace TodoList_Project.Features.Main
         private readonly ITaskFilterService _taskFilterService;
         private readonly ITaskStatisticsService _taskStatisticsService;
         private readonly ICategoryService _categoryService;
+        private readonly IFeedbackService _feedbackService;
         private readonly IMessenger _messenger;
 
         [ObservableProperty]
@@ -45,15 +47,17 @@ namespace TodoList_Project.Features.Main
             ITaskService taskService,
             ITaskStatisticsService taskStatisticsService,
             ITaskFilterService taskFilterService,
-            ICategoryService categoryService, IMessenger  messenger)
+            ICategoryService categoryService, IMessenger  messenger,
+            IFeedbackService feedbackService)
         {
             _taskRepository = taskRepository;
             _taskService = taskService;
             _taskStatisticsService = taskStatisticsService;
             _taskFilterService = taskFilterService;
             _categoryService = categoryService;
+            _feedbackService = feedbackService;
             ShowHomeView();
-            CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService, _taskFilterService);
+            CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService, _taskFilterService, _feedbackService);
            _messenger = messenger;
             RegisterMessages();
         }
@@ -76,7 +80,7 @@ namespace TodoList_Project.Features.Main
         [RelayCommand]
         private void ShowStartView()
         {
-            CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService,_taskFilterService);
+            CurrentChildView = new StartViewModel(_taskService,_taskStatisticsService,_taskFilterService, _feedbackService);
             Caption = "Dashboard";
             Icon = IconChar.Calendar;
         }
@@ -102,9 +106,10 @@ namespace TodoList_Project.Features.Main
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
+                    var feedback = m.Value;
                     var window = new CharacterDialogWindow
                     {
-                        DataContext = new CharacterDialogViewModel(m.Value),
+                        DataContext = new CharacterDialogViewModel(feedback.Message,feedback.ImagePath),
                         Owner = Application.Current.MainWindow,
                         Height = 280,
                         Width = 200

@@ -14,10 +14,12 @@ namespace TodoList_Project.Features.CharacterDialogs
     {
         [ObservableProperty]
         private string _message;
-
-        public CharacterDialogViewModel(string message)
+        [ObservableProperty]
+        private string _imagePath;
+        public CharacterDialogViewModel(string message, string imagePath)
         {
             Message = message;
+            ImagePath = imagePath;
         }
     }
 }

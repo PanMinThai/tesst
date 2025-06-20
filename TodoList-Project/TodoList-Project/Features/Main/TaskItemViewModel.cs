@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Core.Utils.Messages;
+using TodoList_Project.Features.Main.Services;
 using TodoList_Project.Features.Tasks.Models;
 using TodoList_Project.Features.Tasks.Services;
 using static System.Net.Mime.MediaTypeNames;
@@ -19,6 +20,7 @@ namespace TodoList_Project.Features.Main
 {
     public partial class TaskItemViewModel : ObservableObject
     {
+        private readonly IFeedbackService _feedbackService;
         private readonly ITaskService _taskService;
         [ObservableProperty]
         private int _id;
@@ -74,9 +76,10 @@ namespace TodoList_Project.Features.Main
             TaskPriority.Low => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#166534")),
             _ => new SolidColorBrush(Colors.Black)
         };
-        public TaskItemViewModel(ITaskService taskService)
+        public TaskItemViewModel(ITaskService taskService, IFeedbackService feedbackService)
         {
             _taskService = taskService;
+            _feedbackService = feedbackService;
         }
         [RelayCommand]
         private async Task CancelTaskAsync()
@@ -92,9 +95,10 @@ namespace TodoList_Project.Features.Main
 
             await _taskService.UpdateTaskAsync(taskModel);
             WeakReferenceMessenger.Default.Send(new TaskUpdatedMessage(taskModel));
-            WeakReferenceMessenger.Default.Send(
-                new ShowCharacterMessage("Anya khinh bỉ những đứa hủy task. Hèn quá")
-            );
+            // Send feedback to the user by showing a character message
+            var feedback = await _feedbackService.GetFeedbackForActionAsync(ActionType.Cancelled);
+            var characterFeedback = new CharacterFeedbackDto(feedback.Message, feedback.ImagePath);
+            WeakReferenceMessenger.Default.Send(new ShowCharacterMessage(characterFeedback));
         }
         partial void OnIsCompletedChanged(bool value)
         {
