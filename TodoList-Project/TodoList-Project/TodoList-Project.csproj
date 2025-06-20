@@ -21,6 +21,23 @@
     <None Remove="UI\Images\anya6.png" />
     <None Remove="UI\Images\ComicBubble1.png" />
     <None Remove="UI\Images\ComicBubble2.png" />
+    <None Remove="UI\Images\critical1.png" />
+    <None Remove="UI\Images\critical2.png" />
+    <None Remove="UI\Images\critical3.png" />
+    <None Remove="UI\Images\critical4.png" />
+    <None Remove="UI\Images\encouraging1.png" />
+    <None Remove="UI\Images\encouraging2.png" />
+    <None Remove="UI\Images\encouraging3.png" />
+    <None Remove="UI\Images\encouraging4.png" />
+    <None Remove="UI\Images\furious1.png" />
+    <None Remove="UI\Images\furious2.png" />
+    <None Remove="UI\Images\neutral1.png" />
+    <None Remove="UI\Images\neutral2.png" />
+    <None Remove="UI\Images\neutral3.png" />
+    <None Remove="UI\Images\neutral4.png" />
+    <None Remove="UI\Images\sarcastic1.png" />
+    <None Remove="UI\Images\sarcastic2.png" />
+    <None Remove="UI\Images\sarcastic3.png" />
     <None Remove="UI\Images\sarcastic4.png" />
     <None Remove="UI\Images\sarcastic5.png" />
   </ItemGroup>
@@ -55,7 +72,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Features\Main\shin_picture.jpg" />
+    <Resource Include="UI\Images\shin_picture.jpg" />
     <Resource Include="UI\Images\1.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -71,6 +88,57 @@
     <Resource Include="UI\Images\ComicBubble2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="UI\Images\critical1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\critical2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\critical3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\critical4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\encouraging1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\encouraging2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\encouraging3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\encouraging4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\furious1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\furious2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\neutral2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\neutral3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\neutral4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\sarcastic1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\sarcastic2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\sarcastic3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+	  <Resource Include="UI\Images\sarcastic4.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Resource>
     <Resource Include="UI\Images\sarcastic5.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

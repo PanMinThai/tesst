@@ -40,7 +40,7 @@
                     <StackPanel Orientation="Horizontal"
                                 Height="35"
                                 Margin="15,25,0,40">
-                        <Image Source="/Features/Main/shin_picture.jpg"/>
+                        <Image Source="/UI/Images/shin_picture.jpg"/>
                         <TextBlock Text="PanMinTa"
                                    Foreground="{StaticResource titleColor2}"
                                    FontSize="20"
