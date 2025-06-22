@@ -13,6 +13,7 @@ namespace TodoList_Project.Features.Categories.Models
         public string Name { get; set; }
         public string Icon { get; set; }
         public string Color { get; set; }
-        public ICollection<TaskCategoryDto> TaskCategories { get; set; } = new List<TaskCategoryDto>();
+        public int TotalTasks;
+        public int CompletedTasks;
     }
 }

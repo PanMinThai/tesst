@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TodoList_Project.Core.DAL.Entities.SQL;
-using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Core.DAL.Repositories;
 using TodoList_Project.Features.Categories.Models;
 
@@ -21,9 +20,9 @@ namespace TodoList_Project.Features.Categories.Services
             _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-        public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync(DateTimePeriod period = DateTimePeriod.All)
+        public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
         {
-            var categories = await _categoryRepository.GetAllWithTaskStatsAsync(period);
+            var categories = await _categoryRepository.GetAllWithTaskStatsAsync();
             return _mapper.Map<IEnumerable<CategoryDto>>(categories);
         }
     }
