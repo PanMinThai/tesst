@@ -9,7 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using TodoList_Project.Core.DAL.Enums;
 using TodoList_Project.Features.Categories.Services;
+using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
 namespace TodoList_Project.Features.Categories.Views
 {
@@ -79,17 +81,33 @@ namespace TodoList_Project.Features.Categories.Views
             try
             {
                 IsLoading = true;
-                var categories = await _categoryService.GetAllCategoriesAsync();
+
+                var period = SelectedPeriod switch
+                {
+                    "Today" => DateTimePeriod.Today,
+                    "Yesterday" => DateTimePeriod.Yesterday,
+                    "ThisWeek" => DateTimePeriod.ThisWeek,
+                    "LastWeek" => DateTimePeriod.LastWeek,
+                    "ThisMonth" => DateTimePeriod.ThisMonth,
+                    "LastMonth" => DateTimePeriod.LastMonth,
+                    _ => DateTimePeriod.All
+                };
+
+                var categories = await _categoryService.GetAllCategoriesAsync(period);
 
                 Categories.Clear();
                 foreach (var category in categories)
                 {
+                    var tasksInPeriod = category.TaskCategories?.Count ?? 0;
+                    var completedTasksInPeriod = category.TaskCategories?
+                        .Count(tc => tc.Task?.Status == TaskStatus.Completed) ?? 0;
+
                     Categories.Add(new CategoryCardViewModel
                     {
                         CategoryName = category.Name,
                         IconName = category.Icon,
-                        TotalTasks = category.TotalTasks,
-                        CompletedTasks = category.CompletedTasks,
+                        TotalTasks = tasksInPeriod,
+                        CompletedTasks = completedTasksInPeriod,
                         CategoryBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(category.Color))
                     });
                 }
