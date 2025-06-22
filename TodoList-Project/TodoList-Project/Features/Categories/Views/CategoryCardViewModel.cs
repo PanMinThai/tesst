@@ -10,7 +10,6 @@ namespace TodoList_Project.Features.Categories.Views
 {
     public partial class CategoryCardViewModel : ObservableObject
     {
-        // Các thuộc tính cơ bản
         [ObservableProperty]
         private string _categoryName = "Work";
 
@@ -29,13 +28,12 @@ namespace TodoList_Project.Features.Categories.Views
         [ObservableProperty]
         private SolidColorBrush _categoryBrush;
 
-        // Các màu phái sinh (tự động tính toán)
         public SolidColorBrush CardBackgroundBrush => GenerateLightBrush(0.85);  // Màu nền nhạt
         public SolidColorBrush CardBorderBrush => GenerateLightBrush(0.7);     // Màu viền
         public SolidColorBrush IconBackgroundBrush => GenerateLightBrush(0.95); // Màu nền icon
         public SolidColorBrush CategoryTextBrush => GenerateDarkBrush(0.2);           // Màu chữ
         public SolidColorBrush CategoryLightTextBrush => GenerateLightBrush(0.6); // Màu chữ nhạt
-        public SolidColorBrush ProgressBackgroundBrush => GenerateLightBrush(0.85); // Màu nền progress
+        public SolidColorBrush ProgressBackgroundBrush => GenerateLightBrush(0.45); // Màu nền progress
 
         public CategoryCardViewModel()
         {
@@ -44,7 +42,6 @@ namespace TodoList_Project.Features.Categories.Views
 
         partial void OnCategoryBrushChanged(SolidColorBrush value)
         {
-            // Khi màu chính thay đổi => cập nhật các thuộc tính liên quan
             OnPropertyChanged(nameof(CardBackgroundBrush));
             OnPropertyChanged(nameof(CardBorderBrush));
             OnPropertyChanged(nameof(IconBackgroundBrush));
