@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using TodoList_Project.Core.DAL.DBContext;
 using TodoList_Project.Core.DAL.Entities.SQL;
-using TodoList_Project.Core.DAL.Enums;
-using TodoList_Project.Core.Utils.Helpers;
 using TodoList_Project.Features.Categories.Models;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
 
@@ -44,29 +42,13 @@ namespace TodoList_Project.Core.DAL.Repositories
         {
             throw new NotImplementedException();
         }
-        public async Task<IEnumerable<CategoryEntity>> GetAllWithTaskStatsAsync(DateTimePeriod period = DateTimePeriod.All)
+        public async Task<IEnumerable<CategoryEntity>> GetAllWithTaskStatsAsync()
         {
             using var context = _context.CreateDbContext();
-
-            var (startDate, endDate) = DateTimePeriodHelper.GetDateRange(period);
-
             return await context.Categories
                 .Include(c => c.TaskCategories)
-                .ThenInclude(tc => tc.Task)
-                .Select(c => new CategoryEntity
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Icon = c.Icon,
-                    Color = c.Color,
-                    TaskCategories = c.TaskCategories
-                        .Where(tc => period == DateTimePeriod.All ||
-                                   (tc.Task.DueDate.HasValue &&
-                                    tc.Task.DueDate.Value.Date >= startDate.Date &&
-                                    tc.Task.DueDate.Value.Date <= endDate.Date))
-                        .ToList()
-                })
+                .ThenInclude(tc => tc.Task) 
                 .ToListAsync();
-        }   
+        }
     }
 }
