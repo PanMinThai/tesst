@@ -24,5 +24,12 @@ namespace TodoList_Project.Features.Categories.Views
         {
             InitializeComponent();
         }
+        private void EditCategoryControl_CloseRequested(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is Views.CategoryManagementViewModel vm)
+            {
+                vm.IsEditPopupVisible = false;
+            }
+        }
     }
 }

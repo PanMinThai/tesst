@@ -21,12 +21,12 @@ namespace TodoList_Project.Core.Utils.Mapper
             CreateMap<TaskModel, TaskEntity>()
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.Now));
-            CreateMap<CategoryEntity, CategoryDto>()
-            .ForMember(dest => dest.TotalTasks,
-                opt => opt.MapFrom(src => src.TaskCategories.Count))
-            .ForMember(dest => dest.CompletedTasks,
-                opt => opt.MapFrom(src => src.TaskCategories.Count(tc => tc.Task.Status == TaskStatus.Completed)));
-
+            CreateMap<CategoryEntity, CategoryDto>();
+            CreateMap<TaskCategoryEntity, TaskCategoryDto>();
+            CreateMap<TaskEntity, TaskDto>();
+            CreateMap<CategoryDto, CategoryEntity>()
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore()) 
+            .ForMember(dest => dest.TaskCategories, opt => opt.Ignore());
         }
     }
 }

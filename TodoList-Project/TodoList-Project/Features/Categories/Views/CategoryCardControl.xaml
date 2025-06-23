@@ -7,23 +7,47 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d"
              d:DesignHeight="150"
-             d:DesignWidth="300">
+             d:DesignWidth="270">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Features/Categories/Views/CategoryCardControlStyle.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-
+        <Style x:Key="CategoryProgressBar"
+               TargetType="ProgressBar">
+            <Setter Property="Height"
+                    Value="8" />
+            <Setter Property="Foreground"
+                    Value="{Binding CategoryBrush}" />
+            <Setter Property="Background"
+                    Value="{Binding ProgressBackgroundBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                ClipToBounds="True">
+                            <Grid>
+                                <Rectangle x:Name="PART_Indicator"
+                                           Fill="{TemplateBinding Foreground}"
+                                           HorizontalAlignment="Left"
+                                           RadiusX="4"
+                                           RadiusY="4" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
-
+    
     <Border Background="{Binding CardBackgroundBrush}"
             BorderBrush="{Binding CardBorderBrush}"
             BorderThickness="1"
             CornerRadius="12"
             Padding="16"
             Cursor="Hand">
-
+        <Border.InputBindings>
+            <MouseBinding MouseAction="LeftClick"
+                          Command="{Binding EditCommand}"
+                          CommandParameter="{Binding}" />
+        </Border.InputBindings>
         <Border.Effect>
             <DropShadowEffect Color="#000000"
                               Opacity="0.12"

@@ -1,0 +1,275 @@
+﻿<UserControl x:Class="TodoList_Project.Features.Categories.Views.EditCategoryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TodoList_Project.Features.Categories.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="420"
+             d:DesignWidth="660">
+    <UserControl.Resources>
+        <!-- Color Brushes -->
+        <SolidColorBrush x:Key="Blue"
+                         Color="#2563eb" />
+        <SolidColorBrush x:Key="Purple"
+                         Color="#9333ea" />
+        <SolidColorBrush x:Key="Pink"
+                         Color="#EC4899" />
+        <SolidColorBrush x:Key="Red"
+                         Color="#EF4444" />
+        <SolidColorBrush x:Key="Orange"
+                         Color="#F97316" />
+        <SolidColorBrush x:Key="Yellow"
+                         Color="#EAB308" />
+        <SolidColorBrush x:Key="Green"
+                         Color="#22C55E" />
+        <SolidColorBrush x:Key="Teal"
+                         Color="#14B8A6" />
+        <SolidColorBrush x:Key="Cyan"
+                         Color="#06B6D4" />
+        <SolidColorBrush x:Key="Indigo"
+                         Color="#6366F1" />
+        <SolidColorBrush x:Key="Gray"
+                         Color="#6B7280" />
+        <SolidColorBrush x:Key="DarkGray"
+                         Color="#4B5563" />
+
+        <!-- Button Style -->
+        <Style x:Key="ColorButtonStyle"
+               TargetType="Button">
+            <Setter Property="Width"
+                    Value="40" />
+            <Setter Property="Height"
+                    Value="40" />
+            <Setter Property="Margin"
+                    Value="5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="2"
+                                BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Opacity"
+                                        Value="0.8" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding IsSelected}"
+                                         Value="True">
+                                <Setter Property="BorderBrush"
+                                        Value="#333" />
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Main Button Style -->
+        <Style x:Key="MainButtonStyle"
+               TargetType="Button">
+            <Setter Property="Height"
+                    Value="35" />
+            <Setter Property="Padding"
+                    Value="20,0" />
+            <Setter Property="FontWeight"
+                    Value="Medium" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="1"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Opacity"
+                                        Value="0.9" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border Background="White"
+            CornerRadius="12"
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect Color="Black"
+                              Opacity="0.2"
+                              ShadowDepth="5"
+                              BlurRadius="15" />
+        </Border.Effect>
+
+        <Grid Margin="25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0"
+                  Margin="0,0,0,10">
+                <TextBlock Text="Edit Category"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center" />
+                <Button Content="✕"
+                        Width="24"
+                        Height="24"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        FontSize="14"
+                        Command="{Binding CloseCommand}" />
+            </Grid>
+
+            <!-- Content -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Preview Section -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Preview"
+                               FontWeight="Medium"
+                               Margin="0,0,0,10" />
+                    <local:CategoryCardControl DataContext="{Binding CategoryCardViewModel}"
+                                               Margin="0,10"
+                                               HorizontalAlignment="Stretch" />
+                </StackPanel>
+
+                <!-- Color Selection Section -->
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Choose Accent Color"
+                               FontWeight="Medium"
+                               Margin="0,0,0,10" />
+
+                    <!-- Color Grid  -->
+                    <UniformGrid Columns="4"
+                                 Margin="0,0,0,20">
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Blue}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Blue" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Purple}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Purple" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Pink}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Pink" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Red}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Red" />
+
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Orange}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Orange" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Yellow}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Yellow" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Green}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Purple" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Teal}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Teal" />
+
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Cyan}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Cyan" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Indigo}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Indigo" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource Gray}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="Purple" />
+                        <Button Style="{StaticResource ColorButtonStyle}"
+                                Background="{StaticResource DarkGray}"
+                                Command="{Binding SelectColorCommand}"
+                                CommandParameter="DarkGray" />
+                    </UniformGrid>
+
+                    <!-- Custom Color Section -->
+                    <TextBlock Text="Custom Color"
+                               FontWeight="Medium"
+                               Margin="0,0,0,10" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0"
+                                Width="40"
+                                Height="30"
+                                CornerRadius="4"
+                                Margin="0,0,10,0"
+                                Background="{Binding CategoryCardViewModel.CategoryBrush}" />
+
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding CustomColorHex, UpdateSourceTrigger=PropertyChanged}"
+                                 VerticalAlignment="Center"
+                                 Padding="8,6"
+                                 BorderBrush="#D1D5DB">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter"
+                                            Command="{Binding ApplyCustomColorCommand}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <!-- Footer Buttons -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Cancel"
+                        Grid.Column="0"
+                        Style="{StaticResource MainButtonStyle}"
+                        Background="Transparent"
+                        BorderBrush="#D1D5DB"
+                        Foreground="#6B7280"
+                        Margin="0,0,10,0"
+                        Command="{Binding CancelCommand}" />
+
+                <Button Content="Save Changes"
+                        Grid.Column="2"
+                        Style="{StaticResource MainButtonStyle}"
+                        Background="#3B82F6"
+                        BorderBrush="#3B82F6"
+                        Foreground="White"
+                        Command="{Binding SaveCommand}" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

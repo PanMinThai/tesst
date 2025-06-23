@@ -24,7 +24,7 @@ namespace TodoList_Project.Core.DAL.Repositories
             return await _context.MessageTemplates.ToListAsync();
         }
 
-        public async Task<MessageTemplateEntity> GetByIdAsync(object id)
+        public async Task<MessageTemplateEntity> GetByIdAsync(int id)
         {
             return await _context.MessageTemplates.FindAsync(id);
         }

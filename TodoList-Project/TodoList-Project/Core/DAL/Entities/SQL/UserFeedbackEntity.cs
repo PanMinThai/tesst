@@ -13,16 +13,12 @@ namespace TodoList_Project.Core.DAL.Entities.SQL
     {
         [Required]
         public string ActionType { get; set; }
-
         [Required]
         public string Message { get; set; }
-
         [Required]
         public string ImagePath { get; set; }
-
         [Required]
         public Tone Tone { get; set; }
-
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     }

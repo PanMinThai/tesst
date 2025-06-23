@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TodoList_Project.Features.Categories.Views"
+             xmlns:converters="clr-namespace:TodoList_Project.Core.Utils.Converters"
              mc:Ignorable="d"
              d:DesignHeight="688"
              d:DesignWidth="1018"
@@ -14,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="CategoryManagementStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Border Background="#2a156f"
@@ -103,12 +105,26 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <local:CategoryCardControl  Margin="10"/>
+                            <local:CategoryCardControl Margin="10" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+
+            <!-- Edit Popup Overlay -->
+            <Grid Grid.RowSpan="2"
+                  Visibility="{Binding IsEditPopupVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  Panel.ZIndex="1000">
+                <!-- Semi-transparent overlay -->
+                <Border Background="#80000000" />
+
+                <!-- Edit Category Dialog -->
+                <local:EditCategoryControl DataContext="{Binding EditCategoryViewModel}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Height="420"
+                                           Width="660" />
+            </Grid>
         </Grid>
     </Border>
-
 </UserControl>

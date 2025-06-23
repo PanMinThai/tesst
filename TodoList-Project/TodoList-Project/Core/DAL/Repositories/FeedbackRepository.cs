@@ -24,7 +24,7 @@ namespace TodoList_Project.Core.DAL.Repositories
             return await _context.UserFeedbacks.ToListAsync();
         }
 
-        public async Task<UserFeedbackEntity> GetByIdAsync(object id)
+        public async Task<UserFeedbackEntity> GetByIdAsync(int id)
         {
             return await _context.UserFeedbacks.FindAsync(id);
         }

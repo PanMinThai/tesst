@@ -46,6 +46,9 @@
             <DataTemplate DataType="{x:Type category:CategoryManagementViewModel}">
                 <category:CategoryManagement />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type category:EditCategoryViewModel}">
+                <category:EditCategoryControl />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type character:CharacterDialogViewModel}">
                 <character:CharacterDialogWindow />
             </DataTemplate>

@@ -24,7 +24,7 @@ namespace TodoList_Project.Core.DAL.Repositories
             return await _context.CharacterIcons.ToListAsync();
         }
 
-        public async Task<CharacterIconEntity> GetByIdAsync(object id)
+        public async Task<CharacterIconEntity> GetByIdAsync(int id)
         {
             return await _context.CharacterIcons.FindAsync(id);
         }

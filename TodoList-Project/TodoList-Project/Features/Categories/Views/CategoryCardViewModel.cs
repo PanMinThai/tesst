@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace TodoList_Project.Features.Categories.Views
 {
     public partial class CategoryCardViewModel : ObservableObject
     {
-        // Các thuộc tính cơ bản
+        [ObservableProperty]
+        private int _id;
         [ObservableProperty]
         private string _categoryName = "Work";
 
@@ -25,17 +27,18 @@ namespace TodoList_Project.Features.Categories.Views
 
         [ObservableProperty]
         private double _progressPercentage;
-  
+
         [ObservableProperty]
         private SolidColorBrush _categoryBrush;
+        [ObservableProperty]
+        private ICommand _editCommand;
 
-        // Các màu phái sinh (tự động tính toán)
         public SolidColorBrush CardBackgroundBrush => GenerateLightBrush(0.85);  // Màu nền nhạt
         public SolidColorBrush CardBorderBrush => GenerateLightBrush(0.7);     // Màu viền
         public SolidColorBrush IconBackgroundBrush => GenerateLightBrush(0.95); // Màu nền icon
         public SolidColorBrush CategoryTextBrush => GenerateDarkBrush(0.2);           // Màu chữ
         public SolidColorBrush CategoryLightTextBrush => GenerateLightBrush(0.6); // Màu chữ nhạt
-        public SolidColorBrush ProgressBackgroundBrush => GenerateLightBrush(0.85); // Màu nền progress
+        public SolidColorBrush ProgressBackgroundBrush => GenerateLightBrush(0.45); // Màu nền progress
 
         public CategoryCardViewModel()
         {
@@ -44,7 +47,7 @@ namespace TodoList_Project.Features.Categories.Views
 
         partial void OnCategoryBrushChanged(SolidColorBrush value)
         {
-            // Khi màu chính thay đổi => cập nhật các thuộc tính liên quan
+
             OnPropertyChanged(nameof(CardBackgroundBrush));
             OnPropertyChanged(nameof(CardBorderBrush));
             OnPropertyChanged(nameof(IconBackgroundBrush));
@@ -67,7 +70,7 @@ namespace TodoList_Project.Features.Categories.Views
 
             Color baseColor = CategoryBrush.Color;
             var hsl = RgbToHsl(baseColor);
-            hsl.L = Math.Min(0.95, hsl.L + (1 - hsl.L) * lightnessFactor); 
+            hsl.L = Math.Min(0.95, hsl.L + (1 - hsl.L) * lightnessFactor);
             return new SolidColorBrush(HslToRgb(hsl));
         }
 
@@ -78,7 +81,7 @@ namespace TodoList_Project.Features.Categories.Views
             Color baseColor = CategoryBrush.Color;
             var hsl = RgbToHsl(baseColor);
             hsl.L = hsl.L * (1 - darknessFactor);
-            hsl.S = Math.Min(1, hsl.S * 1.2); 
+            hsl.S = Math.Min(1, hsl.S * 1.2);
             return new SolidColorBrush(HslToRgb(hsl));
         }
         private (double H, double S, double L) RgbToHsl(Color color)
@@ -134,7 +137,7 @@ namespace TodoList_Project.Features.Categories.Views
             return Color.FromRgb(
                 (byte)(r * 255),
                 (byte)(g * 255),
-                (byte)(b * 255));
+                (byte)(b * 255)); 
         }
 
         private double HueToRgb(double p, double q, double t)

@@ -28,13 +28,10 @@ namespace TodoList_Project.Core.DAL.Repositories
             return await context.Tasks.ToListAsync();
         }
 
-        public async Task<TaskEntity> GetByIdAsync(object id)
+        public async Task<TaskEntity> GetByIdAsync(int id)
         {
-            if (id is not int taskId)
-                throw new ArgumentException("ID must be an integer");
-
             using var context = _context.CreateDbContext();
-            return await context.Tasks.FirstOrDefaultAsync(t => t.Id == taskId).ConfigureAwait(false);
+            return await context.Tasks.FirstOrDefaultAsync(t => t.Id == id).ConfigureAwait(false);
         }
 
         public async Task AddAsync(TaskEntity entity)
