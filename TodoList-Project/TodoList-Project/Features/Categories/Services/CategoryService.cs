@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using TodoList_Project.Core.DAL.Entities.SQL;
 using TodoList_Project.Core.DAL.Enums;
-using TodoList_Project.Core.DAL.Repositories;
+using TodoList_Project.Core.DAL.Repositories.Interfaces;
 using TodoList_Project.Features.Categories.Models;
 using TodoList_Project.Features.Tasks.Models;
 

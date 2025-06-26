@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TodoList_Project.Core.DAL.Entities.Base;
 using TodoList_Project.Core.DAL.Enums;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;
+using TodoList_Project.Core.DAL.Entities.SQL.Auth;
 
 namespace TodoList_Project.Core.DAL.Entities.SQL
 {
@@ -26,9 +27,11 @@ namespace TodoList_Project.Core.DAL.Entities.SQL
         [Required]
         public TaskPriority Priority { get; set; } = TaskPriority.Medium;
 
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        [ForeignKey(nameof(AssignedUser))]
+        public Guid AssignedUserId { get; set; }  
 
         // Navigation properties
+        public UserEntity AssignedUser { get; set; } 
         public ICollection<TaskCategoryEntity> TaskCategories { get; set; } = new List<TaskCategoryEntity>();
     }
 }

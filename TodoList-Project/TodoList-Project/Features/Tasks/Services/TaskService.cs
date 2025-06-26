@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TodoList_Project.Core.DAL.Entities.SQL;
-using TodoList_Project.Core.DAL.Repositories;
+using TodoList_Project.Core.DAL.Repositories.Interfaces;
 using TodoList_Project.Features.Tasks.Models;
 
 namespace TodoList_Project.Features.Tasks.Services

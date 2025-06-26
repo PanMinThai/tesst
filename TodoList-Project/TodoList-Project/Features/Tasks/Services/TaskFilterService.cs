@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoList_Project.Core.DAL.Entities.SQL;
 using TodoList_Project.Core.DAL.Enums;
-using TodoList_Project.Core.DAL.Repositories;
+using TodoList_Project.Core.DAL.Repositories.Interfaces;
 using TodoList_Project.Features.Tasks.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using TaskStatus = TodoList_Project.Core.DAL.Enums.TaskStatus;

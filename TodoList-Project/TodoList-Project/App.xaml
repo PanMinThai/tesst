@@ -6,7 +6,8 @@
              xmlns:main="clr-namespace:TodoList_Project.Features.Main"
              xmlns:task="clr-namespace:TodoList_Project.Features.Tasks.Views"
              xmlns:character="clr-namespace:TodoList_Project.Features.CharacterDialogs"
-             xmlns:category="clr-namespace:TodoList_Project.Features.Categories.Views">
+             xmlns:category="clr-namespace:TodoList_Project.Features.Categories.Views"
+             xmlns:auth="clr-namespace:TodoList_Project.Features.Auth.Views">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -52,6 +53,17 @@
             <DataTemplate DataType="{x:Type character:CharacterDialogViewModel}">
                 <character:CharacterDialogWindow />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type auth:AuthViewModel}">
+                <auth:AuthView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type auth:LoginViewModel}">
+                <auth:LoginControl />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type auth:RegisterViewModel}">
+                <auth:RegisterControl />
+            </DataTemplate>
+            
+            
         </ResourceDictionary>
 
     </Application.Resources>

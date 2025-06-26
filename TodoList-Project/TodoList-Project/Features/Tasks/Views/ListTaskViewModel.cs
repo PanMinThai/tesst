@@ -21,7 +21,6 @@ namespace TodoList_Project.Features.Tasks.Views
 {
     public partial class ListTaskViewModel : ObservableObject
     {
-        private readonly object _tasksLock = new object();
 
         #region Services
         private readonly ITaskService _taskService;
