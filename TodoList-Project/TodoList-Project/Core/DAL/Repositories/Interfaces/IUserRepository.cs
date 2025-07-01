@@ -9,6 +9,7 @@ namespace TodoList_Project.Core.DAL.Repositories.Interfaces
 {
     public interface IUserRepository : IGenericRepository<UserEntity, Guid>
     {
+        Task<UserEntity> GetByIdWithIncludesAsync(Guid id);
         Task<UserEntity> GetByEmailAsync(string email);
         Task<bool> IsEmailConfirmedAsync(string email);
         Task LockUserAsync(Guid userId, DateTime lockEndTime);

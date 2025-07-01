@@ -56,5 +56,18 @@ namespace TodoList_Project.Core.DAL.Repositories.Auth
                 await context.SaveChangesAsync();
             }
         }
+        public async Task<UserEntity> GetByIdWithIncludesAsync(Guid id)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+
+            return await context.Users
+                .Where(u => u.Id == id)
+                .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                    .ThenInclude(r => r.RolePermissions)
+                    .ThenInclude(rp => rp.Permission)
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

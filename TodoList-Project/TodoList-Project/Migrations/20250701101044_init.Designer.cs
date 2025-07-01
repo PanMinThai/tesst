@@ -12,8 +12,8 @@ using TodoList_Project.Core.DAL.DBContext;
 namespace TodoList_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250625182440_Init")]
-    partial class Init
+    [Migration("20250701101044_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,16 +30,6 @@ namespace TodoList_Project.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DeviceInfo")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("IpAddress")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsSuccess")
                         .HasColumnType("bit");

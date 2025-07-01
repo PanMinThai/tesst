@@ -8,10 +8,11 @@ namespace TodoList_Project.Features.Auth.Services
 {
     public interface IPasswordResetService
     {
-        string GenerateToken();
-        Task SendResetEmailAsync(string email, string token);
-        bool ValidateToken(string email, string token);
-        Task MarkTokenAsUsedAsync(string email, string token);
+        Task<string> GenerateTokenAsync(Guid userId);
+        Task<bool> SendResetEmailAsync(string email, string token);
+        Task<bool> ValidateTokenAsync(string email, string token);
+        Task<bool> MarkTokenAsUsedAsync(string email, string token);
+        Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
     }
 
 }

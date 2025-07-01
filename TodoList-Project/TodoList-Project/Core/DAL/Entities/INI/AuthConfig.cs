@@ -10,9 +10,9 @@ namespace TodoList_Project.Core.DAL.Entities.INI
     {
         public int MaxLoginAttempts { get; set; } = 5;
         public int AccountLockMinutes { get; set; } = 15;
-        public int PasswordResetTokenExpiryHours { get; set; } = 24;
-        public bool RequireConfirmedEmail { get; set; } = false;
-
-        public JwtConfig Jwt { get; set; } = new JwtConfig();
+        public bool RequireConfirmedEmail { get; set; } = true;
+        public int SessionTimeoutMinutes { get; set; } = 30;
+        public int PasswordResetTokenExpiryMinutes { get; set; } = 30;
+        public int MaxPasswordResetAttempts { get; set; } = 5;
     }
 }

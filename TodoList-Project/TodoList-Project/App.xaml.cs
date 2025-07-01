@@ -4,12 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
-using System.Configuration;
-using System.Data;
 using System.Windows;
-using System.Windows.Forms;
 using TodoList_Project.Core.DAL.DBContext;
+using TodoList_Project.Core.DAL.Entities.INI;
 using TodoList_Project.Core.DAL.Repositories.Auth;
 using TodoList_Project.Core.DAL.Repositories.General;
 using TodoList_Project.Core.DAL.Repositories.Interfaces;
@@ -49,7 +46,7 @@ namespace TodoList_Project
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(_configuration);
-            //    private readonly IConfiguration _configuration;
+            
 
             services.AddLogging(loggingBuilder =>
             {
@@ -65,18 +62,30 @@ namespace TodoList_Project
             services.AddTransient<IMessageTemplateRepository, MessageTemplateRepository>();
             services.AddTransient<ICharacterIconRepository, CharacterIconRepository>();
             services.AddTransient<IFeedbackRepository, FeedbackRepository>();
+
             services.AddTransient<IPermissionRepository, PermissionRepository>();
             services.AddTransient<IRoleRepository, RoleRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISessionRepository,SessionRepository>();
+            services.AddTransient<IPermissionRepository,PermissionRepository>();
+            services.AddTransient<IPasswordResetTokenRepository,PasswordResetTokenRepository>();
             //Services
             services.AddTransient<ITaskService, TaskService>();
             services.AddTransient<ITaskFilterService, TaskFilterService>();
             services.AddTransient<ITaskStatisticsService, TaskStatisticsService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
+
             services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<IPasswordService, PasswordService>();
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<ISessionService, SessionService>();
+            services.AddTransient<IPasswordResetService, PasswordResetService>();
+            services.AddTransient<ILoginHistoryService, LoginHistoryService>();
+            var emailConfig = new EmailConfig();
+
+            _configuration.GetSection("EmailConfig").Bind(emailConfig);
+            services.AddSingleton(emailConfig);
             //Mapper
             services.AddAutoMapper(typeof(TaskMappingProfile));
 

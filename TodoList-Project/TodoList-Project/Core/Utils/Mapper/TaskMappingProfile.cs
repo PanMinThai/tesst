@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoList_Project.Core.DAL.Entities.SQL;
 using TodoList_Project.Core.DAL.Entities.SQL.Auth;
+using TodoList_Project.Features.Auth.Models;
 using TodoList_Project.Features.Categories.Models;
 using TodoList_Project.Features.Roles.Models;
 using TodoList_Project.Features.Tasks.Models;
@@ -37,6 +38,7 @@ namespace TodoList_Project.Core.Utils.Mapper
             CreateMap<RoleEntity, RoleModel>()
                 .ForMember(dest => dest.Permissions, opt => opt.MapFrom(src => src.RolePermissions.Select(rp => rp.Permission.Name)));
             CreateMap<PermissionEntity, PermissionModel>();
+            CreateMap<SessionEntity, SessionModel>();
         }
     }
 }

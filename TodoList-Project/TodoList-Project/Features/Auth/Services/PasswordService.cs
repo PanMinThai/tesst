@@ -11,25 +11,19 @@ namespace TodoList_Project.Features.Auth.Services
     {
         public string GenerateSalt()
         {
-            var bytes = new byte[128 / 8];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(bytes);
-            return Convert.ToBase64String(bytes);
+            return BCrypt.Net.BCrypt.GenerateSalt(12);
         }
 
         public string HashPassword(string password, string salt)
         {
-            using var sha256 = SHA256.Create();
-            var saltedPassword = string.Concat(password, salt);
-            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(saltedPassword));
-            return Convert.ToBase64String(bytes);
+            return BCrypt.Net.BCrypt.HashPassword(password, salt);
         }
 
-        public bool VerifyPassword(string password, string storedHash, string salt)
+        public bool VerifyPassword(string inputPassword, string storedHash, string storedSalt = null)
         {
-            var hash = HashPassword(password, salt);
-            return hash == storedHash;
+            return BCrypt.Net.BCrypt.Verify(inputPassword, storedHash);
         }
     }
-
 }
+
+

@@ -15,6 +15,7 @@ using TodoList_Project.Core.DAL.Repositories.Interfaces;
 using TodoList_Project.Core.Utils.Exceptions;
 using TodoList_Project.Features.Auth.Models;
 using TodoList_Project.Features.Auth.Services.Interfaces;
+using TodoList_Project.Features.Roles.Models;
 using TodoList_Project.Features.Users.Models;
 
 namespace TodoList_Project.Features.Auth.Services
@@ -22,59 +23,28 @@ namespace TodoList_Project.Features.Auth.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IJwtService _jwtService;
         private readonly IPasswordService _passwordService;
-        //private readonly IEmailVerificationService _emailVerificationService;
+        private readonly ISessionService _sessionService;
+        private readonly IEmailService _emailService;   
         private readonly IPasswordResetService _passwordResetService;
         private readonly AuthConfig _authConfig;
         private readonly IMapper _mapper;
+        private readonly ILoginHistoryService _loginHistoryService;
 
         public AuthService(
             IUserRepository userRepository,
-            IJwtService jwtService,
             IPasswordService passwordService,
-
-            
-            
+            IPasswordResetService passwordResetService,
             IOptions<AuthConfig> authConfig,
-            IMapper mapper)
+            IMapper mapper,
+            ILoginHistoryService loginHistoryService)
         {
             _userRepository = userRepository;
-            _jwtService = jwtService;
             _passwordService = passwordService;
-            
-            
+            _passwordResetService = passwordResetService;
             _authConfig = authConfig.Value;
             _mapper = mapper;
-        }
-
-        public async Task<AuthResultModel> RegisterAsync(RegisterModel model)
-        {
-            if (await _userRepository.ExistsAsync(u => u.Email == model.Email))
-                throw new AppException("Email đã được sử dụng");
-
-            var salt = _passwordService.GenerateSalt();
-            var hash = _passwordService.HashPassword(model.Password, salt);
-
-            var user = new UserEntity
-            {
-                Email = model.Email,
-                PasswordHash = hash,
-                Salt = salt,
-                DisplayName = model.DisplayName,
-                EmailConfirmed = !_authConfig.RequireConfirmedEmail,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            //await _userRepository.AddAsync(user);
-
-            //if (_authConfig.RequireConfirmedEmail)
-            //{
-            //    var token = _emailVerificationService.GenerateToken();
-            //    await _emailVerificationService.SendConfirmationEmailAsync(user.Email, token);
-            //}
-
-            return BuildAuthResult(user);
+            _loginHistoryService = loginHistoryService;
         }
 
         public async Task<AuthResultModel> LoginAsync(LoginModel model)
@@ -102,32 +72,33 @@ namespace TodoList_Project.Features.Auth.Services
             if (_authConfig.RequireConfirmedEmail && !user.EmailConfirmed)
                 throw new UnauthorizedException("Vui lòng xác thực email trước khi đăng nhập");
 
+            // Reset failed attempts and update last login
             user.FailedLoginAttempts = 0;
             user.LastLogin = DateTime.UtcNow;
             await _userRepository.UpdateAsync(user);
 
-            return BuildAuthResult(user);
+            // Create session
+            var session = await _sessionService.CreateSessionAsync(user.Id);
+
+            // Get user permissions
+            var permissions = await _sessionService.GetUserPermissionsAsync(user.Id);
+
+            return new AuthResultModel
+            {
+                Session = session,
+                User = _mapper.Map<UserModel>(user),
+                Permissions = permissions
+            };
         }
 
-        public async Task<bool> ConfirmEmailAsync(string email, string token)
-        {
-            //var user = await _userRepository.GetByEmailAsync(email);
-            //if (user == null) return false;
-
-            //if (!_emailVerificationService.ValidateToken(email, token)) return false;
-
-            //user.EmailConfirmed = true;
-            //await _userRepository.UpdateAsync(user);
-            return true;
-        }
-
+        // Trong AuthService của bạn
         public async Task<bool> ForgotPasswordAsync(string email)
         {
             var user = await _userRepository.GetByEmailAsync(email);
-            if (user == null) return true;
+            if (user == null) return true; // Trả về true để không tiết lộ email có tồn tại
 
-            var token = _passwordResetService.GenerateToken();
-            await _passwordResetService.SendResetEmailAsync(email, token);
+            string token = await _passwordResetService.GenerateTokenAsync(user.Id);
+            await _emailService.SendPasswordResetEmailAsync(email, token); // Gửi email
             return true;
         }
 
@@ -135,8 +106,8 @@ namespace TodoList_Project.Features.Auth.Services
         {
             var user = await _userRepository.GetByEmailAsync(model.Email);
             if (user == null) return false;
-
-            if (!_passwordResetService.ValidateToken(model.Email, model.Token)) return false;
+            
+            if (!await _passwordResetService.ValidateTokenAsync(model.Email, model.Token)) return false;
 
             var salt = _passwordService.GenerateSalt();
             user.PasswordHash = _passwordService.HashPassword(model.NewPassword, salt);
@@ -164,31 +135,22 @@ namespace TodoList_Project.Features.Auth.Services
             return true;
         }
 
-        public async Task<AuthResultModel> RefreshTokenAsync(string token, string refreshToken)
+        public async Task<UserPermissionsModel> GetUserPermissionsAsync(Guid userId)
         {
-            var principal = _jwtService.GetPrincipalFromExpiredToken(token);
-            var identity = principal.Identity as ClaimsIdentity;
-            var userId = Guid.Parse(identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new SecurityTokenException("Token không hợp lệ"));
+            var user = await _userRepository.GetByIdWithIncludesAsync(userId);
 
-            var user = await _userRepository.GetByIdAsync(userId)
-                       ?? throw new SecurityTokenException("Invalid token");
+            if (user == null) return null;
 
-            return BuildAuthResult(user);
-        }
+            var permissions = user.UserRoles
+                .SelectMany(ur => ur.Role.RolePermissions)
+                .Select(rp => rp.Permission.Name)
+                .Distinct()
+                .ToList();
 
-        public Task<bool> LogoutAsync(Guid userId) => Task.FromResult(true);
-
-        private AuthResultModel BuildAuthResult(UserEntity user)
-        {
-            var token = _jwtService.GenerateJwtToken(user);
-            var refreshToken = _jwtService.GenerateRefreshToken();
-
-            return new AuthResultModel
+            return new UserPermissionsModel
             {
-                Token = token,
-                RefreshToken = refreshToken,
-                Expiration = DateTime.UtcNow.AddMinutes(_authConfig.Jwt.ExpiryMinutes),
-                User = _mapper.Map<UserModel>(user)
+                UserId = userId,
+                Permissions = permissions
             };
         }
     }

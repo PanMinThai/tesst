@@ -9,9 +9,8 @@ namespace TodoList_Project.Features.Auth.Models
 {
     public class AuthResultModel
     {
-        public string Token { get; set; }
-        public string RefreshToken { get; set; }
-        public DateTime Expiration { get; set; }
+        public SessionModel Session { get; set; }
         public UserModel User { get; set; }
+        public IEnumerable<string> Permissions { get; set; }
     }
 }

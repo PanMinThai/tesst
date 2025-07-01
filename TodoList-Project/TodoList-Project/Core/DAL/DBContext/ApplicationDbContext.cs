@@ -141,9 +141,6 @@ namespace TodoList_Project.Core.DAL.DBContext
             // ---- LoginHistory Configuration ----
             modelBuilder.Entity<LoginHistoryEntity>(entity =>
             {
-                entity.Property(l => l.IpAddress).HasMaxLength(50);
-                entity.Property(l => l.DeviceInfo).HasMaxLength(500);
-
                 entity.HasOne(l => l.User)
                     .WithMany(u => u.LoginHistories)
                     .HasForeignKey(l => l.UserId)

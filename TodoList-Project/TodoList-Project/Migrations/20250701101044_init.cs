@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TodoList_Project.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -162,9 +162,7 @@ namespace TodoList_Project.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsSuccess = table.Column<bool>(type: "bit", nullable: false),
-                    IpAddress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DeviceInfo = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                    IsSuccess = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
